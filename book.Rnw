@@ -1,0 +1,2051 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LaTeX book template                           %%
+%% Author:  Amber Jain (http://amberj.devio.us/) %%
+%% License: ISC license                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper, 11pt, twoside]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Source: http://en.wikibooks.org/wiki/LaTeX/Hyperlinks %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{microtype}
+\usepackage{times}
+\usepackage[utf8]{inputenc}     
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{exercise}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{paralist}
+\usepackage[super]{nth}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{pstricks}
+
+\newcommand{\aggregate}[2]{\underset{#2}{\operatornamewithlimits{#1\ }}}
+
+\SetKw{Break}{break}
+\SetKw{Continue}{continue}
+\SetKw{Initialise}{Initialise}
+
+\setlength{\parskip}{1em}
+
+%%%%********************************************************************
+% fancy quotes
+\definecolor{quotemark}{gray}{0.7}
+\makeatletter
+\def\fquote{%
+    \@ifnextchar[{\fquote@i}{\fquote@i[]}%]
+           }%
+\def\fquote@i[#1]{%
+    \def\tempa{#1}%
+    \@ifnextchar[{\fquote@ii}{\fquote@ii[]}%]
+                 }%
+\def\fquote@ii[#1]{%
+    \def\tempb{#1}%
+    \@ifnextchar[{\fquote@iii}{\fquote@iii[]}%]
+                      }%
+\def\fquote@iii[#1]{%
+    \def\tempc{#1}%
+    \vspace{1em}%
+    \noindent%
+    \begin{list}{}{%
+    \small%
+         \setlength{\leftmargin}{0.1\textwidth}%
+         \setlength{\rightmargin}{0.1\textwidth}%
+                  }%
+         \item[]%
+         \begin{picture}(0,0)%
+         \put(-15,-5){\makebox(0,0){\scalebox{3}{\textcolor{quotemark}{``}}}}%
+         \end{picture}%
+         \begingroup\itshape}%
+ %%%%********************************************************************
+ \def\endfquote{%
+ \endgroup\par%
+ \makebox[0pt][l]{%
+ \hspace{0.8\textwidth}%
+ \begin{picture}(0,0)(0,0)%
+ \put(15,15){\makebox(0,0){%
+ \scalebox{3}{\color{quotemark}''}}}%
+ \end{picture}}%
+ \ifx\tempa\empty%
+ \else%
+    \ifx\tempc\empty%
+       \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb}%
+   \else%
+       \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb},\ \tempc%
+   \fi\fi\par%
+   \vspace{0.5em}%
+ \end{list}%
+ }%
+ \makeatother
+ %%%%***************
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% First page of book which contains 'stuff' like: %
+%  - Book title, subtitle                         %
+%  - Book author name                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Book's title and subtitle
+\title{
+  \Huge \textbf{Business Analytics in R} \\ 
+  \huge Introduction to Statistical Programming
+}
+% Author
+\author{
+  \textsc{Timothy Wong}\thanks{\url{timothy.wong@hotmail.co.uk}} \\
+  \textsc{Second Author}\thanks{\url{person@organisation.com}}
+}
+
+
+\begin{document}
+\frontmatter
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Add a dedication paragraph to dedicate your book to someone %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{dedication}
+%Dedicated to Calvin and Hobbes.
+%\end{dedication}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Auto-generated table of contents, list of figures and list of tables %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+
+%%%%%%%%%%%
+% Preface %
+%%%%%%%%%%%
+\chapter*{Preface}
+Lorem ipsum dolor sit amet.
+
+\begin{fquote}[Yes, Prime Minister][1986]
+{Jim Hacker: The statistics are irrefutable...\\
+Sir Humphrey: Statistics? You can prove anything with statistics.\\
+Jim Hacker: Even the truth.\\
+Sir Humphrey: Yes... No!}
+\end{fquote}
+\lipsum[2]
+
+\section*{Structure of book}
+% You might want to add short description about each chapter in this book.
+Each unit will focus on <SOMETHING>.
+
+\section*{About the companion website}
+The website for this file contains:
+\begin{itemize}
+  \item A link to (freely downlodable) latest version of this document.
+  \item Link to download LaTeX source for this document.
+  \item Miscellaneous material (e.g. suggested readings etc).
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Give credit where credit is due. %
+% Say thanks!                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Acknowledgements}
+\begin{itemize}
+\item A special word of thanks goes to.
+\item I'll also like to thank.
+\item I'm deeply indebted my parents, colleagues and friends for their support and encouragement.
+\end{itemize}
+\mbox{}\\
+%\mbox{}\\
+\noindent Tim \\
+\noindent \url{timothy.wong@hotmail.co.uk}
+
+
+
+\chapter{Basics}
+
+%%%%%%%%%%%%%%%%
+% NEW CHAPTER! %
+%%%%%%%%%%%%%%%%
+\chapter{Regression Models}
+
+Within the realm of supervised learning, regression model is one of the most widely used statistical techniques. It provides a way to quantify the relationship between dependent variable \(Y\) and independent variable \(X\), where \(Y	\subseteq \mathbb{R} \) and \(X = \{ x_1, x_2,...x_M \}\).
+
+\section{Linear Regression}
+
+Linear regression is a very popular parametric statistical technique. This means it assumes independent variables are normally distributed (i.e. having a bell-shaped curve) and the model residuals also follow the same distribution. The goal of linear regression is to minimise the sum of squared residual. Regression method is extremely useful in the sense that the output can quantify the effects of each input variable, it also informs users whether the effects are statistical significant or not.
+
+In a univariate scenario where \(x\) is the only input, it provides the best fit for the model equation \(\hat y=\beta_0+\beta_1x \). The parameter \(\beta_0\) is normally referred as the intercept, while the \(\beta_1\) value is called the slope. This is illustrated in the chart on the left side in the figure below.
+
+Simple linear model can be extended to include a high-order polynomial term  of variable \(x\). It provides higher model flexibility so that linear model fits the data better. For example, an \(M\)\textsuperscript{th} order polynomial term has been fitted to the dataset on the next chart. The choice of \(M\) is subjective but usually a small value of \(M\) is desirable because it helps avoid overfitting.
+
+In R language you can simply call the function lm to perform linear regression. You need to provide at least two arguments (\verb|data| and \verb|formula|), extra arguments can be provided such as subset. For example, \verb|lm(y ~ x , myData)| will perform a simple univariate linear model using independent variable \(x\) to predict dependent variable \(y\) in the data frame object \verb|myData|.
+
+Dummy variable can be easily created from categorical labels. Users can simply use the syntax \verb|lm(y ~ x1 + x2, myData)| where \verb|x1| is a numeric variable and \verb|x2| either a factor or a character variable The lm function will automatically create dummy variables on-the-fly. Normally the first category in the column will be used as reference level. If users would like to control the reference item, \verb|x2| can be coded as a factor variable with levels defined. 
+
+A more flexible regression model can be built by extending a linear model with poilynomial terms.
+It can be expressed as \verb|lm(y~poly(x1,3)+x2,myData)|. In this case, we are defining a cubic relationship with variable \verb|x1| and linear relationship with variable \verb|x2| (Five coefficients in total will be estimated, four from the regression terms plus one from the intercept). Such model can be expressed mathematically as equation \eqref{linear}. 
+
+\begin{equation}
+\label{linear}
+\hat y = \underbrace{\beta_0}_\text{Intercept} + 
+\underbrace{\beta_1x_1 + \beta_2x_1^2 +\beta_3x_1^3}_\text{Cubic polynomial term} + 
+\underbrace{\beta_4x_2}_\text{Linear term}
+\end{equation}
+
+Interaction refers to the combined effect (also known as synergy) of more than one independent variables. For example, independent variable \verb|x1| and \verb|x2| might have no effect on dependent variable \(y\) alone. However, the effect on \(y\) can become prominent when these two variables get combined. In R language you can use the syntax \verb|lm(y ~ x1*x2)| to represent the relationship. The function \verb|I(x1*x2)| can be used to supress interaction term and the arguments will be treated as simple arithmetic operations.
+
+\begin{Exercise}[title={Simple Linear Regression}]
+In this exercise, we are going to predict car efficiency using the \verb|mtcars| teaching dataset. The dataset is embedded in open source R and can be called directly by \verb|mtcars|. You can browse the top several rows by executing \verb|head(mtcars)| in your R console. You can read the definition of individual columns by calling the command \verb|?mtcars|.
+
+
+<<eval=TRUE, dpi=100,size='scriptsize'>>=
+head(mtcars)
+@
+
+Before running any models, we can explore the dataset a bit further by visualising it. The R package \verb|ggplot2| is a very popular visualisation add-in. It builds charts by stacking layers of graphics on it. You may try the following lines:
+
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Create a simple histogram using base R plot
+hist(mtcars$mpg)
+# Using dplyr pipeline style code (equivalent output)
+library(dplyr)
+mtcars$mpg %>% hist()
+# Histogram using ggplot package
+library(ggplot2)
+mtcars %>%
+  ggplot(aes(x=mpg)) + 
+  geom_histogram() + 
+  labs(x='Miles-per-gallon',
+       y='Count', 
+       title='Histogram showing the distribution of car performance')
+# Scatterplot showing the relationship between mpg and wt
+library(ggplot2)
+mtcars %>%
+  ggplot(aes(x=wt, y=mpg, colour=factor(cyl))) +
+  geom_point() +
+  labs(x='Weight',
+       y='Miles-per-gallon',
+       colour='Number of cylinders',
+       title="Scatterplot showing car weight against performance")
+# Create a boxplot showing mpg distribution of different gear types
+mtcars %>%
+ggplot(aes(x=factor(am,
+                    levels = c(0,1),
+                    labels = c('Automatic', 'Manual')), y=mpg)) + 
+  geom_boxplot() +
+  labs(x='Gear type',
+       y='Miles-per-gallon')
+# Draw a scatterplot with facets to visualise multiple variables 
+mtcars %>%
+  ggplot(aes(x=hp, y=mpg, colour=factor(gear), size=disp)) +
+  geom_point() +
+  facet_grid(. ~ cyl) +
+  labs(x='Horsepower',
+       y='Miles-per-gallon',
+       colour='Number of gears',
+       size='Displacement')
+# Draw a matrix scatterplot
+pairs(mtcars)
+# Load the package GGally and use the function ggpairs
+# Draws a prettier matrix scatterplot
+library(GGally)
+ggpairs(mtcars)
+@
+
+Now let us try to model car efficiency using the \verb|mpg| column as dependent variable. The hypothesis is that we suspect heavy cars have lower miles-per-gallon. A simple way to investigate this is to build a univariate linear model using the \verb|lm| function and analyse the results. The following code would fit an ordinary least-squares (OLS) regression model using one predictor variable. The function \verb|summary(myModel1)| would print out all the crucial results of the model.
+
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Build a univariate linear model
+myModel1 <- lm(mpg ~ wt, mtcars)
+summary(myModel1)
+@
+
+You can also build more complex multivariate models using the same command. You can instruct the function \verb|lm()| to deal with nominal and ordinal variables by explicitly stating \verb|factor(myVar)| in the formula. Alternatively, if your variable is already in \verb|factor| data type, the regression function would handle it automatically without stating it in the formula.
+
+<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# To build a multivariate linear model with polynomial terms.
+# Dummy variables are automatically created on-the-fly.
+myModel2 <- lm(mpg ~ factor(cyl) + disp + poly(hp, 3) + 
+                 drat + qsec + 
+                 factor(am) + factor(gear), mtcars)
+summary(myModel2)
+# Multivariate model with interaction effect
+myModel3 <- lm(mpg ~ factor(cyl) * disp + poly(hp, 3) + 
+                 drat + qsec + 
+                 factor(am) + factor(gear), mtcars)
+summary(myModel3)
+@
+If you manage to produce the model summary, you will find a lot of useful information there:
+\begin {table}[H]
+\caption {Summary of key model information} \label{tab:title} 
+\begin{center}
+\begin{tabular}{ | l | p{8cm} |}
+\toprule[1.5pt]
+{\bf Term}          & {\bf Description}\\
+\midrule
+Residuals	          & This is the unexplained bit of the model, defined as observed value minus fitted value (\(\epsilon=y_i-\hat{y_i}\)). If the model's parametric assumption is correct, the mean and median values of the residuals should be very close to zero. The distribution of the residuals should have equal tails on both ends.\\
+Estimate            & Coefficient of the corresponding independent variable (i.e.  the \(\beta\) values).\\
+Standard error      & Standard deviation of the estimate.\\
+\(t\)-value         & The number of standard deviations away from zero (i.e. the null hypothesis).\\
+\(P(>|t|)\)        & \(p\)-value of the model estimate. In general, variables with \(p\)-value above \(0.05\) are considered statistical significant.\\
+Multiple \(R^2\)    & Pearson's correlation squared which indicates strength of relationship between the observed and fitted values.\\
+Adjusted \(R^2\)    & Adjusted version of \(R^2\).\\
+\(F\)-statistic     & Global hypothesis for the model as a whole.\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{center}
+\end{table}
+
+
+As the input predictor variables have different scale, the model coefficient are not directly comparable yet. To compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a funciton \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. 
+<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+library(QuantPsyc)
+lm.beta(myModel1)
+lm.beta(myModel2)
+lm.beta(myModel3)
+@
+
+Users can also compare multiple nested models\footnote{Refers to models having additional predictor terms. For example, \(\hat{y}=x_1+x_2+x_3\) and \(\hat{y}=x_1+x_2+x_3+x_4\) are both nested models of \(\hat{y}=x_1+x_2\).} using ANOVA technique and check for any statistically significant difference. The code snippet below shows an example.
+
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Compare all models using Chi-square test
+anova(myModel1, myModel2, myModel3, test='Chisq')
+@
+
+\end{Exercise}
+
+
+\begin{Exercise}[title={Regression Diagnostics}]
+As we have discussed previously, linear regression is a parametric method which means it has strong underlying assumptions. Studying the model's diagnostic measurements would help us understand whether the assumptions are sufficiently met. You may use the \verb|plot()| function to create a series of regression diagnostic plots. The following command generates several diagnostic plots for a standard OLS regression model:
+
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+plot(myModel3)
+@
+
+\begin{figure}[H]
+	\centering
+<<fig.show='asis', eval=TRUE,echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=9, fig.height=8>>=
+par(mfrow = c(2,2))
+plot(myModel3)
+par(mfrow = c(1,1))
+@
+	\caption{Regression diagnostic plots}
+\end{figure}
+
+\begin{description}
+  \item [$\bullet$ Residuals vs Fitted]
+  Checks for non-linear relationship. For a good linear fit, you should find the residuals evenly distributed along a straight line centred near zero (i.e. a horizontal line). Contrarily, curvy line indicate poor model fit with possible non-linear effects not yet captured.
+
+  \item [$\bullet$ Normal Quantile-Quantile]
+  One the of main assumptions of OLS regression is that the residual is drawn from zero-centred Gaussian distribution \(\epsilon_i\sim\mathcal{N}(0,\sigma^2)\). To verify whether the proposed model satisfy the assumptions, we can use a normal quantile-quantile plot (Q-Q plot) to perform a quick check. The plot aligns model residuals against a theoretical normal distribution. If the residuals spread along a straight line on the Q-Q plot, it suggests that the residuals are normally distributed. Alternatively, if the data points deviate from the line it indicates vice versa. In this case, parametric model assumption does not hold and you might have to consider improving your model.
+		
+  \item [$\bullet$ Scale-Location]
+  Shows the distribution of the standardised residuals along the range of fitted values. As standard OLS model is assumed to be homoscedastic, the residual variance is not expected to vary along the range of fitted values (i.e. expects a near-horizontal line). If the standardised residual forms a distinguishable patten (e.g. fanning out), then the model may be heteroscedastic and hence violates the underlying assumptions.
+  
+  \item [$\bullet$ Residual vs Leverage (Cook's Distance)]
+  This plot indicates the observation which are highly influential to the model. For observations having high leverage, they pose influence to the model. This means that the model estimates are strongly affected by these cases. If such obserations have high residuals (i.e. large Cook's distance), they can sometimes be considered as outliers. On the other hand, most observations would have low leverage and short Cook's distance. This means that the model estimates would not have varied a lot if few such observations were to be added or discarded.
+\end{description}
+\end{Exercise}
+
+
+\begin{Exercise}[title={Model Overfitting}]
+Linear regression can be made more flexible by increasing the order of the polynomial terms. This allows linear model to capture non-linear effects. However, one of the major problems of a flexible model is that it risks overfitting the data. This means that the model might appear to have very good fit during training, but it may fit poorly when it is tested using unseen data. In general, overfitted models have very little inference and are ungeneralisable.
+
+The following code snippet runs an OLS model with variable level of flexibility. 
+
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Bivariate linear model with polynomial terms
+# You can change the values here.
+J <- 3
+K <- 2
+myModel4 <- lm(mpg ~ poly(wt,J) + poly(hp,K), mtcars)
+summary(myModel4)
+# Create the base axes as continuous values
+wt_along <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 50)
+hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
+# Use the outer product of wt and hp to run predictions for every 
+# point on the plane
+f <- function(k1, k2, model){ z <- predict(model, data.frame(wt=k1, hp=k2 )) }
+myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
+# Draw the 3D plane
+myPlane <- persp(x = wt_along, xlab = 'Weight',
+                 y = hp_along, ylab = 'Horsepower',
+                 z = myPrediction, zlab = 'Miles-per-Gallon',
+                 main = 'Fitted vs observed values in 3D space',
+                 theta = 30, phi = 30, expand = 0.5, col = "lightblue")
+# Add original data as red dots on the plane
+myPoints <- trans3d(x = mtcars$wt,
+                    y = mtcars$hp,
+                    z = mtcars$mpg,
+                    pmat=myPlane)
+points(myPoints, col='red')
+@
+
+\begin{figure}[H]
+	\centering
+	\[\hat{y} = \beta_0 + \sum\limits_{j=1}^{3} {\beta_{wt}}_j x_{wt}^j + \sum\limits_{k=1}^{2} {\beta_{hp}}_k x_{hp}^k \]
+	%\includegraphics[width=0.6\textwidth]{flexible_low}
+	<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=4>>=
+  # Bivariate linear model with polynomial terms
+  # You can change the values here.
+  J <- 3
+  K <- 2
+  myModel4 <- lm(mpg ~ poly(wt,J) + poly(hp,K), mtcars)
+  # Create the base axes as continuous values
+  wt_along <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 50)
+  hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
+  # Use the outer product of wt and hp to run predictions for every 
+  # point on the plane
+  f <- function(k1, k2, model){ z <- predict(model, data.frame(wt=k1, hp=k2 )) }
+  myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
+  # Draw the 3D plane
+  myPlane <- persp(x = wt_along, xlab = 'Weight',
+                   y = hp_along, ylab = 'Horsepower',
+                   z = myPrediction, zlab = 'Miles-per-Gallon',
+                   theta = 30, phi = 30, expand = 0.5, col = "lightblue")
+  # Add original data as red dots on the plane
+  myPoints <- trans3d(x = mtcars$wt,
+                      y = mtcars$hp,
+                      z = mtcars$mpg,
+                      pmat=myPlane)
+  points(myPoints, col='red')
+  @
+	\caption{A less flexible model showing better generalisability}
+\end{figure}
+
+\begin{figure}[H]
+	\centering\[\hat{y} = \beta_0 + \sum\limits_{j=1}^{8} {\beta_{wt}}_j x_{wt}^j + \sum\limits_{k=1}^{5} {\beta_{hp}}_k x_{hp}^k \]
+	%\includegraphics[width=0.6\textwidth]{flexible_high}
+  <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=4>>=
+  # Bivariate linear model with polynomial terms
+  # You can change the values here.
+  J <- 8
+  K <- 5
+  myModel4 <- lm(mpg ~ poly(wt,J) + poly(hp,K), mtcars)
+  # Create the base axes as continuous values
+  wt_along <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 50)
+  hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
+  # Use the outer product of wt and hp to run predictions for every 
+  # point on the plane
+  f <- function(k1, k2, model){ z <- predict(model, data.frame(wt=k1, hp=k2 )) }
+  myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
+  # Draw the 3D plane
+  myPlane <- persp(x = wt_along, xlab = 'Weight',
+                   y = hp_along, ylab = 'Horsepower',
+                   z = myPrediction, zlab = 'Miles-per-Gallon',
+                   theta = 30, phi = 30, expand = 0.5, col = "lightblue")
+  # Add original data as red dots on the plane
+  myPoints <- trans3d(x = mtcars$wt,
+                      y = mtcars$hp,
+                      z = mtcars$mpg,
+                      pmat=myPlane)
+  points(myPoints, col='red')
+  @
+	\caption{A more flexible model illutrating the risk of overfitting}
+\end{figure}
+
+\end{Exercise}
+
+
+\section{Poisson Regression}
+
+In the previous section, simple OLS model assumes the dependent variable follows a Gaussian distribution which spans the range \((-\infty, +\infty)\). Yet sometimes we would like to estimate the discrete number of events where it is often a positive integer (\(\mathbb{N}=\{0,1,2,3,...\}\)). In this case, Poisson distribution can be used. Poisson distributions can be found in everyday life, the following are typical examples:
+\begin{itemize}
+  \item Number of children in a household.
+  \item Number of bank notes in a wallet.
+\end{itemize}
+
+Poisson regression model assumes the response variable is drawn from Poisson distribution\footnote{A Poisson distribution is defined by a single parameter \(y \sim Poisson(\lambda)\), where \(\sigma^2=\lambda\) and \(\mu=\lambda\). This means that for every Poisson distribution, the mean \(\mu\) and variance \(\sigma^2\) must be equal.}. It can take into account multiple predictor variables. The Poisson regression equation is defined in the equations below \eqref{poisson}.
+
+\begin{equation}
+\label{poisson}
+\hat{y}=e^{\beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_M x_M} \\
+\ln\hat{y} =\beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_M x_M
+\end{equation}
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=5, fig.height=2>>=
+  library(dplyr)
+  library(ggplot2)
+poisson_max <- 20
+tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=1), frequency=0:poisson_max, lambda=1) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=2), frequency=0:poisson_max, lambda=2)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=3), frequency=0:poisson_max, lambda=3)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=4), frequency=0:poisson_max, lambda=4)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=5), frequency=0:poisson_max, lambda=5)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=6), frequency=0:poisson_max, lambda=6)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=7), frequency=0:poisson_max, lambda=7)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=8), frequency=0:poisson_max, lambda=8)) %>%
+  ggplot(aes(x=frequency, y=density, colour=factor(lambda))) +
+  geom_line() + 
+  labs(x='Frequency', y='Density', colour='Lambda') +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif')
+@
+\caption{Poisson distribution with different \(\lambda\) values}
+\end{figure}
+
+
+\begin{Exercise}[title={Testing for Poisson Distribution}]
+Using the \verb|mtcars| dataset, we can estimate the number of carburetors (i.e. the variable \verb|carb|) in cars using predictor variables available. You can use the command \verb|hist(mtcars$carb)| to draw a simple histogram. You should find that this variable (1) never goes below zero and (2) has a long but thin tail towards the positive side. 
+
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Draw a simple histogram.
+hist(mtcars$carb)
+# Compute the mean and variance.
+mean(mtcars$carb)
+var(mtcars$carb)
+@
+
+To robustly check whether a variable is truly drawn from a Poisson distribution, one of the most common methods is to perform a Chi-squared goodness-of-fit test. If the resulting \(p\)-value is small enough, we can then accept the variable as Poisson.
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Performs the Chi-squared goodness-of-fit test.
+# It checks whether the variable is drawn from a Poisson distribution.
+library(vcd)
+gf <- goodfit(mtcars$carb, type= "poisson", method= "ML")
+# Plots the observed frequency vs fitted Poisson distribution.
+# The hanging bars should fill the space if it was perfectly Poisson.
+plot(gf)
+# Checks the statistical p-value of the goodness-of-fit test.
+# If p<=0.05 then it is safe to say that the variable is Poisson.
+summary(gf)
+@
+\end{Exercise}
+
+\begin{Exercise}[title={Building a Poisson Model}]
+The following lines produce a Poisson regression model using the \verb|mtcars| dataset. The variable \verb|carb| is used as dependent variable while \verb|hp|, \verb|wt| and \verb|am| are used as independent predictor variables. The regression output can be interpreted in a similar way as the ones from linear model.
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Build a Poisson model to predict the number of carburetors in a car.
+myModel5 <- glm(carb ~ hp + wt + factor(am), 
+                family="poisson",
+                data=mtcars)
+# Read the model summary
+summary(myModel5)
+# Read the model diagnostic
+plot(myModel5)
+# Visualise the observed / fitted values as a table
+tibble(observed = mtcars$carb,
+       fitted = myModel5$fitted.values) %>% View()
+@
+\end{Exercise}
+
+\section{Logistic Regression}
+Logistic regression can be used if the dependent variable is binary. This refers to the scenario where the outcome can either be \(Y\) or \(\neg Y\). The model estimates the probablity of outcome \(P(Y)\in(0,1)\) using the logistic function as outlined in equation \eqref{logisticsreg}.
+
+\begin{equation}
+\label{logisticsreg}
+\sigma(X)=\frac{1}{1+e^{-X}}
+\end{equation}
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=4, fig.height=2>>=
+logit_min <- -5
+logit_max <- 5
+logistic <- seq(logit_min, logit_max, 0.1)
+
+ggplot(mapping = aes(x=logistic,
+                     y=1/(1+exp(-logistic)))) +
+  geom_line()+
+  labs(x='X', y='Logistic function') +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif')
+@
+\caption{Graph showing the range of a logistic function}
+\end{figure}
+
+In a univariate scenario, the logistic function can be expressed as the following equation, where \(\beta_0\) represents the intercept while \(\beta_1\) refers to the coefficient of variable \(x_1\). The output \(\sigma(X)\) indicates the probability of when the label is true, which is always within the range \(\sigma(X)\in(0,1)\). If the model is multivariate in nature, independent variables and their corresponding coefficients can be chained linearly in the \(X\) term \eqref{logisticprob}.
+
+\begin{equation}
+\label{logisticprob}
+P(Y)=\frac{1}{1+e^{-(\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M)}}
+\end{equation}
+
+One of the most powerful features of logistic regression is the odds-ratio. It quantifies the effects of each independent variable in a simple way. It is a value indicating the change of likelihood of the event when an independent predictor variable \(x_1\) increase by \(1\) unit. Odds-ratio is defined in equation \eqref{oddsratio}.
+
+\begin{equation}
+\label{oddsratio}
+{OR}(x_1) = \frac{odds(x_1+1)}{odds(x_1)} = \frac{e^{\beta_0+\beta_1 (x_1+1)+\beta_2 x_2+...+\beta_M x_M}}{e^{\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M}} = e^{\beta_1}
+\end{equation}
+
+Logistic regression can only handle binary problem. If the dependent variable \(Y\) has more than two outcomes we can use another algorithm called multinomial logistic regression\footnote{\url{http://www.ats.ucla.edu/stat/r/dae/mlogit.htm}}. Such problem can also be analysed using artificial neural networks in a much more sophisticated way which we will cover in a later section.
+
+
+\begin{Exercise}[title={Building a Logistic Model}]
+
+In this exercise, we would continue to use the \verb|mtcars| dataset. This time we will build a logistic regression model to predict whether the vehicle has automatic or manual transmission system (using the \verb|am| variable as dependent variable). In the following example, the model has three independent variables \verb|mpg|, \verb|hp| and \verb|disp|. This logistic regression model can be expressed as equation \eqref{logisticexample}.
+
+\begin{equation}
+\label{logisticexample}
+P(manual)=\frac{1}{1+e^{-(\beta_0 +\beta_1 x_{mpg} +\beta_2 x_{hp} +\beta_3 x_{disp})}}
+\end{equation}
+
+
+\end{Exercise}
+
+You may run the following code to build the logistic regression model. You may also calculate the odds-ratio and analyse the effect of each variable. The last part of the code is to calculate the model accuracy.
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Build a logistic regression model to predict the dependent variable am
+# (1=manual; 0=auto)
+myModel6 <- glm(am ~ mpg + hp + disp, family="binomial", data=mtcars)
+summary(myModel6)
+# Calculate the odds-ratios by taking the exponential of the coefficients
+# Can you explain the effects of each of these independent variables?
+exp(myModel6$coefficients)
+# You may also calculate the 95% confidence interval of the odds-ratio
+exp(cbind(oddsratio=myModel6$coefficients, confint(myModel6)))
+# Returns the modelled probability
+myProb <- predict(myModel6, mtcars, type="response")
+# Turn the probability into a binary class (i.e. TRUE vs FALSE)
+# Probability > 0.5 means the vehicle likely to have manual transmission
+myPrediction <- myProb > 0.5
+# Construct a contingency table to check correct & incorrect predictions
+table(myPrediction, observed=(mtcars$am == 1))
+# Calculate model accuracy
+# (defined as the percentage of correct prediction)
+myAccuracy <- sum(myPrediction==(mtcars$am == 1))/nrow(mtcars)
+myAccuracy
+@
+
+\chapter{Tree-based Methods}
+
+Tree-based algorithms belong to the supervised learning discipline. For any given set of labelled objects, trees would produce a set of prediction rules. It is based on the concept of region (denoted as \(\mathcal{R}_i\)) which refers to a subset of the original object space. Trees would produce a prediction for all objects situating within the same region. 
+
+At the heart of tree-based method is a concept called binary recursive partitioning. It is a top-down process which starts from initial object space. At the first recursion, the algorithm would split the master region \(\mathcal{R}_1\) into two at a cut-off point. This produces two corresponding new regions \(\mathcal{R}_2 \subseteq \mathcal{R}_1\) and \(\mathcal{R}_3 \subseteq \mathcal{R}_1\) with two distinct prediction values. The cutoff point \(s\) determines where to slice the master region. All objects within \(\{X|X_1 \geq s\}\) belong to \(\mathcal{R}_2\) and those with \(\{X|X_1 < s\}\) belong to \(\mathcal{R}_3\). This process runs recursively until it hits a termination criteria.
+			
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{rpart.PNG}
+\caption{Recursive partitioning}
+\end{figure}
+			
+\section{Decision Trees}
+
+Decision tree is the simplest form of any tree-based models. It uses standard recursive partitioning to produce prediction regions. Decision tree is a very generic algorithm which fits both regression and classification problem. This means it can predict both continuous real numbers and discrete categories depending on the type of problem. The region prediction for a classification tree is decided by the majority class, while the prediction for a regression tree is defined as the simple average of all members within the region. The tree-splitting structure is called the topology, which can be interpreted graphically in most cases.
+
+On the downside, one of the biggest problems of partitioning is that it tends to produces very deep and complex trees which may risk overfitting the data. Various control parameters can be used to mitigate the overfitting problem. For example, recursion can terminate once all regions are small enough to contain less than \(10\) objects.
+
+\begin{Exercise}[title={Growing a Decision Tree}]
+
+In the R language, there are many packages which implement tree-based algorithm. In this exercise, we will use the \verb|rpart| function in the rpart package to build a simple decision trees for a regression problem. The aim of this exercise is to predict car efficiency (\verb|mpg| variable) using the \verb|mtcars| dataset.
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Load the rpart package for recursive partitioning
+# Load the rpart.plot package for tree visualisation
+library(rpart)
+library(rpart.plot)
+# Build a decision tree to predict mpg using several input variables 
+myTree <- rpart(formula = mpg ~ wt + hp + factor(carb) + factor(am), 
+                data = mtcars,
+                control = rpart.control(minsplit=5)) 
+# Read the tree topology
+myTree
+# Read the detailed summary of the tree
+summary(myTree)
+# Visualise the decision tree
+rpart.plot(myTree)
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=5>>=
+library(rpart)
+library(rpart.plot)
+myTree <- rpart(formula = mpg ~ wt + hp + factor(carb) + factor(am), 
+                data = mtcars,
+                control = rpart.control(minsplit=5))
+rpart.plot(myTree, fallen.leaves = FALSE)
+@
+\caption{Decision tree for a regression problem}
+\end{figure}
+
+\end{Exercise}
+
+
+\begin{Exercise}[title={Tree Pruning}]
+
+It is a common practice to grow a complex tree and then decide how to prune it afterwards. By removing weak branches of the tree, it usually enhance predictive power of the model and eventually makes it more robust.
+
+The command \verb|printcp(myTree)| returns the relative error of the tree at each and every node. It is defined as \(1-R^2\) and therefore always starts with \(1\) at the top level. As the tree grows, the \(R^2\) value would increase and approach \(1\) while the corresponding relative error will diminish towards zero. The \verb|cp| value is simply the amount of error reduced when a region is split into two. We can specify a threshold \verb|cp| value so that branches with weak predictive power can be pruned away.
+
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# View the cp values
+plotcp(myTree)
+printcp(myTree)
+# Prune the tree at a certain threshold cp value
+# You can change the threshold value
+myNewTree <- prune(myTree, cp = 0.03)
+rpart.plot(myNewTree, fallen.leaves = FALSE)
+@
+
+\end{Exercise}
+
+\section{Random Forest}
+
+A random forest is a collection of many small decision trees. Each of the trees are trained using the same dataset, but with randomly selected predictor variables. For a random forest model with \(P\) independent variables, only \(p < P\) variables are randomly selected for each tree. Such randomess causes variation among the trees. Some trees would have strong prediction power while some others would be weaker.
+
+Once all the trees are grown, the random forest algorithm combines the output of all trees and use the simple average of the region as prediction value if it is regression problem. Alternatively if it is a classification problem, the majority label of the region would become the prediction value.
+
+It is widely recognised that prediction accuracy of random forest is far better than an individual decision tree. However as a trade-off, random forest is often harder to interpret manually as the decision rule becomes more complicated.
+
+\begin{Exercise}[title={Planting a Random Forest}]
+In this exercise, we would plant a random forest with many individual decision trees. Each tree would randomly select a few variables for consideration. You can use the \verb|randomForest| package to build random forest rapidly.
+
+The importance of each predictor variable is usually indicatde by the decrease of node impurity. A powerful predictor would substantially decrease node impurity. For regression, it is measured by residual sum of squares. For classification, the node impurity is measured by the Gini index. You can use the function \verb|importance(myForest)| or \verb|varImpPlot(myForest)| to calculate the importance measurement.
+
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+library(randomForest)
+# The randomForest package does not support factor encoding on-the-fly
+# So let us clone the data frame and encode the variable first.
+mtcars2 <- with(data = mtcars,
+                expr = {carb = factor(carb)
+                        am = factor(am)
+                        return(mtcars)})
+# Build a random forest with 1000 trees
+# Each tree has 2 randomly selected variables
+# You can change the parameters
+myForest <- randomForest(mpg ~ wt + hp + carb + am, 
+                         ntree = 1000,
+                         mtry = 2,
+                         data = mtcars2)
+# Plot the error as the forest expands
+plot(myForest)
+# Plot the distribution of tree size
+treesize(myForest) %>% hist()
+# Model summary
+myForest
+# Relative importance of each independent variable
+importance(myForest)
+varImpPlot(myForest)
+@
+\end{Exercise}
+
+
+\chapter{Neural Networks}
+
+Artificial neural networks (ANN) are mathematical algorithms inspired by the structure of the biological brains. It process incoming information through non-linear mechanism in a neuron and pass on the output to another neuron. When this process repeats many times via multiple layers of neurons, it becomes an artificial neural network. Neural networks having complex structure are usually trained iteratively using backpropagation techniques over long period of time with massive computational power. Nowadays, many modern applications are based on state-of-the-art neural networks, such as video analysis, speech recognition, chatbots and machine translation.
+
+In an ANN, each hidden neuron carries a non-linear activation function \(f(x)\). Sigmoid function is a traditional choice of activation function for ANNs\eqref{sigmoid}. It takes the weighted sum of input plus the bias unit and squashes everything into the range \((0,1)\) with a characteristic sigmoidal 'S' shape. As the sigmoid function is differentiable and easy to compute, it soon becomes a popular choice for ANN activation function. However, it suffers from weak gradient when the input is far away from zero (i.e. the neuron saturates), which makes the ANN learn very slow. 
+
+To address the problem of weak gradient, alternative activation functions have been proposed. For instance, the hyperbolic tangent function can be used\eqref{tanh}. It shares the same sigmoidal shape but further stretches the output to the range \((-1,1)\) therefore provides stronger gradient. Yet, the gradient still suffers from saturation when the input is too small or too large.
+
+Different activation functions can provide stronger gradients while maintaining non-linearity. For instance, the softplus function has strong gradient (i.e. unsaturable) for any positive input \eqref{softplus}. However, it has been considered computationally costly as it contains logarithm and exponential terms. In light of this, a simplified version call rectified linear unit (ReLU) is usually used instead \eqref{relu}. The shape of ReLU is very similar to softplus with the exception that it has a threshold at zero. This means only positive input can lead to activation. However, the weighted sum input can change to negative value during training therefore causing the ReLU neuron to cease training. This is called the dying ReLU problem. To avoid this, more advanced activation functions incorporate a very small gradient in the negative range to allow the neuron to recover. The output of common activation functions are visualised in figure \ref{fig:activation}.
+	
+\begin{subequations}
+	Sigmoid activation
+	\begin{equation}
+	\label{sigmoid}
+	\sigma (x)= \frac{1}{1+e^{-x}}
+	\end{equation}
+	
+	Hyperbolic tangent activation
+	\begin{equation}
+	\label{tanh}
+	tanh(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}
+	\end{equation}
+	
+	Softplus activation
+	\begin{equation}
+	\label{softplus}
+	f(x)= \ln(1+e^x)
+	\end{equation}
+	
+	Rectified linear unit (ReLU)
+	\begin{equation}
+	\label{relu}
+	f(x)= \max(0,x)
+	\end{equation}
+	
+\end{subequations}
+
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=4>>=
+range <- seq(-3,3,0.05)
+
+func_sigmoid <- 1/(1+exp(-range))
+func_tanh <-tanh(range)
+func_softplus <- log(1+exp(range))
+func_relu <- sapply(range, max, 0)
+
+tibble(func='Sigmoid', value= func_sigmoid, range = range) %>%
+  union_all(tibble(func='Hyperbolic tangent', value= func_tanh, range = range)) %>%
+  union_all(tibble(func='Softplus', value= func_softplus, range = range)) %>%
+  union_all(tibble(func='ReLU', value= func_relu, range = range)) %>%
+  ggplot(aes(x=range, y=value, colour=func)) +
+  geom_line() +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'right') +
+  labs(x='x', y='f(x)', colour='Activation Function')
+@
+\caption{Common neural activation functions}
+\label{fig:activation}
+\end{figure}
+
+The output prediction is made at the network's final layer. Each neuron at this layer combines the hidden neuron's activation though weighted sum and a bias adjustment unit \eqref{weightedhidden}. For regression problems, a linear activation layer is usually used to map the output vector back into unbounded real value range \eqref{linear}. For classification problem, softmax function is used as the final output layer. It maps the hidden layer's activations into the range \((0,1)\) where the sum of the entire output vector is restricted to\(1\) in order to represent class probabilities \eqref{softmax}.
+
+\begin{subequations}
+	Weighted sum of hidden vector with bias adjustment
+	\begin{equation}
+	\label{weightedhidden}
+	y_k=\beta_k+\sum_{h=1}^{H} w_{h,k}h_h , k=1,...,K
+	\end{equation}
+	
+	Linear output
+	\begin{equation}
+	\label{linear}
+	\hat{Y_k} = y_k
+	\end{equation}
+			
+	Softmax output
+	\begin{equation}
+	\label{softmax}
+	\hat{Y_k} = \frac{e^{y_k}}{ \sum_{k^\prime=1}^{K} e^{y_{k^\prime}} }
+	\end{equation}
+\end{subequations}
+
+\section{Multilayer Perceptron}
+
+A multilayer perceptron (MLP) network is the simplest form of all neural network. It consists a configurable number of stacked hidden layers, where every neurons in subsequent layers are fully interconnected.
+
+It is common practice to use zero-centred values for neural network training. In addition, it is vital to check that all variables share the same measurement unit prior to running the model. To achieve this, we would normalise all variables into \(z\)-score \eqref{zscore} so that they have the same spread. For any individual value \(x_i\), the \(z\)-score can be calculated as the distance from the arithmetic mean \(\bar{x}\) divided by standard deviation \(\sigma\) of the variable.
+
+\begin{subequations}
+	\begin{equation}
+	\label{zscore}
+	z_i = \frac{x_i - \bar{x}}{\sigma}
+	\end{equation}
+\end{subequations}
+
+At the training phase, network weights are usually initialised randomly. They are then optimised through backpropagation to achieve gradent descent. The weights improves gradually according to a predefined learning rate until they ultimately converge at the minimum value. One of the drawbacks is that backpropagation does not guarantee reaching global minimum if there are multiple minima across the parameter space. Such problem is usually mitigated by using advanced optimisers with adaptive learning rate.
+
+
+\begin{Exercise}[title={Training MLP for Regression Problem}]
+
+There are many packages which implements neural network in the R language, including \verb|neuralnets|, \verb|nnet|, \verb|RSNNS|, \verb|caret|, \verb|h2o|, \verb|MXNet|, \verb|kerasR|... etc. Generally speaking, all these packages implement the same underlying algorithm and the difference usually lies in syntax, execution speed and hardware compatibility.
+
+In this section, we will continue to use the \verb|mtcars| dataset. The objective of this exercise is to predict the \verb|mpg| value of each car given all other known attributes of it. We would use the \verb|neuralnet| package to create a simple multilayer perceptron (MLP) model.
+
+The following code trains a fully-connected multilayer perceptron with two hidden layers. The code will also visualise the iterative errors, network topology and compute the mean squared error (MSE) for both training and test set.
+
+<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+library(dplyr)
+library(neuralnet)
+# The mtcars dataset has a mixture of numeric and categorical variables
+# For numeric variables we need to normalise them
+mtcars_numeric <- mtcars %>% select(mpg, disp, hp, drat, wt, qsec)
+# foreach numeric variable, we calculate the mean and standard deviation
+mtcars_mean <- mtcars_numeric %>% lapply(mean)
+mtcars_sd <- mtcars_numeric %>% lapply(sd)
+# Convert the numeric variables into z-scores using the mean and sd
+mtcars_numeric_normalised <- (mtcars_numeric - mtcars_mean) / mtcars_sd
+# Construct a two layers MLP using all numeric variables.
+# By default it uses sigmoid active function
+myNN1 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
+          data = mtcars_numeric_normalised,
+          hidden = c(4,3),
+          linear.output = TRUE,
+          lifesign = 'full')
+# Visualise the network topology
+plot(myNN1)
+# Use a helper package for prettier graphics (optional)
+library(NeuralNetTools)
+plotnet(myNN1)
+# Calculate the network prediction
+myNNResult1 <- compute(myNN1, mtcars_numeric_normalised %>% select(-mpg))
+# The predicted values are in scaled format (z-score)
+# Need to convert it back to original scale for comparison
+myNNPred1 <- myNNResult1$net.result[,1] *
+                mtcars_sd[['mpg']] + 
+                mtcars_mean[['mpg']]
+# Visualise the results on a scatterplot
+qplot(mtcars$mpg, myNNPred1) +
+  labs(x='Observed MPG',
+       y='Predicted MPG')
+# Calculate model error using mean squared error (MSE)
+myNNError1 <- mean((myNNPred1 - mtcars$mpg)^2)
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=4>>=
+plot(myNN1, rep="best")
+@
+\caption{MLP model with two hidden layers}
+\end{figure}
+
+In many packages, the default neural activation function is sigmoid function. You can use trhe following code to use custom activation.
+
+<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+# Build the second model
+# Keep everything the same but change to softplus activation
+myNN2 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
+          data = mtcars_numeric_normalised,
+          hidden = c(4,3),
+          linear.output = TRUE,
+          act.fct = function(x) { log(1+exp(x)) },
+          lifesign = 'full')
+# Calculate the network prediction
+myNNResult2 <- compute(myNN2, mtcars_numeric_normalised %>% select(-mpg))
+# Convert the predicted values back to original scale
+myNNPred2 <- myNNResult2$net.result[,1] *
+                mtcars_sd[['mpg']] + 
+                mtcars_mean[['mpg']]
+# Calculate model error (MSE)
+myNNError2 <- mean((myNNPred2 - mtcars$mpg)^2)
+@
+
+Neural networks can also deal with categorical inputs. They are usually converted into one-hot encoding to feed into the model\footnote{For a categorical variable with \(K\) unique values, one-hot encoding would produce \(K\) new variables. Each new variables would have value \(\{1,0\}\). Please note that this is different from dummy encoding in statistical modelling.}. The following code converts all categorical variables in the \verb|mtcars| dataset into one-hot encoding. The encoded values afre then binded to the numeric values and jointly used for network training.
+
+<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+# Loads the purrr package to access the imap function
+library(purrr)
+# Selecting all the categorical variables in the dataset
+# Use the imap function to iterate through all columns
+# Convert all into one-hot encoding and binds back into a tibble
+mtcars_encoded <- mtcars %>% select(cyl,vs,am,gear,carb) %>% 
+  imap(function(myCol, myName) {
+    myUniqueValues <- unique(myCol)
+    myTib <- sapply(myUniqueValues, 
+           function(myValue){ (myValue == myCol) * 1 }) %>% as_tibble
+    colnames(myTib) <- paste0(myName, '_', myUniqueValues)
+    return(myTib)
+  }) %>% bind_cols()
+# Combines all numeric and categorical variables
+mtcars_all <- bind_cols(mtcars_numeric_normalised, mtcars_encoded)
+# View the dataset
+View(mtcars_all)
+# Train the third model by including encoded categorical variables
+myNN3 <- neuralnet(formula = mpg ~ 
+                     disp + hp + drat + wt + qsec +
+                     cyl_6 + cyl_4 + cyl_8 + 
+                     vs_0 + vs_1 + 
+                     am_1 + am_0 + 
+                     gear_4 + gear_3 + gear_5 + 
+                     carb_4 + carb_1 + carb_2 + carb_3 + carb_6 + carb_8,
+          data = mtcars_all,
+          hidden = c(4,3),
+          linear.output = TRUE,
+          act.fct = function(x) { log(1+exp(x)) },
+          lifesign = 'full')
+# Visualise the network topology
+plot(myNN3)
+# Calculate the network prediction
+myNNResult3 <- compute(myNN3, mtcars_all %>% select(-mpg))
+# Convert the predicted values back to original scale
+myNNPred3 <- myNNResult3$net.result[,1] *
+                mtcars_sd[['mpg']] + 
+                mtcars_mean[['mpg']]
+# Calculate model error (MSE)
+myNNError3 <- mean((myNNPred3 - mtcars$mpg)^2)
+# Compare the error of the three models
+myNNError1
+myNNError2
+myNNError3
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=4>>=
+plot(myNN3, rep="best")
+@
+\caption{MLP model with one-hot encoded categorical variables}
+\end{figure}
+
+\end{Exercise}
+
+
+\chapter{Time Series Analysis}
+
+Many datasets have temporal dimension. A time series is a series of observations ordered by chronologically.  There are two main types of time series data: 
+\begin{inparaenum}[1)]
+\item regularly-sampled\footnote{Regularly sampled time series has observations taken at fixed interval. This includes examples like heart rate, network traffic, daily weather... etc.}, and
+\item irregularly-sampled\footnote{Refers to when observations are not recorded at fixed interval, such as incidents of earthquakes.}
+\end{inparaenum}
+In this section, we would only focus on time series data sampled at regularly-spaced intervals.
+
+In time series data, temporal properties are often the point-of-interest. That include trend, seasonality, or temporal dependency among different variables. Analysing these properties allows users to gain useful insights. For example, users may extrapolate trend to create forecast going into the future. Alternatively, users may understand the nature of recurring patterns by analysing seasonality. In this section, we will introduce several tools to explore these properties.
+
+\section{Auto-Correlation Function}
+
+Auto-correlation function (ACF) measures the correlation of a single variable along the temporal dimension between \(x_t\) and \(x_{t+h}\). In other words, it shows the correlation of the variable over different lag periods. 
+
+In the R language, you may use the \verb|Acf(x)| function within the package \verb|forecast| to plot the ACF correlogram. For most time series variables, the correlation is usually strong at lag \(h=1\) and gradually diminishes as lag period increases. Cyclic pattern in the correlogram suggests possible seasonality which you can analyse further.
+
+On the other hand, the partial auto-correlation function (PACF) is similar to the ACF in the sense that it also measures the correlation between different lag periods. The difference is that it controls the correlation across the temporal dimsnion so that only the contribution of an individual lag can be reflected.
+
+\begin{Exercise}[title={Loading Datasets}]
+
+In this exercise, we would use an energy dataset. This dataset contains daily electricity generation and demand data published by a German transmission network called Amprion\footnote{Amprion - Demand in Conrrol Area \url{https://www.amprion.net/Grid-Data/Demand-in-Control-Area/}}. The first column is a date time variable and the rest are demand and generation data, each sampled at \(15\) minutes granularity. Let us start by loading the dataset from CSV file.
+
+\begin {table}[H]
+\caption {Description of the Amprion dataset}
+\begin{center}
+\begin{tabular}{ | l | l | l |}
+\toprule[1.5pt]
+{\bf Variable}            & \bf{Measurement Unit}           & {\bf Description}\\
+\midrule
+\verb|datetime|           & \verb|%Y-%m-%d %H:%M:%S|        & Date and time\\
+\verb|demand|             & Megawatt                        & Demand in control area\\
+\verb|pv|                 & Megawatt                        & Photovoltaic feed-in\\
+\verb|wp|                 & Megawatt                        & Wind power feed-in\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{center}
+\end{table}
+
+<<fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Read the Amprion dataset from CSV file
+# You might have to modify the path to point to your file location
+amprion <- read.csv('amprion.csv',
+                    colClasses = c('character',
+                                   'numeric',
+                                   'numeric',
+                                   'numeric')) %>% as_tibble()
+# View the dataset
+amprion
+@
+
+One of the main drivers of demand and generation is weather. The weather dataset is published by the Deutscher Wetterdienst\footnote{DWD Climate Data Center \url{https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html}}. Weather observations are recorded every hour at the Bremen weather station.
+
+\begin {table}[H]
+\caption {Description of the Breman weather dataset}
+\begin{center}
+\begin{tabular}{ | l | l | l |}
+\toprule[1.5pt]
+{\bf Variable}            & \bf{Measurement Unit}     & {\bf Description}\\
+\midrule
+\verb|datetime|           & \verb|%Y-%m-%d %H:%M:%S|  & Date and time\\
+\verb|airtemp|            & Degree Celsius            & Air temperature\\
+\verb|sun|                & \(J {cm}^-1\)             & Short-wave global radiation\\
+\verb|windspd|            & \(m {sec}^-1\)            & Wind speed\\
+\verb|winddir|            & Bearing                   & Wind direction\\
+\verb|soil10|             & Degree Celsius            & Soil temperature at \(10\)cm depth\\
+\verb|soil20|             & Degree Celsius            & Soil temperature at \(20\)cm depth\\
+\verb|soil50|             & Degree Celsius            & Soil temperature at \(50\)cm depth\\
+\verb|soil100|            & Degree Celsius            & Soil temperature at \(100\)cm depth\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{center}
+\end{table}
+
+<<fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Load the Breman weather dataset
+bremen <- read.csv('bremen.csv',
+                   colClasses = c('character',
+                                  'numeric',
+                                  'numeric',
+                                  'numeric',
+                                  'factor',
+                                  'numeric',
+                                  'numeric',
+                                  'numeric',
+                                  'numeric')) %>% as_tibble()
+# View the dataset
+bremen
+@
+
+Before moving on to further analysis, we need to normalise the two datasets into the same granularity first. Once this is done, we can then join the two datasets together to form one table containing all variables.
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Load the lubridate package to access more datetime functions
+library(lubridate)
+# Load the dplyr package for data wrangling
+library(dplyr)
+# Aggregate the amprion dataset from 15 minutes to daily level.
+amprion_daily <- amprion %>%
+                  mutate(date = datetime %>% 
+                           ymd_hms() %>% 
+                           floor_date('day') %>%
+                           as.Date()) %>%
+                  group_by(date) %>%
+                  summarise(total_demand = sum(demand),
+                            total_pv = sum(pv),
+                            total_wp = sum(wp))
+# Aggregate the bremen dataset from hourly to daily.
+bremen_daily <- bremen %>%
+                  mutate(date = datetime %>% 
+                           ymd_hms() %>% 
+                           floor_date('day') %>%
+                           as.Date()) %>%
+                  group_by(date) %>% 
+                  summarise(mean_airtemp = airtemp %>% mean(),
+                            max_sun = sun %>% sum(),
+                            mean_windspd = windspd %>% mean(),
+                            mean_soil10 = soil10 %>% mean(),
+                            mean_soil20 = soil20 %>% mean(),
+                            mean_soil50 = soil50 %>% mean(),
+                            mean_soil100 = soil100 %>% mean())
+# Join the two daily datasets together into a common table
+myTable <- amprion_daily %>%
+  left_join(bremen_daily, by = 'date')
+# View the aggregated datasets
+View(myTable)
+# Plots the daily total demand
+myTable %>%
+  ggplot(aes(x=date, y=total_demand)) + 
+  geom_line() +
+  labs(x = 'Date',
+       y = 'Power Demand (MW)')
+@
+
+\end{Exercise}
+
+\begin{Exercise}[title={Analysing Temporal Correlation}]
+
+Using the code below, you may create an ACF, a PACF and a CCF plot. The latter one refers to the cross-correlation function plot between two time series. In other words, it shows the temporal relationship among two variables across different lag.
+
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+# Load the forecast package
+library(forecast)
+# Plots the ACF correlogram only
+# There are several ways to create plots.
+ggAcf(myTable$total_demand) # More pretty
+Acf(myTable$total_demand)   # Standard base R plot
+# Plots the PACF correlogram only.
+ggPacf(myTable$total_demand)
+Pacf(myTable$total_demand)
+# Draw a CCF correlogram which find the correlation between two variables.
+# You can try swapping variables here.
+ggCcf(x = myTable$mean_airtemp, 
+      y = myTable$total_demand)
+Ccf(x = myTable$mean_airtemp, 
+    y = myTable$total_demand)
+# Constructs the several key plots in one go.
+ggtsdisplay(myTable$total_demand)
+tsdisplay(myTable$total_demand)
+# Create a lag plot 
+gglagplot(myTable$total_demand, lags = 28)
+lag.plot(myTable$total_demand, lags = 28)
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=7>>=
+library(forecast)
+tsdisplay(myTable$total_demand, 
+          main = 'Total daily power demand (MW)',
+          points = FALSE,
+          lag.max = 120)
+@
+\caption{ACF and PACF correlograms}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=5>>=
+library(forecast)
+lag.plot(myTable$total_demand,lags = 28, layout = c(4,7))
+@
+\caption{Lag plot showing the correlation of various lag periods}
+\end{figure}
+
+\end{Exercise}
+
+\section{Decomposition}
+Time series at regular interval can be either additive or multiplicative. Additive time series can be generally described as \(X_t=S_t+T_t+\epsilon_t\) where \(S_t\) refers to the seasonality at time \(t\) while \(T_t\) refers to the trend component. The observed data \(X_t\) is simply the sum total of trend, seasonal and error components. Alternative, a multiplicative time series is defined as \(X_t = S_t \times T_t \times \epsilon_t\). These components can be easily decomposed from the observed values.
+
+\begin{Exercise}[title={Identifying Trend and Seasonal Components}]
+
+From this exercise onwards, we would divide the dataset into training and testing set. We would use the training set to build models, the models would be apply to the testing set to assess their performance.
+
+The following code will help us find out the ideal frequency of the seasonal component. It uses spectal analysis to identify frequency with the strongest spectral density. Once the frequency is calculated, we can build a \verb|ts| object using the frequency value. The function \verb|decompose()| would convert the observed time series into trend component \(T_t \in [1,T]\), seasonal component \(S_t \in [1,T]\) and random residuals \(\epsilon_t \in [1,T]\).
+
+<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+# Divide the dataset into training and testing set
+TEST_SET_BEGIN <- '2017-01-01'
+myTrainingSet <- myTable %>% filter(date < TEST_SET_BEGIN)
+myTestingSet <- myTable %>% filter(date >= TEST_SET_BEGIN)
+# Automatically search for ideal frequency using training data
+# We would expect the frequency to be 7 (weekly pattern)
+myFreq <- findfrequency(myTrainingSet$total_demand)
+# Check the calculated frequency
+myFreq
+# Define a seasonal time series object using the frequency value
+myTs <- ts(data = myTrainingSet$total_demand,
+           frequency = myFreq)
+# Decompose the time series into its constituent components
+myDecomp <- decompose(myTs,
+                      type = 'additive')
+# View the decomposed components
+autoplot(myDecomp)
+plot(myDecomp)
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=6>>=
+plot(myDecomp)
+@
+\caption{Decomposing an additive time series}
+\end{figure}
+
+\end{Exercise}
+
+\begin{Exercise}[title={Linear Time Series Forecast}]
+
+Given that you already learnt how to decompose time series data in the previous exercise, we can make further use of the decomposition outputs. In this exercise, we will build a simple forecasting model using the trend and seasonal components as independent variables. The mathematical formula of a linear model with \(M\) predictor variables can be expressed as \eqref{tslm}.
+
+\begin{equation}
+\label{tslm}
+X_t = \beta_0 + \beta_{trend} T_t + \beta_{seasonal}S_t + \sum_{m=1}^{M}(\beta_m {x_m}_t) + \epsilon_t
+\end{equation}
+
+<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+library(forecast)
+# Perform linear regression model with decomposed time series components
+# You can also add interaction and polynomial terms here
+myTsModel1 <- tslm(myTs ~ trend + season + 
+                     mean_airtemp * mean_windspd + 
+                     poly(max_sun,degree = 2) + 
+                     mean_soil10 + mean_soil20,
+                   data = myTrainingSet)
+# View model summary
+summary(myTsModel1)
+# Produce forecast using the testing set
+myTsForecast1 <- forecast(object = myTsModel1, 
+                          newdata = myTestingSet)
+# Visualise the forecast
+autoplot(myTsForecast1)
+plot(myTsForecast1)
+# Calculate the model performance by comparing with the testing set
+# Using mean squared error (MSE) here.
+myTestError1 <- mean((myTsForecast1$mean - myTestingSet$total_demand)^2)
+@
+
+The output of the above code would produce a chart with your forecast visualised as coloured line. The coloured area surrounding the line represents the confidence interval of your prediction.
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=3>>=
+plot(myTsForecast1)
+@
+\caption{Linear time series forecasting with trend and seasonal components}
+\end{figure}
+
+You can run a simple linear regresion model using the same set of predictor variables with the \verb|lm()| function to compare with the time series model output. 
+
+<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+myTsModel2 <- lm(myTs ~ mean_airtemp * mean_windspd + 
+                 poly(max_sun,degree = 2) + 
+                 mean_soil10 + mean_soil20,
+                 data = myTrainingSet)
+# View model summary
+summary(myTsModel2)
+# Calculate model prediction using testing set
+myTsForecast2 <- predict(object = myTsModel2, 
+                         newdata = myTestingSet)
+# Calculate testing MSE
+myTestError2 <- mean((myTsForecast2 - myTestingSet$total_demand)^2)
+# Compare the testing error (MSE) of these two models
+# Which one is a better model?
+myTestError1
+myTestError2
+# Visualise the predictions of the two models
+ggplot() +
+  geom_line(aes(x=date, y=total_demand), myTrainingSet) + 
+  geom_line(aes(x=date, y=myTsForecast1$mean, colour='blue'), myTestingSet) +
+  geom_line(aes(x=date, y=myTsForecast2, colour='green'), myTestingSet) + 
+  scale_colour_manual(guide = 'legend', name = 'Model', 
+         values =c('blue'='blue','green'='green'), 
+         labels = c('Time Series Model','Simple Linear')) + 
+  labs(x='Date',
+       y='Total Demand (MW)') +
+  theme(legend.position = 'bottom')
+@
+
+\end{Exercise}
+
+\section{ARIMA Model}
+
+ARIMA is an acronym for Auto-Regressive Integrative Moving Average model. It is a statistical technique which incorporates lag within the statistical model. It can be described as the combination of three separate parts: autoregression, integration and moving average. ARIMA has three corresponding parameters \(p\),\(d\),and \(q\) which is normally expressed as \(ARIMA(p,d,q)\) or as separate terms \(AR(p)\), \(I(d)\) and \(MA(q)\).
+
+The \(AR(p)\) part suggests that observation \(X_t\) is dependent on the linear combination of lagged terms up to \(p\) lag periods. A pure \(AR(p)\) model is expressed as \(X_t=\sum_{i=i}^{p}(\phi_i X_{t-i})\). The moving average part \(MA(q)\) indicates the residual is inherited from up to \(q\) lag periods. A pure \(MA(q)\) model can be expressed as as \(X_t=\sum_{i=1}^{q}(\theta_i \epsilon_{t-i}) + \epsilon_t \). As a result, a simple \(ARMA(p,q)\) model can be expressed as the following where \(\phi_i\) and \(\theta_i\) are model coefficients, while \(X_{t-i}\) represent observed data at \(i^{th}\) lag step and \(\epsilon_{t-i}\) refers to the random error at the \(i^{th}\) lag step \eqref{arma}.
+
+\begin{equation}
+\label{arma}
+\underbrace{X_t}_\text{Observation} = 
+\underbrace{ \beta_0 }_\text{intercept}+ 
+\underbrace{ \sum_{i=i}^{p}(\phi_i X_{t-1}) }_\text{AR(p)} + 
+\underbrace{ \sum_{i=1}^{q}(\theta_i \epsilon_{t-i}) }_\text{MA(q)} + 
+\underbrace{\epsilon_t}_\text{residual}
+\end{equation}
+
+ARIMA model assumes the time series conforms stationarity\footnote{A stationary time series has consistent statistical properties across all time, such as equal mean and variance.}. The integrative component \(I(d)\) ensures stationarity by taking \(d\) number of integrative steps over time. A first order integrative model \(I(1)\) is simply the difference between current step and the immediate previous lag step. It is expressed as \( X_t^{'}=X_t - X_{t-1} \). Similarly, a second order integrative model \(I(2)\) is expressed as \( X_t^{''} = X_t^{'} - X_{t-1}^{'} = X_t - 2X_{t-1}+X_{t-2} \).
+
+Time series data with seasonality can be expressed \(ARIMA(p,d,q)(P,D,Q)_m\) where the uppercase parameters represent the seasonal component of the model. The \(m\) value is a positive non-zero integer indicating the frequency. The estimates \(AR(P)\), \(I(D)\) and \(MA(Q)\) are linearly combined together with the non-seasonal part to create the seasonal ARIMA (SARIMA) model.
+
+\begin{Exercise}[title={Automated ARIMA}]
+
+The standard ARIMA implementation accepts six parameters \(p\), \(d\), \(q\), \(P\), \(D\) and \(Q\) which will produce a seasonal time series model. In many cases, these values are usually not known to the user and all possible values are examined case-by-case to get the best fit.
+
+In the \verb|forecast| package\footnote{The package author has published a detailed book: \url{https://www.otexts.org/fpp/}}, you may use the function \verb|Arima()| to experiment parameters manually. Alternatively, it is quite common to use automated method to search for good parameters. The method \verb|auto.arima()| tries all parameter values within the given constraints. It can also fit linear regression using predictor variables if the \verb|xreg| attribute is supplied to the function. This is considerably slower than the \verb|Arima()| function due to overhead for parameter search.
+
+<<fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+library(forecast)
+library(dplyr)
+# Build an ARIMA model automatically
+# Keeping the maximum order (p+d+P+D) small
+# Search for seasonal model only
+myTsModel3 <- auto.arima(y = myTs,
+                         max.order = 5,
+                         seasonal = TRUE,
+                         xreg = myTrainingSet %>% 
+                                 select(mean_airtemp, 
+                                        mean_windspd, 
+                                        max_sun,
+                                        mean_soil10,
+                                        mean_soil20,
+                                        mean_soil50,
+                                        mean_soil100),
+                         trace = TRUE)
+# View the ARIMA(p,d,q)(P,D,Q) estimates and their coefficients
+summary(myTsModel3)
+# Run the forecast
+# Apply the ARIMA model to testing set
+myTsForecast3 <- forecast(myTsModel3,
+                          xreg = myTestingSet %>%
+                                   select(mean_airtemp, 
+                                          mean_windspd, 
+                                          max_sun,
+                                          mean_soil10,
+                                          mean_soil20,
+                                          mean_soil50,
+                                          mean_soil100))
+# Visualise the forecast
+autoplot(myTsForecast3)
+plot(myTsForecast3)
+# Calculate the MSE error using the testing set
+myTestError3 <- mean((myTsForecast3$mean - myTestingSet$total_demand)^2)
+@
+\end{Exercise}
+
+\begin{Exercise}[title={Custom ARIMA}]
+After you have calculated the automated ARIMA forecast, you might realise the forecast tends to flat out when forecast horizon increases. This is because the \verb|auto.arima()| function selects the best parameters based on an indicated called AIC. It maximises the log-likelihood of the training data and gives preference to simpler models. We can manually tweak the ARIMA model with custom parameters using the \verb|Arima()| function instead:
+<<fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE>>=
+# Use custom parameters for the ARIMA model
+# In this case we can try ARIMA(2,0,0)(1,1,1)
+# You can change the parameters here
+myTsModel4 <- Arima(y = myTs, 
+                    xreg = myTrainingSet %>% 
+                            select(mean_airtemp,
+                                   mean_windspd,
+                                   max_sun,
+                                   mean_soil10,
+                                   mean_soil20,
+                                   mean_soil50,
+                                   mean_soil100),
+                    order = c(2,0,0), 
+                    seasonal = c(1,1,1)) 
+# View the model summary
+summary(myTsModel4)
+# Apply the ARIMA model to test set
+myTsForecast4 <- forecast(myTsModel4, 
+                          xreg = myTestingSet %>% 
+                            select(mean_airtemp,
+                                         mean_windspd,
+                                         max_sun,
+                                         mean_soil10,
+                                         mean_soil20,
+                                         mean_soil50,
+                                         mean_soil100))
+# Visualise the forecast
+autoplot(myTsForecast4)
+plot(myTsForecast4)
+# Calculate MSE error using the testing set
+myTestError4 <- mean((myTsForecast4$mean - myTestingSet$total_demand)^2)
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=3>>=
+myTsModel4 <- Arima(y = myTs, 
+                    xreg = myTrainingSet %>% 
+                            dplyr::select(mean_airtemp,
+                                   mean_windspd,
+                                   max_sun,
+                                   mean_soil10,
+                                   mean_soil20,
+                                   mean_soil50,
+                                   mean_soil100),
+                    order = c(2,0,0), 
+                    seasonal = c(1,1,1)) 
+myTsForecast4 <- forecast(myTsModel4, 
+                          xreg = myTestingSet %>% 
+                            dplyr::select(mean_airtemp,
+                                         mean_windspd,
+                                         max_sun,
+                                         mean_soil10,
+                                         mean_soil20,
+                                         mean_soil50,
+                                         mean_soil100))
+plot(myTsForecast4)
+@
+\caption{Forecast generated from a seasonal ARIMA model.}
+\end{figure}
+
+\end{Exercise}
+
+
+\begin{Exercise}[title={Model-based Simulation}]
+
+With a full \(ARIMA(p,d,q)(P,D,Q)_m\) model, users can easily create model-based simulation. The following code will generate \(100\) simulated runs and plot the average of all runs as point forecast on a chart.
+
+<<fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+# Use one of the trained ARIMA model for simulation
+# Wrapping the simulation in a lapply loop
+mySimulation <- lapply(1:100, function(i){
+  tibble(date = myTestingSet$date,
+         run = i,
+         value = simulate(object = myTsModel4,
+                          xreg = myTestingSet %>% 
+                                  select(mean_airtemp, 
+                                         mean_windspd, 
+                                         max_sun,
+                                         mean_soil10,
+                                         mean_soil20,
+                                         mean_soil50,
+                                         mean_soil100)) %>%
+                  as.numeric())})
+# Combines all tibbles together to form a large tibble
+mySimulationAll <- do.call(rbind, mySimulation)
+# Calculate the mean of all simulated runs
+myTsForecast5 <- mySimulationAll %>% 
+                      group_by(date) %>%
+                      summarise(fcast = mean(value))
+# Visualise the simulated forecast data
+ggplot() +
+  geom_line(aes(x=date, y=total_demand), myTrainingSet) + 
+  geom_line(aes(x=date, y=value, group=run), mySimulationAll, alpha=0.02) + 
+  stat_summary(aes(x=date, y=value), mySimulationAll,
+               fun.y = mean, 
+               geom = 'line',
+               colour ='blue') +
+  labs(x='Date', 
+       y='Power Demand')
+# Calculate the MSE error
+myTestError5 <- mean((myTsForecast5$fcast - myTestingSet$total_demand)^2)
+@
+
+
+At last, you can compare the performance of various models:
+<<fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+# Linear time series model
+myTestError1
+# Simple linear regression (not time series model)
+myTestError2
+# Auto ARIMA model
+myTestError3
+# ARIMA with custom parameters
+myTestError4
+# Simulated ARIMA model
+myTestError5
+@
+\end{Exercise}
+
+
+\chapter{Survival Analysis}
+
+For problems involving events occuring at irregularly interval, they can be studied through survival analysis. It is commonly used to analyse time-to-event in many research areas, such as medicine, economics, engineering and biology. For example, survival analysis is famously used in clinical research to analyse the effects of different drugs on sustaining patient's life. In this case, the time to death is used an indicator for drug performance. We will go through several techniques in this chapter.
+
+\section{Kaplan-Meier Estimator}
+
+Kaplan-Meier estimator is used to measure how many subjects survives after a certain amount time after treatment started. 
+At time \(t \leqslant	T\), the estimator is given by equation \eqref{kmestimator} where \(d_{t^{'}}\) represents the number of events and \(n_{t^{'}}\) represents the number of subjects at risk.
+
+\begin{equation}
+\label{kmestimator}
+\hat{S}_t = \prod_{t^{'}=1}^{t} \Big( 1-\frac{d_{t^{'}}} {n_{t^{'}}} \Big)
+\end{equation}
+
+
+\begin{Exercise}[title={Fitting a Kaplan-Meier Curve}]
+
+There are many implementationf for survival analysisin the R language. The most commonly used one is the \verb|survival| package. You can use the \verb|survfit()| function to fit a Kaplan-Meier curve with categorical predictors.
+
+In this exercise, we use the \verb|lung| dataset within the \verb|survival| package which contains lung cancer patients survival time. You can use the command \verb|?lung| to read the detailed dataset description. To fit a Kaplan-Meier Curve, we need to define the target event (i.e. death, in this example) and the time-to-event. This is done by defining a special object using the \verb|Surv(time, event)| function. The \verb|survfit| function fits a Kaplan-Meier curve against the target event using the supplied variables.
+
+<<fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE>>=
+# Load the survival package for curve fitting
+library(survival)
+# Use the survminer package for better graphics
+library(survminer)
+# Load the lungs dataset into current environment
+data(lung)
+# Read the dataset description
+?lung
+# Build an empty model
+# We are interested in death cases only (status = 2)
+# This model has no predictor variable
+mySurvFit1 <- survfit(Surv(time, status==2) ~ 1,
+                      data = lung)
+# Plot the fited curve
+ggsurvplot(mySurvFit1)
+# Use patient's sex as predictor
+mySurvFit2 <- survfit(Surv(time, status==2) ~ sex, 
+                      data = lung)
+# Plot the curve with confidence interval and p-value
+ggsurvplot(mySurvFit2,
+           conf.int = TRUE, 
+           pval = TRUE)
+# The predictor needs to be categorical variable  
+# Use age as predictor by encoding into age group categories
+mySurvFit3 <- survfit(Surv(time, status==2) ~ cut(age, c(40,50,60,70)), 
+                      data = lung)
+ggsurvplot(mySurvFit3,pval = TRUE)
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=4>>=
+library(survival)
+library(survminer)
+mySurvFit2 <- survfit(Surv(time, status==2) ~ sex, lung %>% mutate(sex = factor(sex,levels = c(1,2), labels = c('Male','Female'))))
+ggsurvplot(mySurvFit2, 
+           palette = 'Set2',
+           conf.int = TRUE,
+           risk.table = TRUE,
+           risk.table.col = "strata",tables.height = 0.3,
+           pval = TRUE)
+@
+\caption{Kaplan-Meier curves showing two strata}
+\end{figure}
+
+\end{Exercise}
+
+
+\section{Cox Proportional Harzard Model}
+
+To investigate the statistical effects of multiple predictor variables on survival probability, a technique named Cox regression can be used. Cox regression can take into account categorical, ordinal as well as numerical range variables. It analyses the simultaneously effects of multiple variables on survivial and assumes that the effects of these covariates are time-independent.
+
+The harzard function \(h_t\) is give by equation \eqref{coxph}. The term \(h_{0,t}\) in the equation represents the baseline harzard when all covariates are zero. The linear terms \(x_1, x_2, x_3,..., x_M \) are the predictor variables, while \(\beta_1, \beta_2, \beta_3,..., \beta_M \) are their corresponding coefficients. For each coefficient \(\beta_m\), the exponential term \(e^{\beta_m}\) represents the harzard ratio of the covariate variable \(x_m\). If \(e^{\beta_m} > 1\), the corresponding covariate is positively correlated with increase in hazard. On the other hand, \(x_m\) is negatively correlated with harzard if \(e^{\beta_m} < 1\). In the case where \(e^{\beta_m} = 1\), the variable \(x_m\) has no effects on harzard.
+
+\begin{equation}
+\label{coxph}
+h_t = h_{0,t} \times e^{\beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 +...+\beta_M x_M}
+\end{equation}
+
+Cox model assumes variable effects are time-independent. To test whether the assumptions hold, we can analyse the Schoenfeld residuals for each covariate variable. Equation \eqref{schoenfeld} defines the Schoenfeld residual \(s_{i,k}\) of covariate \(k\) of observation \(i\). It is the difference between covariate \(x_{i,k}\) and the sum of weighted likelihood of failure of all subjects at risks at time \(t\). If there are observable temporal patterns in the residual plot, it suggests the proportional harzard assumptions may have been violated. In this case, you can consider adding interaction effects with time to mitigate the problem.
+
+\begin{equation}
+\label{schoenfeld}
+s_{i, k} =  x_{i,k} - \sum_{i=1}^{j \in R(t)} x_{i, m} \hat{p_j}
+\end{equation}
+
+\begin{Exercise}[title={Training a Cox Regression Model}]
+
+Cox regression model can be trained using the \verb|coxph()| funciton in the \verb|survival| package. In the following example using the \verb|lung|dataset, the cox model analyses the effects of different covariate variables on the time-to-death of a group of cancer patients. 
+
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Build a Cox model with predictor variables
+myCoxModel1 <- coxph(Surv(time, status==2) ~ factor(sex) + age + 
+                       ph.ecog + ph.karno + 
+                       pat.karno + 
+                       meal.cal + wt.loss, data = lung)
+# Read the model summary
+summary(myCoxModel1)
+@
+
+The model output above shows the statistical effects of different covariates. For instance, \verb|sex|\footnote{It is encoded as male=\(1\) and female=\(2\).} is a statistically significant variable for predicting time-to-death of lung cancer patients. This variable has coefficient \(\beta_{sex=2} = \Sexpr{round(myCoxModel1$coefficients['factor(sex)2'],3)} \), which means that having \verb|sex=2| would change the patient's hazard by \(e^{\Sexpr{round(myCoxModel1$coefficients['factor(sex)2'],3)}} - 1=\Sexpr{round((exp(myCoxModel1$coefficients['factor(sex)2']) - 1)*100,1)}\% \). In other words, \verb|sex=2| is benefitial to the patient's wellbeing.
+
+Likewise, \verb|ph.ecog| is also a significant variable. Each unit increase in \verb|ph.ecog| would change the patient's harzard by \( e^{\Sexpr{round(myCoxModel1$coefficients['ph.ecog'],3)}}-1=\Sexpr{round((exp(myCoxModel1$coefficients['ph.ecog']) - 1)*100,1)}\% \). This implies higher \verb|ph.ecog| score significantly increases patient's risk of death.
+
+\end{Exercise}
+
+\begin{Exercise}[title={Cox Regression Diagnostics}]
+
+The code below tests the Cox proportional hazard assumption by calculating the Schoenfeld residuals. If there are observable patterns along the temporal dimension, the model assumptions may have been violated.
+
+<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE>>=
+# Test the proportional harzard assumption of a Cox regression
+myCoxZph1 <- cox.zph(myCoxModel1)
+# Print the results of the test 
+myCoxZph1
+# Plot the Schoenfeld residuals
+ggcoxzph(myCoxZph1)
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=7>>=
+ggcoxzph(myCoxZph1,var = c('age','ph.ecog','ph.karno'))
+@
+\caption{Scaled Schoenfeld residuals of a selected set of variables plotted against time}
+\end{figure}
+
+
+\end{Exercise}
+
+
+\chapter{Unsupervised Learning}
+
+Unsupervised learning refers to identifying the underlying structure of an unlabelled dataset. Clustering is one of the most common applications of unsupervised learning, which aims at allocating similar objects into common groups.
+
+In a given set of unlabelled objects, there can be different ways to produce clusters. Figure \ref{fig:clusters} below shows the effects of choosing differennt number of clusters.
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=4>>=
+# Multiple plot function
+#
+# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+# - cols:   Number of columns in layout
+# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+#
+# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+# then plot 1 will go in the upper left, 2 will go in the upper right, and
+# 3 will go all the way across the bottom.
+#
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+
+  numPlots = length(plots)
+
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                    ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+
+ if (numPlots==1) {
+    print(plots[[1]])
+
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+
+km1 <- iris %>%
+  select(Sepal.Length, Sepal.Width) %>%
+  kmeans(2)
+clust1 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km1$cluster %>% factor)) +
+  geom_point()+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km1$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'none') +
+  labs(x='Variable 1', y='Variable 2')
+
+km2 <- iris %>%
+  select(Sepal.Length, Sepal.Width) %>%
+  kmeans(4)
+clust2 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km2$cluster %>% factor)) +
+  geom_point()+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km2$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'none') +
+  labs(x='Variable 1', y='Variable 2')
+
+km3 <- iris %>%
+  select(Sepal.Length, Sepal.Width) %>%
+  kmeans(6)
+clust3 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km3$cluster %>% factor)) +
+  geom_point()+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km3$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'none') +
+  labs(x='Variable 1', y='Variable 2')
+
+km4 <- iris %>%
+  select(Sepal.Length, Sepal.Width) %>%
+  kmeans(8)
+clust4 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km4$cluster %>% factor)) +
+  geom_point()+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km4$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'none') +
+  labs(x='Variable 1', y='Variable 2')
+
+multiplot(clust1, clust2, clust3, clust4,cols = 2)
+@
+\caption{Different ways to cluster a set of unlabelled objects}
+\label{fig:clusters}
+\end{figure}
+
+\section{\(K\)-means Clustering}
+
+\(K\)-means clustering is arguably the most common clustering algorithm due to its intrinsic simplicity. It produces clusters by minimising the Euclidean distance between objects and the centroid of their own cluster. The Euclidean distance between two \(P\)-dimensional vectors \(\vec{x_j}\) and \(\vec{x_k}\) is defined as:
+
+\begin{equation}
+\label{euclidean}
+d(\vec{x_j}, \vec{x_k}) = \sqrt{ \sum_{p=1}^{P} (x_{j,p} - x_{k,p} )^2 }
+\end{equation}
+
+\begin{algorithm}[H]
+	\label{kmeans}
+	\caption{\(K\)-means clustering}
+	\SetKwInOut{Input}{Input}
+	\Input{Set of unlabelled object \( X=\{\vec{x}_1, \vec{x}_2, \vec{x}_3, ... ,\vec{x}_N \}\)}
+	\Input{Number of clusters \(K\)}
+	\Initialise \\
+	\( \{ \vec{\mu}_1, \vec{\mu}_2, \vec{\mu}_3, ..., \vec{\mu}_K  \} \leftarrow Randomise (\{ \vec{x}_1, \vec{x}_2, \vec{x}_3, ... , \vec{x}_N    \}, K), K < N \) \;
+	\While{ true } {
+	  \For{ \(k \leftarrow \{ 1,2,3,...,K\}\) } {
+	    \( \omega_k \leftarrow \{ \} \) \;
+	  }
+	  \For{ \(n \leftarrow \{ 1,2,3,...,N\}\) } {
+	    \( k \leftarrow \aggregate{argmin} {k^{'}} d( \vec{\mu}_{k^{'}}, \vec{x}_n ) , k \in {1,2,3,...,K} \) \;
+	    \( \omega_k \leftarrow \omega_k \cup \{ \vec{x}_n  \} \) \;
+	  }
+	  
+	  \For{ \(k \leftarrow \{ 1,2,3,...,K\}\) } {
+	    \( \vec{\mu}_k^{'} \leftarrow \frac{1}{|\omega_k|} \sum_{\vec{x} \in \omega_k } \vec{x} \) \;
+	  }
+    \uIf{ \(\vec{\mu}_k^{'} = \vec{\mu}_k, k={1,2,3,...K}\) }{
+      \Break \;
+    } \Else{
+      \( \vec{\mu}_k = \vec{\mu}_k^{'} \) \;
+    }
+	}
+  \Return Cluster centroids \(  \{ \vec{\mu}_1, \vec{\mu}_2, \vec{\mu}_3, ..., \vec{\mu}_K  \} \) \;
+  \Return Object cluster assignment \( \{\omega_1, \omega_2, \omega_3, ..., \omega_K \} \)
+\end{algorithm}
+
+Given that the dataset unlabelled, the true number of cluster is not known to us. The \(K\) value which represents the number of clusters is usually experimented one-by-one and the best value is determined from the output. 
+
+In the R language, the \(K\)-means clustering algorithm is implemented very efficiently. You can use the \verb|kmeans()| function in the \verb|stats| package to perform \(K\)-means clustering.
+
+\begin{Exercise}[title={Dimensionality Reduction}]
+
+In this exercise, we will use the \verb|mtcars| dataset. This dataset contains six numeric variables, in other words, it is a \(P=6\) dimensionality dataset. We can use dimensionality reduction techniques such as principal component analysis (PCA) to visualise them. It converts input variables into principal components (PCs) in the order of maximum variance. The following code would execute PCA and visualise the top two PCs on a scatterplot. 
+
+<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+# Select the numeric variables from the mtcars dataset
+mtcars_numeric <- mtcars %>% select(mpg, disp, hp, drat, wt, qsec)
+# Calculate the mean and standard deviation for each variables
+mtcars_mean <- mtcars_numeric %>% lapply(mean)
+mtcars_sd <- mtcars_numeric %>% lapply(sd)
+# Convert the numeric variables into z-scores using the mean and sd
+mtcars_numeric_normalised <- (mtcars_numeric - mtcars_mean) / mtcars_sd
+# There are six variables in this dataset
+# We can use principal component analysis (PCA) to reduce the dimensionity
+myPca <- prcomp(mtcars_numeric_normalised)
+library(ggfortify)
+autoplot(myPca, loadings.label = TRUE)
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=4, fig.height=3>>=
+autoplot(myPca, loadings.label = TRUE) +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'none')
+@
+\caption{Biplot showing the first and second principal components}
+\end{figure}
+
+\end{Exercise}
+
+
+\begin{Exercise}[title={\(K\)-means Clustering}]
+
+With a \(P=6\) dimensional dataset, we can apply \(K\)-means algorithm on it to compute the clusters. In most cases, the number of cluster \(K\) is not known in advance. We can experiement different values here. 
+
+In practical applications of \(K\)-means algorithm, it is very common to normalise the variables using \(z\)-scores if they are recorded in different units. Normalisation would ensure that all variables are fairly represented.
+
+<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+# We know there are three types of of flowers, so let's start with K=3
+# You can try different values
+myKClust <- kmeans(mtcars_numeric_normalised, centers = 3)
+# Visualise the clusters
+ggplot(myPca$x, aes(x = PC1,
+                    y = PC2,
+                    colour = factor(myKClust$cluster))) +
+  geom_point() + 
+  geom_label(aes(label=mtcars %>% rownames())) + 
+  stat_ellipse() +
+  labs(colour='Cluster')
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=3>>=
+set.seed(1988)
+size <- 2
+kmPca1 <- kmeans(mtcars_numeric_normalised, centers = 2)$cluster
+myClustPlot1 <- ggplot(myPca$x, aes(x = PC1,
+                        y = PC2,
+                        colour = factor(kmPca1))) +
+  geom_point() + 
+  geom_label(aes(label=mtcars %>% rownames()), size=size) + 
+  stat_ellipse() +
+  labs(colour='Cluster') +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'bottom')
+
+kmPca2 <- kmeans(mtcars_numeric_normalised, centers = 3)$cluster
+myClustPlot2 <- ggplot(myPca$x, aes(x = PC1,
+                        y = PC2,
+                        colour = factor(kmPca2))) +
+  geom_point() + 
+  geom_label(aes(label=mtcars %>% rownames()), size=size) + 
+  stat_ellipse() +
+  labs(colour='Cluster') +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'bottom')
+
+kmPca3 <- kmeans(mtcars_numeric_normalised, centers = 4)$cluster
+myClustPlot3 <- ggplot(myPca$x, aes(x = PC1,
+                        y = PC2,
+                        colour = factor(kmPca3))) +
+  geom_point() + 
+  geom_label(aes(label=mtcars %>% rownames()), size=size) + 
+  stat_ellipse() +
+  labs(colour='Cluster') +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'bottom')
+
+multiplot(myClustPlot1,myClustPlot2,myClustPlot3,cols = 3)
+@
+\caption{Comparing \(K\)-means clustering results using different \(K\) values}
+\end{figure}
+
+\end{Exercise}
+
+\section{Hierarchical Clustering}
+
+In a given unlabelled dataset containing objects \(\vec{x}_i, i=\{1,2,3,...,N\} \), the maximum number of cluster is \(N\) where each cluster contains only \(1\) member object. In this case, each cluster centroid which is denoted as \( \vec{\mu}_i \) contains rich information which perfectly describes its member object as \( \vec{\mu}_i = \vec{x}_i \). However, such information would be practically useless. If we start with \(N\) clusters, we can merge the closest two clusters into one therefore adding the least amount of error to the system. In this way, we would have obtained \(N-1\) clusters. If we repeat this merging process again and again until there are no more clusters left to merge, you would eventually obtain one single cluster which comprises every member of the object set. This is how agglomerative hierarchical clustering algorithm works. 
+
+In hierarchical clustering, the closeness metric between two clusters \( \omega_i \) and \( \omega_j \) is denoted as function \( D(\omega_i,\omega_j) \). There are several common choices of including 
+\begin{inparaenum}[1)]
+\item single linkage, 
+\item complete linkage, 
+\item average linkage,
+\item centroid and
+\item Ward's method
+\end{inparaenum}
+. For single linkage, the distance between two clusters is defined as the closest distance between their member objects \eqref{singlelinkage}. In many cases, this tends to produce long chains with similar objects merging sequentially into the same cluster. On the other hand, complete linkage uses the distance between farthest objects between two clusters as the cluster closeness metric \eqref{completelinkage}. This tends to produce clusters with consistent size. The two aforementioned measurements are prone to outlier influence. To mitigate such problem, average linkage can be used. It uses the arithmetic average of all pairwise distance as the cluster closeness measurement \eqref{averagelinkage}. Similarly, we can make use of cluster centroid to measure closeness \eqref{centroid}. The centroid method is also resilient to outlier influence. Nonetheless, Ward's method compares the change in sum of squares between cluster members and their centroid when they are merged \eqref{ward}.
+
+\begin{subequations}
+	Single linkage
+	\begin{equation}
+	\label{singlelinkage}
+	D(\omega_i, \omega_j) = \min_{\vec{x}_i \in \omega_i, \vec{x}_j \in \omega_j} d(\vec{x}_i, \vec{x}_j)
+	\end{equation}
+	
+	Complete linkage
+	\begin{equation}
+	\label{completelinkage}
+	D(\omega_i, \omega_j) = \max_{\vec{x}_i \in \omega_i, \vec{x}_j \in \omega_j} d(\vec{x}_i, \vec{x}_j)
+	\end{equation}
+	
+	Average linkage
+	\begin{equation}
+	\label{averagelinkage}
+	D(\omega_i, \omega_j) = \underbrace{\frac{1}{|\omega_i|}\frac{1}{|\omega_j|}  \sum_{\vec{x}_i \in \omega_i} \sum_{\vec{x}_j \in \omega_j}  d(\vec{x}_i, \vec{x}_j)}_\text{Average pairwise distance between \(\omega_i\) and \(\omega_j\)}
+	\end{equation}
+	
+	Centroid
+	\begin{equation}
+	\label{centroid}
+	D(\omega_i, \omega_j) = d\Bigg(\Big( \underbrace{\frac{1}{|\omega_i|}\sum_{\vec{x}_i \in \omega_i}\vec{x}_i }_\text{Centroid of \(\omega_i\)} \Big), 
+	                               \Big( \underbrace{\frac{1}{|\omega_j|}\sum_{\vec{x}_j \in \omega_j}\vec{x}_j }_\text{Centroid of \(\omega_j\)} \Big) \Bigg)
+	\end{equation}
+	
+	Ward's method
+	\begin{equation}
+	\label{ward}
+  \begin{split}
+	D(\omega_i, \omega_j) = 
+	        & \underbrace{ \sum_{k \in \omega_i \cup \omega_j } \Big(\vec{x}_k - ( \frac{1}{|\omega_i \cup \omega_j|} \sum_{\vec{x}_{{k}^{'}} \in \omega_i \cup \omega_j} \vec{x}_{{k}^{'}} \Big)^2 ) }_\text{Sum of squares of \(\omega_i \cup \omega_j\)} - \\
+        	& \underbrace{ \sum_{i \in \omega_i } \Big(\vec{x}_i - ( \frac{1}{|\omega_i|} \sum_{\vec{x}_{{i}^{'}} \in \omega_i}\vec{x}_{{i}^{'}}) \Big)^2 }_\text{Sum of squares of \(\omega_i\)} - \\
+        	& \underbrace{ \sum_{j \in \omega_j } \Big(\vec{x}_j - ( \frac{1}{|\omega_j|} \sum_{\vec{x}_{{j}^{'}} \in \omega_j}\vec{x}_{{j}^{'}}) \Big)^2 }_\text{Sum of squares of \(\omega_j\)}
+	\end{split}
+	\end{equation}
+\end{subequations}
+
+
+\begin{algorithm}[H]
+	\label{hclust}
+	\caption{Agglomerative hierarchical clustering}
+	\SetKwInOut{Input}{Input}
+	\Input{Set of unlabelled object \(X = \{ \vec{x}_1, \vec{x}_2, \vec{x}_3,..., \vec{x}_N\}\)}
+	\Input{Linkage function \(D(\omega_i,\omega_j)\)}
+	%\tcc{  }
+	\For{\( n \in \{1,2,3,...,N\} \)}{
+	  \( \omega_n \leftarrow \{\vec{x}_n\} \) \;
+	}
+	\( \Omega \leftarrow \{ \omega_1, \omega_2, \omega_3, ..., \omega_N \} \) \;
+	\While{ \( |\Omega| > 1 \) } {
+	  \( \Omega^{'} = \{\} \) \;
+	  \For{\(i \in \{1,2,3,..., |\Omega|\}\)}{
+	    \( \Omega^{'}_i \leftarrow D(\omega_i, \omega_j), j=\{1,2,3,...,|\Omega|\}  \) \;
+	    %\( j \leftarrow \aggregate{argmax}{j} d(\omega_i, \omega_j), j={1,2,3,...,|\Omega|} \) \;
+	  }
+	  \( \{i,j\} \leftarrow \aggregate{argmin}{i,j} \Omega^{'} \) \;
+	  \( \omega_{ij} \leftarrow \Omega^{'}_i \cup \Omega^{'}_j \) \;
+    \( \Omega \leftarrow \Omega^{'} \setminus \Omega^{'}_i \setminus \Omega^{'}_j \cup \omega_{ij} \) \;
+	}
+  %\Return Cluster centroids \( C \)\;
+\end{algorithm}
+
+The result of hierarchical clustering can be visualised using a tree-like structure called dendrogram. The merging sequence of clusters as well as object closeness can be easily read from the dendrogram. The height of the node at the dendrogram indicates the closeness metric of the two clusters when they are merged. After analysing the dendrogram, users can decide how many clusters to retain. This is usually an objective decision. Once decided, the dendrogram can be cut to obtain the desired number of clusters. Alternatively, we can cut the dendrogram at a certain fixed height to discard trivial clusters at the bottom.
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=14>>=
+StatChull <- ggproto("StatChull", Stat,
+  compute_group = function(data, scales) {
+    data[chull(data$x, data$y), , drop = FALSE]
+  },
+  
+  required_aes = c("x", "y")
+)
+stat_chull <- function(mapping = NULL, data = NULL, geom = "polygon",
+                       position = "identity", na.rm = FALSE, show.legend = NA, 
+                       inherit.aes = TRUE, ...) {
+  layer(
+    stat = StatChull, data = data, mapping = mapping, geom = geom, 
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+myDist <- mtcars[,c('disp','qsec')] %>% scale %>% dist()
+hc <- myDist %>% hclust()
+getHPlot <- function(i){
+  ggplot(mtcars, aes(x=disp, y=qsec, group=factor(cutree(hc, k=i)))) +
+  geom_point(size=0.5) +
+  stat_chull(fill = NA, colour = "red", size=1) +
+  #geom_text(aes(x=250, y=22,label=)) +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'bottom') +
+  labs(x=paste0('Iteration ', nrow(mtcars)-i+1 ), y=NULL) +
+  scale_x_continuous(labels = NULL) + 
+  scale_y_continuous(labels = NULL)
+}
+plt <- lapply(32:1, getHPlot)
+multiplot(plotlist = plt, cols = 4)
+@
+\caption{Iterative steps of agglomerative hierarchical clustering}
+\end{figure}
+
+\begin{Exercise}[title={Constructing a Dendrogram}]
+
+In the R language, hierarchical clustering can be performed using the \verb|hclust()| function which is included in the default \verb|stats| package. The function requires a distance matrix of objects which is normally pre-computed using the \verb|dist()| function. The \verb|hclust()| function uses complete linkage by default if the \verb|method| parameter is not specified. You can change the linkage function and check the difference in output results. The following code snippet produces a simple dendrogram.
+
+<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+# Calculate distance matrix
+# Using Euclidean distance here but you can change it
+myDist <- mtcars_numeric_normalised %>% dist(method = 'euclidean')
+# Perform hierarchical clustering using complete linkage
+myHClust <- myDist %>% hclust(method = 'complete')
+# You can change the closeness measurement
+# Read the documentation of the hclust function
+?hclust
+# Visualise the dendrogram
+plot(myHClust)
+# You can use ggdendrogram to plot a prettier dendrogram
+library(ggdendro)
+ggdendrogram(myHClust)
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=4>>=
+ggdendrogram(myHClust)
+@
+\caption{Dendrogram illustrating hierarchical clustering using complete linkage}
+\end{figure}
+
+\end{Exercise}
+
+\begin{Exercise}[title={Cutting a Dendrogram}]
+
+Dendrogram can be cut to remove smaller clusters at lower height. This can be achieved using the \verb|cutree()| function in R. You can either specify the number of clusters to retain using parameter \verb|k|, this would retain the top \verb|k| clusters of the dendrogram. Alternatively, you can use the \verb|h| parameter to specify at which height the dendrogram should be cut. You can use the code below to cut the dendrogram and visualise the results.
+
+<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+# Cut the dendrogram by specifying how many clusters to retain
+# You can change the number of clusters here
+myCutClusters1 <- cutree(myHClust, k = 5) %>% factor()
+# Alternatively, cut the dendrogram at a certain height
+myCutClusters2 <- cutree(myHClust, h = 6) %>% factor()
+# Use the ape package to plot pretty dendrograms
+# The RColorBrewer package generates colour palette
+library(ape)
+library(RColorBrewer)
+# Obtain colour definition
+myColours <- brewer.pal(n = 5, name="Set1")
+# Convert the hierarchical cluster result into a phylogram object
+myPhylo <- myHClust %>% as.phylo()
+# Draw some plots
+# This is a phylogenic tree
+plot(myPhylo, 
+     type = 'phylogram',
+     tip.color = myColours[myCutClusters1])
+# This is a cladogram
+plot(myPhylo, 
+     type = 'cladogram',
+     tip.color = myColours[myCutClusters1])
+# This is a unrooted phylogenic tree
+plot(myPhylo, 
+     type = 'unrooted',
+     tip.color = myColours[myCutClusters1])
+# This is a fan phylogram
+plot(myPhylo, 
+     type = 'fan',
+     tip.color = myColours[myCutClusters1])
+# This is a radial phylogram
+plot(myPhylo, 
+     type = 'radial',
+     tip.color = myColours[myCutClusters1])
+@
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=8>>=
+plot(myPhylo, 
+     type = 'fan',
+     tip.color = brewer.pal(5, name="Set2")[myCutClusters1])
+@
+\caption{Fan phylogram showing hierarchical clusters}
+\end{figure}
+
+\end{Exercise}
+
+
+
+\end{document}
