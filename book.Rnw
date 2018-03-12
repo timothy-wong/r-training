@@ -280,16 +280,15 @@ summary(myModel1)
 You can also build more complex multivariate models using the same command. You can instruct the function \verb|lm()| to deal with nominal and ordinal variables by explicitly stating \verb|factor(myVar)| in the formula. Alternatively, if your variable is already in \verb|factor| data type, the regression function would handle it automatically without stating it in the formula.
 
 <<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# To build a multivariate linear model with polynomial terms.
 # Dummy variables are automatically created on-the-fly.
-myModel2 <- lm(mpg ~ factor(cyl) + disp + poly(hp, 3) + 
-                 drat + qsec + 
-                 factor(am) + factor(gear), mtcars)
+# The variable am has two categories 
+myModel2 <- lm(mpg ~ wt + hp + qsec + factor(am), mtcars)
 summary(myModel2)
-# Multivariate model with interaction effect
-myModel3 <- lm(mpg ~ factor(cyl) * disp + poly(hp, 3) + 
-                 drat + qsec + 
-                 factor(am) + factor(gear), mtcars)
+# Build a multivariate linear model with polynomial terms.
+# Interaction effect can be added as well
+myModel3 <- lm(mpg ~ wt + qsec + factor(am) + 
+                 factor(cyl) * disp + poly(hp, 3) + 
+                 factor(gear), mtcars)
 summary(myModel3)
 @
 If you manage to produce the model summary, you will find a lot of useful information there:
@@ -313,6 +312,23 @@ Adjusted \(R^2\)    & Adjusted version of \(R^2\).\\
 \end{center}
 \end{table}
 
+You can load the \verb|car| package and use the function \verb|avPlots()| to view the partial regression plot\footnote{It is also called the added-variable plot.}. This would graphically display the effect of individual variables while keeping others in control. 
+
+<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+library(car)
+avPlots(myModel2)
+@
+
+\begin{figure}[H]
+	\centering
+  <<fig.show='asis', eval=TRUE,echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=9, fig.height=8>>=
+  par(mfrow = c(2,2))
+  library(car)
+  avPlots(myModel2)
+  par(mfrow = c(1,1))
+  @
+	\caption{Partial Regression plots}
+\end{figure}
 
 As the input predictor variables have different scale, the model coefficient are not directly comparable yet. To compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a funciton \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. 
 <<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
