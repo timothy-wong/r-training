@@ -37,6 +37,8 @@
 \usepackage{amsmath}
 \usepackage{pstricks}
 
+\newtheorem{rexample}{R Example}[section]
+
 \newcommand{\aggregate}[2]{\underset{#2}{\operatornamewithlimits{#1\ }}}
 
 \SetKw{Break}{break}
@@ -95,7 +97,13 @@
  }%
  \makeatother
  %%%%***************
-
+ 
+<<setup, include=FALSE>>=
+library(knitr)
+knit_hooks$set(rexample = function(before, options, envir) {
+  if (before) sprintf('\\begin{rexample}\\label{%s}\\hfill{}', options$label) else '\\end{rexample}'
+})
+@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % First page of book which contains 'stuff' like: %
@@ -139,7 +147,6 @@
 % Preface %
 %%%%%%%%%%%
 \chapter*{Preface}
-Lorem ipsum dolor sit amet.
 
 \begin{fquote}[Yes, Prime Minister][1986]
 {Jim Hacker: The statistics are irrefutable...\\
@@ -147,19 +154,11 @@ Sir Humphrey: Statistics? You can prove anything with statistics.\\
 Jim Hacker: Even the truth.\\
 Sir Humphrey: Yes... No!}
 \end{fquote}
-\lipsum[2]
 
-\section*{Structure of book}
-% You might want to add short description about each chapter in this book.
-Each unit will focus on <SOMETHING>.
+R is an open source language for statistical programming. It is widely used among statisticians, academic researchers, and business analysts across the world. This book is part of a training course designed for business analysts.
 
-\section*{About the companion website}
-The website for this file contains:
-\begin{itemize}
-  \item A link to (freely downlodable) latest version of this document.
-  \item Link to download LaTeX source for this document.
-  \item Miscellaneous material (e.g. suggested readings etc).
-\end{itemize}
+\section*{Web Access}
+The \LaTeX source code and compiled PDF version of this book can be digitially accessed via public repository at \url{https://github.com/timothy-wong/r-training}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Give credit where credit is due. %
@@ -167,9 +166,8 @@ The website for this file contains:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Acknowledgements}
 \begin{itemize}
-\item A special word of thanks goes to.
-\item I'll also like to thank.
-\item I'm deeply indebted my parents, colleagues and friends for their support and encouragement.
+\item A special word of thanks goes to the open source R community. 
+\item I would also like to thanks analytics users who pioneer the use of the R language.
 \end{itemize}
 \mbox{}\\
 %\mbox{}\\
@@ -180,54 +178,57 @@ The website for this file contains:
 
 \chapter{Basics}
 
-%%%%%%%%%%%%%%%%
-% NEW CHAPTER! %
-%%%%%%%%%%%%%%%%
+
 \chapter{Regression Models}
 
-Within the realm of supervised learning, regression model is one of the most widely used statistical techniques. It provides a way to quantify the relationship between dependent variable \(Y\) and independent variable \(X\), where \(Y	\subseteq \mathbb{R} \) and \(X = \{ x_1, x_2,...x_M \}\).
+Regression model is one of the most widely used statistical techniques in the realm of supervised learning. It quantifies the relationship between dependent variable \(Y\) and independent variable \(X\), where \(Y	\subseteq \mathbb{R} \) and \(X = \{ x_1, x_2,...x_M \}\).
 
 \section{Linear Regression}
 
-Linear regression is a very popular parametric statistical technique. This means it assumes independent variables are normally distributed (i.e. having a bell-shaped curve) and the model residuals also follow the same distribution. The goal of linear regression is to minimise the sum of squared residual. Regression method is extremely useful in the sense that the output can quantify the effects of each input variable, it also informs users whether the effects are statistical significant or not.
+Linear regression\footnote{Also called ordinary least square (OLS) regression.} is a very popular parametric statistical technique. It can quantify the effects of each input variable, it also informs users whether the effects are statistically significant or not.
 
-In a univariate scenario where \(x\) is the only input, it provides the best fit for the model equation \(\hat y=\beta_0+\beta_1x \). The parameter \(\beta_0\) is normally referred as the intercept, while the \(\beta_1\) value is called the slope. This is illustrated in the chart on the left side in the figure below.
+In a univariate scenario where \(x\) is the only input, it provides the best fit for the model equation \(\hat{y}_i=\beta_0+\beta_1 x_i \). The parameter \(\beta_0\) is normally referred as the intercept, while the \(\beta_1\) value is called the slope.
 
 Simple linear model can be extended to include a high-order polynomial term  of variable \(x\). It provides higher model flexibility so that linear model fits the data better. For example, an \(M\)\textsuperscript{th} order polynomial term has been fitted to the dataset on the next chart. The choice of \(M\) is subjective but usually a small value of \(M\) is desirable because it helps avoid overfitting.
 
-In R language you can simply call the function lm to perform linear regression. You need to provide at least two arguments (\verb|data| and \verb|formula|), extra arguments can be provided such as subset. For example, \verb|lm(y ~ x , myData)| will perform a simple univariate linear model using independent variable \(x\) to predict dependent variable \(y\) in the data frame object \verb|myData|.
+The model assumes model residuals \( \epsilon_i = y_i-\hat{y}_i\) are drawn from Gaussian distribution (i.e. having a bell-shaped curve). The goal of linear regression is to minimise the sum of squared residual. 
 
-Dummy variable can be easily created from categorical labels. Users can simply use the syntax \verb|lm(y ~ x1 + x2, myData)| where \verb|x1| is a numeric variable and \verb|x2| either a factor or a character variable The lm function will automatically create dummy variables on-the-fly. Normally the first category in the column will be used as reference level. If users would like to control the reference item, \verb|x2| can be coded as a factor variable with levels defined. 
+In the R language you can call the function \verb|lm()| to perform linear regression. It requires at least two arguments (\verb|data| and \verb|formula|). For example, \verb|lm(y ~ x , myData)| will perform a simple univariate linear model using independent variable \(x\) to predict dependent variable \(y\) in the data frame object \verb|myData|.
 
-A more flexible regression model can be built by extending a linear model with poilynomial terms.
-It can be expressed as \verb|lm(y~poly(x1,3)+x2,myData)|. In this case, we are defining a cubic relationship with variable \verb|x1| and linear relationship with variable \verb|x2| (Five coefficients in total will be estimated, four from the regression terms plus one from the intercept). Such model can be expressed mathematically as equation \eqref{linear}. 
+Dummy variable can be easily created from categorical labels. Users can simply use the syntax \verb|lm(y ~ x1 + x2, myData)| where \verb|x1| is a numeric variable and \verb|x2| either a factor or a character variable The \verb|lm| function will automatically create dummy variables on-the-fly. Normally the first category in the column will be used as reference level.
+
+Simple linear model are often not flexible enough to model complex variable effects. In light of this, linear models can be made more flexible by including polynomial terms. It can be expressed as \verb|lm(y~poly(x1,3)+x2,myData)|. In this case, we are defining a cubic relationship with variable \verb|x1| and a linear relationship with variable \verb|x2| (Five coefficients in total will be estimated, four from the regression terms plus one from the intercept). Such model can be expressed as equation \eqref{linearexample}. 
 
 \begin{equation}
-\label{linear}
-\hat y = \underbrace{\beta_0}_\text{Intercept} + 
-\underbrace{\beta_1x_1 + \beta_2x_1^2 +\beta_3x_1^3}_\text{Cubic polynomial term} + 
-\underbrace{\beta_4x_2}_\text{Linear term}
+\label{linearexample}
+\hat{y}_i = \underbrace{\beta_0}_\text{Intercept} + 
+\underbrace{\beta_1 x_{1,i} + \beta_2 x_{1,i}^2 +\beta_3 x_{1,i}^3}_\text{Cubic polynomial term} + 
+\underbrace{\beta_4 x_{2,i}}_\text{Linear term}
 \end{equation}
 
-Interaction refers to the combined effect (also known as synergy) of more than one independent variables. For example, independent variable \verb|x1| and \verb|x2| might have no effect on dependent variable \(y\) alone. However, the effect on \(y\) can become prominent when these two variables get combined. In R language you can use the syntax \verb|lm(y ~ x1*x2)| to represent the relationship. The function \verb|I(x1*x2)| can be used to supress interaction term and the arguments will be treated as simple arithmetic operations.
+Interaction refers to the combined effect\footnote{Also known as synergy effect.} of more than one independent variables. For example, independent variable \verb|x1| and \verb|x2| might have no effect on dependent variable \(y\) alone. However, the effect on \(y\) can become prominent when these two variables are combined. In R language you can use the syntax \verb|lm(y ~ x1*x2)| to represent the relationship. The function \verb|I(x1*x2)| can be used to supress interaction term and the arguments will be treated as simple arithmetic operations.
 
 \begin{Exercise}[title={Simple Linear Regression}]
-In this exercise, we are going to predict car efficiency using the \verb|mtcars| teaching dataset. The dataset is embedded in open source R and can be called directly by \verb|mtcars|. You can browse the top several rows by executing \verb|head(mtcars)| in your R console. You can read the definition of individual columns by calling the command \verb|?mtcars|.
+In this exercise, we are going to predict car efficiency using the \verb|mtcars| teaching dataset. The dataset is embedded in open source R and can be called directly by \verb|mtcars|. In example \ref{ex:mtcars_head},you can peek at the dataset by executing \verb|head(mtcars)| or \verb|tail(mtcars)|. You can also read the dataset definition by executing the command \verb|?mtcars|.
 
-
-<<eval=TRUE, dpi=100,size='scriptsize'>>=
+<<ex:mtcars_head, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+#Load the dataset into your local environment.
+data(mtcars)
+# Browse the top few rows
 head(mtcars)
+# Browse the last few rows
+tail(mtcars)
 @
 
-Before running any models, we can explore the dataset a bit further by visualising it. The R package \verb|ggplot2| is a very popular visualisation add-in. It builds charts by stacking layers of graphics on it. You may try the following lines:
+Before running any models, we can explore the dataset a bit further through visualisation. The R package \verb|ggplot2| is a very popular visualisation add-in. It builds charts by stacking layers of graphics on it. Example \ref{ex:mtcars_ggplot} shows how you can use \verb|ggplot2| to visualise the dataset.
 
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+<<ex:mtcars_ggplot, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Create a simple histogram using base R plot
 hist(mtcars$mpg)
 # Using dplyr pipeline style code (equivalent output)
 library(dplyr)
 mtcars$mpg %>% hist()
-# Histogram using ggplot package
+# Plot histogram using ggplot2 package
 library(ggplot2)
 mtcars %>%
   ggplot(aes(x=mpg)) + 
@@ -246,7 +247,7 @@ mtcars %>%
        title="Scatterplot showing car weight against performance")
 # Create a boxplot showing mpg distribution of different gear types
 mtcars %>%
-ggplot(aes(x=factor(am,
+  ggplot(aes(x=factor(am,
                     levels = c(0,1),
                     labels = c('Automatic', 'Manual')), y=mpg)) + 
   geom_boxplot() +
@@ -263,23 +264,48 @@ mtcars %>%
        size='Displacement')
 # Draw a matrix scatterplot
 pairs(mtcars)
-# Load the package GGally and use the function ggpairs
-# Draws a prettier matrix scatterplot
+# Load the package GGally
+# It is an extension of the ggplot2 package
+# Use ggpairs to draws a prettier matrix scatterplot
 library(GGally)
 ggpairs(mtcars)
 @
 
-Now let us try to model car efficiency using the \verb|mpg| column as dependent variable. The hypothesis is that we suspect heavy cars have lower miles-per-gallon. A simple way to investigate this is to build a univariate linear model using the \verb|lm| function and analyse the results. The following code would fit an ordinary least-squares (OLS) regression model using one predictor variable. The function \verb|summary(myModel1)| would print out all the crucial results of the model.
+Now let us try to analyse car efficiency using the \verb|mpg| column as dependent variable. The hypothesis is that heavier cars have lower miles-per-gallon. We can investigate this by building a univariate linear model using the \verb|lm()| function and analyse the results. The following code fits an univariate regression model. The function \verb|summary(myModel1)| would print out all the key results of the model. This is demonstrated in example \ref{ex:linearmodel}.
 
-<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+<<ex:linearmodel, fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Build a univariate linear model
 myModel1 <- lm(mpg ~ wt, mtcars)
+# Read the model summary
 summary(myModel1)
 @
 
-You can also build more complex multivariate models using the same command. You can instruct the function \verb|lm()| to deal with nominal and ordinal variables by explicitly stating \verb|factor(myVar)| in the formula. Alternatively, if your variable is already in \verb|factor| data type, the regression function would handle it automatically without stating it in the formula.
+The model summary contains a lot of useful information. Table \ref{tab:linearsummary} lists the key items alongside a short description.
 
-<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+\begin {table}[H]
+\caption {Summary of key model information}
+\begin{center}
+\begin{tabular}{ | l | p{8cm} |}
+\toprule[1.5pt]
+{\bf Term}          & {\bf Description}\\
+\midrule
+Residuals	          & This is the unexplained bit of the model, defined as observed value minus fitted value (\(\epsilon=y_i-\hat{y_i}\)). If the model's parametric assumption is correct, the mean and median values of the residuals should be very close to zero. The distribution of the residuals should have equal tails on both ends.\\
+Estimate            & Coefficient of the corresponding independent variable (i.e.  the \(\beta_m\) values).\\
+Standard error      & Standard deviation of the estimate.\\
+\(t\)-value         & The number of standard deviations away from zero (i.e. the null hypothesis).\\
+\(P(>|t|)\)        & \(p\)-value of the model estimate. In general, variables with \(p\)-value above \(0.05\) are considered statistical significant.\\
+Multiple \(R^2\)    & Pearson's correlation squared which indicates strength of relationship between the observed and fitted values.\\
+Adjusted \(R^2\)    & Adjusted version of \(R^2\).\\
+\(F\)-statistic     & Global hypothesis for the model as a whole.\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{center}
+\label{tab:linearsummary}
+\end{table}
+
+You can also build more complex multivariate models using the same \verb|lm()| function Example \ref{ex:linearmodelpoly} shows how the function deals with nominal and ordinal variables. You can either force the variable to become categorical by explicitly state \verb|factor(myVar)| in the formula. Alternatively, if the variable already belongs \verb|factor| data type, the \verb|lm()| regression function would handle it automatically without having to state it in the formula.
+
+<<ex:linearmodelpoly, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Dummy variables are automatically created on-the-fly.
 # The variable am has two categories 
 myModel2 <- lm(mpg ~ wt + hp + qsec + factor(am), mtcars)
@@ -291,30 +317,10 @@ myModel3 <- lm(mpg ~ wt + qsec + factor(am) +
                  factor(gear), mtcars)
 summary(myModel3)
 @
-If you manage to produce the model summary, you will find a lot of useful information there:
-\begin {table}[H]
-\caption {Summary of key model information} \label{tab:title} 
-\begin{center}
-\begin{tabular}{ | l | p{8cm} |}
-\toprule[1.5pt]
-{\bf Term}          & {\bf Description}\\
-\midrule
-Residuals	          & This is the unexplained bit of the model, defined as observed value minus fitted value (\(\epsilon=y_i-\hat{y_i}\)). If the model's parametric assumption is correct, the mean and median values of the residuals should be very close to zero. The distribution of the residuals should have equal tails on both ends.\\
-Estimate            & Coefficient of the corresponding independent variable (i.e.  the \(\beta\) values).\\
-Standard error      & Standard deviation of the estimate.\\
-\(t\)-value         & The number of standard deviations away from zero (i.e. the null hypothesis).\\
-\(P(>|t|)\)        & \(p\)-value of the model estimate. In general, variables with \(p\)-value above \(0.05\) are considered statistical significant.\\
-Multiple \(R^2\)    & Pearson's correlation squared which indicates strength of relationship between the observed and fitted values.\\
-Adjusted \(R^2\)    & Adjusted version of \(R^2\).\\
-\(F\)-statistic     & Global hypothesis for the model as a whole.\\
-\bottomrule[1.5pt]
-\end{tabular}
-\end{center}
-\end{table}
 
-You can load the \verb|car| package and use the function \verb|avPlots()| to view the partial regression plot\footnote{It is also called the added-variable plot.}. This would graphically display the effect of individual variables while keeping others in control. 
+To further analyse the effects of individual variables, wou can load the \verb|car| package and use the function \verb|avPlots()| to view the partial regression plot\footnote{It is also called the added-variable plot.}. This would graphically display the effect of individual variables while keeping others in control. This is shown in example \ref{ex:avplots}.
 
-<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+<<ex:avplots,fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
 library(car)
 avPlots(myModel2)
 @
@@ -330,18 +336,20 @@ avPlots(myModel2)
 	\caption{Partial Regression plots}
 \end{figure}
 
-As the input predictor variables have different scale, the model coefficient are not directly comparable yet. To compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a funciton \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. 
-<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+As the input predictor variables usually have different scale, the model coefficient are not directly comparable. To fairly compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a function \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. You can follow example \ref{ex:betanorm} for coefficient standardisation.
+
+<<ex:betanorm, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
 library(QuantPsyc)
 lm.beta(myModel1)
 lm.beta(myModel2)
 lm.beta(myModel3)
 @
 
-Users can also compare multiple nested models\footnote{Refers to models having additional predictor terms. For example, \(\hat{y}=x_1+x_2+x_3\) and \(\hat{y}=x_1+x_2+x_3+x_4\) are both nested models of \(\hat{y}=x_1+x_2\).} using ANOVA technique and check for any statistically significant difference. The code snippet below shows an example.
+You can also compare nested models\footnote{Refers to models having additional predictor terms. For example, \(\hat{y}=x_1+x_2+x_3\) and \(\hat{y}=x_1+x_2+x_3+x_4\) are both nested models of \(\hat{y}=x_1+x_2\).} using ANOVA technique. Example \ref{ex:linearanova} compares three nested models by applying Chi-square test on the model residuals to check for statistically significant differences. In most cases, the simpler model is prefereable if the candidate models are not significantly different.
 
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
-# Compare all models using Chi-square test
+<<ex:linearanova, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
+# Compare linear regression models using Chi-square test
+# Testing whether myModel2 and myModel3 are different from myModel1
 anova(myModel1, myModel2, myModel3, test='Chisq')
 @
 
@@ -349,44 +357,44 @@ anova(myModel1, myModel2, myModel3, test='Chisq')
 
 
 \begin{Exercise}[title={Regression Diagnostics}]
-As we have discussed previously, linear regression is a parametric method which means it has strong underlying assumptions. Studying the model's diagnostic measurements would help us understand whether the assumptions are sufficiently met. You may use the \verb|plot()| function to create a series of regression diagnostic plots. The following command generates several diagnostic plots for a standard OLS regression model:
 
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+Linear regression is a parametric statistical method which has strong underlying assumptions. Analysing the model's diagnostic measurements would help us assess whether the assumptions are sufficiently met. You may use the \verb|plot()| function to create a series of regression diagnostic plots. The command in example \ref{ex:diagplots} generates several diagnostic plots for a standard linear regression model object.
+
+<<ex:diagplots, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 plot(myModel3)
 @
 
 \begin{figure}[H]
 	\centering
-<<fig.show='asis', eval=TRUE,echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=9, fig.height=8>>=
-par(mfrow = c(2,2))
-plot(myModel3)
-par(mfrow = c(1,1))
-@
+  <<fig.show='asis', eval=TRUE,echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=9, fig.height=8>>=
+  par(mfrow = c(2,2))
+  plot(myModel3)
+  par(mfrow = c(1,1))
+  @
 	\caption{Regression diagnostic plots}
 \end{figure}
 
 \begin{description}
   \item [$\bullet$ Residuals vs Fitted]
-  Checks for non-linear relationship. For a good linear fit, you should find the residuals evenly distributed along a straight line centred near zero (i.e. a horizontal line). Contrarily, curvy line indicate poor model fit with possible non-linear effects not yet captured.
+  Checks for non-linear relationship. For a good linear fit, residuals are normally distributed along a straight line centred at zero (i.e. a horizontal line). Contrarily, curvy line indicate poor model fit with possible non-linear effects.
 
   \item [$\bullet$ Normal Quantile-Quantile]
-  One the of main assumptions of OLS regression is that the residual is drawn from zero-centred Gaussian distribution \(\epsilon_i\sim\mathcal{N}(0,\sigma^2)\). To verify whether the proposed model satisfy the assumptions, we can use a normal quantile-quantile plot (Q-Q plot) to perform a quick check. The plot aligns model residuals against a theoretical normal distribution. If the residuals spread along a straight line on the Q-Q plot, it suggests that the residuals are normally distributed. Alternatively, if the data points deviate from the line it indicates vice versa. In this case, parametric model assumption does not hold and you might have to consider improving your model.
+  One the of main assumptions of linear regression is that the residual is drawn from zero-centred Gaussian distribution \(\epsilon_i\sim\mathcal{N}(0,\sigma^2)\). To verify whether the proposed model satisfies this assumption, we can use a normal quantile-quantile plot (Q-Q plot) to perform a quick check. It aligns model residuals against a theoretical normal distribution. If the residuals spread along a straight line on the Q-Q plot, it suggests that the residuals are normally distributed. Alternatively, if the data points deviate from the line it indicates vice versa. In this case, parametric model assumption does not hold and you might have to consider improving your model.
 		
   \item [$\bullet$ Scale-Location]
-  Shows the distribution of the standardised residuals along the range of fitted values. As standard OLS model is assumed to be homoscedastic, the residual variance is not expected to vary along the range of fitted values (i.e. expects a near-horizontal line). If the standardised residual forms a distinguishable patten (e.g. fanning out), then the model may be heteroscedastic and hence violates the underlying assumptions.
+  Shows the distribution of the standardised residuals along the range of fitted values. As standard linear model is assumed to be homoscedastic, the residual variance should not vary along the range of fitted values (i.e. expects a near-horizontal line). If the standardised residual forms a distinguishable patten (e.g. fanning out or curvy), then the model may be heteroscedastic and hence violates the underlying assumption.
   
   \item [$\bullet$ Residual vs Leverage (Cook's Distance)]
-  This plot indicates the observation which are highly influential to the model. For observations having high leverage, they pose influence to the model. This means that the model estimates are strongly affected by these cases. If such obserations have high residuals (i.e. large Cook's distance), they can sometimes be considered as outliers. On the other hand, most observations would have low leverage and short Cook's distance. This means that the model estimates would not have varied a lot if few such observations were to be added or discarded.
+  Observations having high leverage pose greater influence to the model. This means that the model estimates are strongly affected by these cases. If such obserations have high residuals (i.e. large Cook's distance), they can sometimes be considered as outliers. On the other hand, most observations would have low leverage and short Cook's distance. This means that the model estimates would not have varied a lot if few such observations were to be added or discarded.
 \end{description}
 \end{Exercise}
 
 
 \begin{Exercise}[title={Model Overfitting}]
-Linear regression can be made more flexible by increasing the order of the polynomial terms. This allows linear model to capture non-linear effects. However, one of the major problems of a flexible model is that it risks overfitting the data. This means that the model might appear to have very good fit during training, but it may fit poorly when it is tested using unseen data. In general, overfitted models have very little inference and are ungeneralisable.
 
-The following code snippet runs an OLS model with variable level of flexibility. 
+Linear regression can be made more flexible by increasing the order of the polynomial terms. This allows linear model to capture non-linear effects. However, a flexible model also risks overfitting the data. This means that the model might appear to have very good fit during training, but it may fit poorly when it is tested on new data. In general, overfitted models have very little inference and are ungeneralisable. The code snippet in example \ref{ex:overfitting} runs a linear model with variable level of flexibility. 
 
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+<<ex:overfitting, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Bivariate linear model with polynomial terms
 # You can change the values here.
 J <- 3
@@ -417,26 +425,18 @@ points(myPoints, col='red')
 \begin{figure}[H]
 	\centering
 	\[\hat{y} = \beta_0 + \sum\limits_{j=1}^{3} {\beta_{wt}}_j x_{wt}^j + \sum\limits_{k=1}^{2} {\beta_{hp}}_k x_{hp}^k \]
-	%\includegraphics[width=0.6\textwidth]{flexible_low}
 	<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=4>>=
-  # Bivariate linear model with polynomial terms
-  # You can change the values here.
   J <- 3
   K <- 2
   myModel4 <- lm(mpg ~ poly(wt,J) + poly(hp,K), mtcars)
-  # Create the base axes as continuous values
   wt_along <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 50)
   hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
-  # Use the outer product of wt and hp to run predictions for every 
-  # point on the plane
   f <- function(k1, k2, model){ z <- predict(model, data.frame(wt=k1, hp=k2 )) }
   myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
-  # Draw the 3D plane
   myPlane <- persp(x = wt_along, xlab = 'Weight',
                    y = hp_along, ylab = 'Horsepower',
                    z = myPrediction, zlab = 'Miles-per-Gallon',
                    theta = 30, phi = 30, expand = 0.5, col = "lightblue")
-  # Add original data as red dots on the plane
   myPoints <- trans3d(x = mtcars$wt,
                       y = mtcars$hp,
                       z = mtcars$mpg,
@@ -448,26 +448,18 @@ points(myPoints, col='red')
 
 \begin{figure}[H]
 	\centering\[\hat{y} = \beta_0 + \sum\limits_{j=1}^{8} {\beta_{wt}}_j x_{wt}^j + \sum\limits_{k=1}^{5} {\beta_{hp}}_k x_{hp}^k \]
-	%\includegraphics[width=0.6\textwidth]{flexible_high}
   <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=4>>=
-  # Bivariate linear model with polynomial terms
-  # You can change the values here.
   J <- 8
   K <- 5
   myModel4 <- lm(mpg ~ poly(wt,J) + poly(hp,K), mtcars)
-  # Create the base axes as continuous values
   wt_along <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 50)
   hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
-  # Use the outer product of wt and hp to run predictions for every 
-  # point on the plane
   f <- function(k1, k2, model){ z <- predict(model, data.frame(wt=k1, hp=k2 )) }
   myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
-  # Draw the 3D plane
   myPlane <- persp(x = wt_along, xlab = 'Weight',
                    y = hp_along, ylab = 'Horsepower',
                    z = myPrediction, zlab = 'Miles-per-Gallon',
                    theta = 30, phi = 30, expand = 0.5, col = "lightblue")
-  # Add original data as red dots on the plane
   myPoints <- trans3d(x = mtcars$wt,
                       y = mtcars$hp,
                       z = mtcars$mpg,
@@ -482,18 +474,18 @@ points(myPoints, col='red')
 
 \section{Poisson Regression}
 
-In the previous section, simple OLS model assumes the dependent variable follows a Gaussian distribution which spans the range \((-\infty, +\infty)\). Yet sometimes we would like to estimate the discrete number of events where it is often a positive integer (\(\mathbb{N}=\{0,1,2,3,...\}\)). In this case, Poisson distribution can be used. Poisson distributions can be found in everyday life, the following are typical examples:
+In the previous section, simple linear regression model assumes the dependent variable \(y\) follows a Gaussian distribution which spans the range \((-\infty, +\infty)\). Yet sometimes we would like to estimate the number of discrete events where it is often a positive integer (\(\mathbb{N}=\{0,1,2,3,...\}\)). In this case, Poisson regression can be used. It is based on Poisson distribution\footnote{A Poisson distribution is defined by a single parameter \(y \sim Poisson(\lambda)\), where the mean \(\mu\) and variance \(\sigma^2\) are equal. i.e. \(\lambda=\mu\) and \(\lambda=\sigma^2\)} which can be found in everyday life, the following are typical examples:
+
 \begin{itemize}
   \item Number of children in a household.
   \item Number of bank notes in a wallet.
 \end{itemize}
 
-Poisson regression model assumes the response variable is drawn from Poisson distribution\footnote{A Poisson distribution is defined by a single parameter \(y \sim Poisson(\lambda)\), where \(\sigma^2=\lambda\) and \(\mu=\lambda\). This means that for every Poisson distribution, the mean \(\mu\) and variance \(\sigma^2\) must be equal.}. It can take into account multiple predictor variables. The Poisson regression equation is defined in the equations below \eqref{poisson}.
+Poisson regression model can take into account multiple predictor variables. Equation \eqref{poisson} shows a Poisson regression model with \(\hat{y}\) as dependent variable and \(M\) predictor variables.
 
 \begin{equation}
 \label{poisson}
-\hat{y}=e^{\beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_M x_M} \\
-\ln\hat{y} =\beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_M x_M
+\hat{y}=e^{\beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_M x_M}
 \end{equation}
 
 \begin{figure}[H]
@@ -521,9 +513,13 @@ tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=1), frequency=0:pois
 
 
 \begin{Exercise}[title={Testing for Poisson Distribution}]
-Using the \verb|mtcars| dataset, we can estimate the number of carburetors (i.e. the variable \verb|carb|) in cars using predictor variables available. You can use the command \verb|hist(mtcars$carb)| to draw a simple histogram. You should find that this variable (1) never goes below zero and (2) has a long but thin tail towards the positive side. 
 
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+Using the \verb|mtcars| dataset, we can estimate the number of carburetors (i.e. the variable \verb|carb|) in different cars. In example \ref{ex:meanvar}, you can use the command \verb|hist(mtcars$carb)| to draw a simple histogram. You should find that this variable \begin{inparaenum}[1)]
+\item never goes below zero and
+\item has a long but thin tail towards the positive side
+\end{inparaenum}. This is a key signature of Poisson distribution.
+
+<<ex:meanvar, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
 # Draw a simple histogram.
 hist(mtcars$carb)
 # Compute the mean and variance.
@@ -531,8 +527,9 @@ mean(mtcars$carb)
 var(mtcars$carb)
 @
 
-To robustly check whether a variable is truly drawn from a Poisson distribution, one of the most common methods is to perform a Chi-squared goodness-of-fit test. If the resulting \(p\)-value is small enough, we can then accept the variable as Poisson.
-<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+To robustly check whether a variable is truly drawn from a Poisson distribution, you can perform a Chi-squared goodness-of-fit test. If the resulting \(p\)-value is small enough, we can then accept the hypothesis that variable is drawn from a Poisson distribution. Example \ref{ex:goodfit} performs the test visualises the results.
+
+<<ex:goodfit, fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
 # Performs the Chi-squared goodness-of-fit test.
 # It checks whether the variable is drawn from a Poisson distribution.
 library(vcd)
@@ -544,6 +541,17 @@ plot(gf)
 # If p<=0.05 then it is safe to say that the variable is Poisson.
 summary(gf)
 @
+
+
+\begin{figure}[H]
+\centering
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=4>>=
+plot(gf)
+@
+\caption{Goodness-of-fit test for Poisson distribution}
+\end{figure}
+
+
 \end{Exercise}
 
 \begin{Exercise}[title={Building a Poisson Model}]
