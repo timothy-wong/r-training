@@ -517,9 +517,9 @@ tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=1), frequency=0:pois
 Using the \verb|mtcars| dataset, we can estimate the number of carburetors (i.e. the variable \verb|carb|) in different cars. In example \ref{ex:meanvar}, you can use the command \verb|hist(mtcars$carb)| to draw a simple histogram. You should find that this variable \begin{inparaenum}[1)]
 \item never goes below zero and
 \item has a long but thin tail towards the positive side
-\end{inparaenum}. This is a key signature of Poisson distribution.
+\end{inparaenum}. These are key signatures of a Poisson distribution.
 
-<<ex:meanvar, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+<<ex:meanvar, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Draw a simple histogram.
 hist(mtcars$carb)
 # Compute the mean and variance.
@@ -527,21 +527,20 @@ mean(mtcars$carb)
 var(mtcars$carb)
 @
 
-To robustly check whether a variable is truly drawn from a Poisson distribution, you can perform a Chi-squared goodness-of-fit test. If the resulting \(p\)-value is small enough, we can then accept the hypothesis that variable is drawn from a Poisson distribution. Example \ref{ex:goodfit} performs the test visualises the results.
+To robustly check whether a variable is truly drawn from a Poisson distribution, you can perform a Chi-squared goodness-of-fit test. It fits the input data against a theoretical Poisson distribution. Example \ref{ex:goodfit} visualises the results. The vertical bars would fill the positive space if the input data fits well against the Poisson distribution. This can be statistically examined by analysing the \(p\)-value of the Chi-square test. If the \(p\)-value is small enough, we can then accept the hypothesis that the variable is drawn from a Poisson distribution. 
 
-<<ex:goodfit, fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+<<ex:goodfit, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=8, fig.height=4, rexample=TRUE>>=
 # Performs the Chi-squared goodness-of-fit test.
 # It checks whether the variable is drawn from a Poisson distribution.
 library(vcd)
 gf <- goodfit(mtcars$carb, type= "poisson", method= "ML")
-# Plots the observed frequency vs fitted Poisson distribution.
+# Plots the observed frequency vs theoretical Poisson distribution.
 # The hanging bars should fill the space if it was perfectly Poisson.
 plot(gf)
 # Checks the statistical p-value of the goodness-of-fit test.
 # If p<=0.05 then it is safe to say that the variable is Poisson.
 summary(gf)
 @
-
 
 \begin{figure}[H]
 \centering
@@ -555,8 +554,9 @@ plot(gf)
 \end{Exercise}
 
 \begin{Exercise}[title={Building a Poisson Model}]
-The following lines produce a Poisson regression model using the \verb|mtcars| dataset. The variable \verb|carb| is used as dependent variable while \verb|hp|, \verb|wt| and \verb|am| are used as independent predictor variables. The regression output can be interpreted in a similar way as the ones from linear model.
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+
+Example \ref{ex:poissonregression} trains a Poisson regression model using the \verb|mtcars| dataset. The variable \verb|carb| is used as dependent variable while \verb|hp|, \verb|wt| and \verb|am| are used as independent predictor variables. The regression output can be interpreted in a similar way as the ones from linear model.
+<<ex:poissonregression ,fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3,rexample=TRUE>>=
 # Build a Poisson model to predict the number of carburetors in a car.
 myModel5 <- glm(carb ~ hp + wt + factor(am), 
                 family="poisson",
@@ -572,11 +572,12 @@ tibble(observed = mtcars$carb,
 \end{Exercise}
 
 \section{Logistic Regression}
-Logistic regression can be used if the dependent variable is binary. This refers to the scenario where the outcome can either be \(Y\) or \(\neg Y\). The model estimates the probablity of outcome \(P(Y)\in(0,1)\) using the logistic function as outlined in equation \eqref{logisticsreg}.
+
+Logistic regression can be used if the dependent variable is binary. This refers to when the outcome can either be \(Y\) or \(\neg Y\). The model estimates outcome likelihood using the logistic function as outlined in equation \eqref{logisticsreg}. Logistic function transforms a real-valued number \(X\) into the range \((0,1)\) which represents the outcome probability \(P(Y)\in(0,1)\).
 
 \begin{equation}
 \label{logisticsreg}
-\sigma(X)=\frac{1}{1+e^{-X}}
+P(Y)=\frac{1}{1+e^{-X}}
 \end{equation}
 
 \begin{figure}[H]
@@ -585,7 +586,6 @@ Logistic regression can be used if the dependent variable is binary. This refers
 logit_min <- -5
 logit_max <- 5
 logistic <- seq(logit_min, logit_max, 0.1)
-
 ggplot(mapping = aes(x=logistic,
                      y=1/(1+exp(-logistic)))) +
   geom_line()+
@@ -596,37 +596,29 @@ ggplot(mapping = aes(x=logistic,
 \caption{Graph showing the range of a logistic function}
 \end{figure}
 
-In a univariate scenario, the logistic function can be expressed as the following equation, where \(\beta_0\) represents the intercept while \(\beta_1\) refers to the coefficient of variable \(x_1\). The output \(\sigma(X)\) indicates the probability of when the label is true, which is always within the range \(\sigma(X)\in(0,1)\). If the model is multivariate in nature, independent variables and their corresponding coefficients can be chained linearly in the \(X\) term \eqref{logisticprob}.
+In a univariate scenario, the logistic function can be expressed as equation \eqref{logisticprob}, where \(\beta_0\) represents the intercept while \(\beta_1, \beta_2, \beta_3, ..., \beta_M\) refers to the regression coefficient of variables \(x_1, x_2, x_3,...,x_M\). The output \(P(Y)\) indicates the likelihood of true outcome.
 
 \begin{equation}
 \label{logisticprob}
 P(Y)=\frac{1}{1+e^{-(\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M)}}
 \end{equation}
 
-One of the most powerful features of logistic regression is the odds-ratio. It quantifies the effects of each independent variable in a simple way. It is a value indicating the change of likelihood of the event when an independent predictor variable \(x_1\) increase by \(1\) unit. Odds-ratio is defined in equation \eqref{oddsratio}.
+One of the most powerful features of logistic regression is the odds ratio. It quantifies the effects of each independent variable. It is a value indicating the change of likelihood of the event when an independent predictor variable is increased by \(1\) unit. Odds ratio is defined in equation \eqref{oddsratio}.
 
 \begin{equation}
 \label{oddsratio}
 {OR}(x_1) = \frac{odds(x_1+1)}{odds(x_1)} = \frac{e^{\beta_0+\beta_1 (x_1+1)+\beta_2 x_2+...+\beta_M x_M}}{e^{\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M}} = e^{\beta_1}
 \end{equation}
 
-Logistic regression can only handle binary problem. If the dependent variable \(Y\) has more than two outcomes we can use another algorithm called multinomial logistic regression\footnote{\url{http://www.ats.ucla.edu/stat/r/dae/mlogit.htm}}. Such problem can also be analysed using artificial neural networks in a much more sophisticated way which we will cover in a later section.
-
+Logistic regression can only handle binary problem. If the dependent variable \(Y\) has more than two outcomes, we can use another algorithm called multinomial logistic regression\footnote{\url{http://www.ats.ucla.edu/stat/r/dae/mlogit.htm}}. Such problem can also be analysed using artificial neural networks in a much more sophisticated way which we will cover in a later section.
 
 \begin{Exercise}[title={Building a Logistic Model}]
 
-In this exercise, we would continue to use the \verb|mtcars| dataset. This time we will build a logistic regression model to predict whether the vehicle has automatic or manual transmission system (using the \verb|am| variable as dependent variable). In the following example, the model has three independent variables \verb|mpg|, \verb|hp| and \verb|disp|. This logistic regression model can be expressed as equation \eqref{logisticexample}.
+In this exercise, we would continue to use the \verb|mtcars| dataset. We will build a logistic regression model to predict whether the vehicle has automatic or manual transmission system (using the \verb|am| variable as dependent variable). 
 
-\begin{equation}
-\label{logisticexample}
-P(manual)=\frac{1}{1+e^{-(\beta_0 +\beta_1 x_{mpg} +\beta_2 x_{hp} +\beta_3 x_{disp})}}
-\end{equation}
+In the example \ref{ex:logistic}, the model has three independent variables \verb|mpg|, \verb|hp| and \verb|disp|. You may run the example code to build the logistic regression model. You may also calculate the odds ratio and analyse the effects of each variable. The last part of the code is to calculate the model accuracy. 
 
-
-\end{Exercise}
-
-You may run the following code to build the logistic regression model. You may also calculate the odds-ratio and analyse the effect of each variable. The last part of the code is to calculate the model accuracy.
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+<<ex:logistic, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Build a logistic regression model to predict the dependent variable am
 # (1=manual; 0=auto)
 myModel6 <- glm(am ~ mpg + hp + disp, family="binomial", data=mtcars)
@@ -648,6 +640,18 @@ table(myPrediction, observed=(mtcars$am == 1))
 myAccuracy <- sum(myPrediction==(mtcars$am == 1))/nrow(mtcars)
 myAccuracy
 @
+
+The logistic model described in example \ref{ex:logistic} can be expressed as equation \eqref{logisticexample}.
+
+\begin{equation}
+\label{logisticexample}
+\begin{split}
+P(manual) & = \frac{1}{1+e^{-(\beta_0 +\beta_1 x_{mpg} +\beta_2 x_{hp} +\beta_3 x_{disp})}} \\
+P(automatic) & = 1 - P(manual)
+\end{split}
+\end{equation}
+
+\end{Exercise}
 
 \chapter{Tree-based Methods}
 
