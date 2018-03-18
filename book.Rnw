@@ -16,7 +16,6 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage[english]{babel}
-
 \usepackage{float}
 \usepackage{mathtools}
 \usepackage{amssymb}
@@ -36,10 +35,17 @@
 \usepackage[linesnumbered,ruled]{algorithm2e}
 \usepackage{amsmath}
 \usepackage{pstricks}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes, shapes.geometric, arrows}
 
 \newtheorem{rexample}{R Example}[section]
 
 \newcommand{\aggregate}[2]{\underset{#2}{\operatornamewithlimits{#1\ }}}
+
+\tikzstyle{block1} = [rectangle, draw, fill=blue!20, text centered, rounded corners]
+\tikzstyle{block2} = [rectangle, draw, fill=red!20, text centered, rounded corners]
+\tikzstyle{block3} = [rectangle, draw, text centered]
+\tikzstyle{arrow} = [thick,->,>=stealth]
 
 \SetKw{Break}{break}
 \SetKw{Continue}{continue}
@@ -119,7 +125,7 @@ knit_hooks$set(rexample = function(before, options, envir) {
 % Author
 \author{
   \textsc{Timothy Wong}\thanks{\url{timothy.wong@hotmail.co.uk}} \\
-  \textsc{Second Author}\thanks{\url{person@organisation.com}}
+  \textsc{James Gammerman}\thanks{\url{person@organisation.com}}
 }
 
 
@@ -176,7 +182,312 @@ The \LaTeX source code and compiled PDF version of this book can be digitially a
 
 
 
-\chapter{Basics}
+\chapter{Tidyverse}
+
+The \verb|tidyverse| is a coherent system of packages for data manipulation, exploration and visualisation that share a common design philosophy. These were mostly developed by the prolific R developer Hadley Wickham\footnote{\url{http://hadley.nz}}, but they are now being expanded by several contributors. The \verb|tidyverse| packages are intended to make data scientists and statisticians more productive by guiding them through the workflow of a typical project. This is illustrated in figure \ref{tidyverseworkflow}.
+
+You may being analysis by importing data into R. This typically means that you take data stored in a file, database, or web API and load it into R as an object known as a \verb|data frame| or a \verb|tibble|.
+
+Once the data is imported, it is a good idea to tidy it. In brief, when your data is tidy, each column is a variable and each row is an observation. This is important because a consistent structure lets you focus your struggle on questions about the data, not fighting to get the data into the right form for different functions.
+
+Once you have tidy data, the usual next step is to transform it. This includes narrowing in on observations of interest, creating new variables that are functions of existing variables and calculating summary statistics.
+
+There are two main engines of knowledge generation: \begin{inparaenum}[1)] \item visualisation and \item modelling \end{inparaenum}. These have complementary strengths and weaknesses so a good analysis will iterate between them many times.
+
+Data visualisation is a fundamentally human activity. A good visualisation will show you things that you did not expect, or raise new questions about the data. It might also cast doubt on the research hypothesis or hint that you need to collect different data. Visualisation do not scale particularly well because it requires human interpretation.
+
+Models are complementary tools to visualisation. Once the research hypothesis are sufficiently precise, you can use a model to address them. Models are fundamentally mathematical or computational tools, so they generally scale well. 
+
+The last step of data science is communication, which is a critical part of any data analysis project. It does not matter how well your models and visualisation have led you to understand the data unless you can also communicate your results to others.
+
+Surrounding all these tools is programming. This is a tool that you use in every part of the analysis.
+
+\begin{figure}[H]
+	\centering
+    \begin{tikzpicture}[node distance = 2.5cm, auto]
+        \node [block3, dashed, label={above left:\tiny Program}] (bigbox){
+            \begin{tikzpicture}[node distance = 2.5cm, auto, solid]
+              \node [block1] (import) {Import};
+              \node [block1, right of=import] (tidy) {Tidy};
+              \node [block3, dashed, fill=gray!10, below of=tidy, label={above left:\tiny Understand}] (mybox){
+                  \begin{tikzpicture}[node distance = 2.5cm, auto, solid]
+                      \node [block2] (transform) {Transform};
+                      \node [block2, right of=transform] (visualise) {Visualise};
+                      \node [block2, below of=visualise] (model) {Model};
+                      \draw [arrow] (transform) -- (visualise);
+                      \draw [arrow] (visualise) -- (model);
+                      \draw [arrow] (model) -| (transform);
+                      \draw [arrow] (visualise) -- (transform);
+                      \draw [arrow] (model) -- (visualise);
+                      \draw [arrow] (transform) |- (model);
+                  \end{tikzpicture}
+              };
+              \node [block1, below of=mybox] (communicate) {Communicate};
+              \draw [arrow] (import) -- (tidy);
+              \draw [arrow] (tidy) -- (mybox);
+              \draw [arrow] (mybox) -- (communicate);
+            \end{tikzpicture}
+        };
+    \end{tikzpicture}
+  \label{tidyverseworkflow}
+	\caption{Stages of data analysis}
+\end{figure}
+
+This list provides an overview of the main \verb|tidyverse| packages and how they fit into this typical workflow. In this training course we will focus on the packages \verb|dplyr| and \verb|ggplot2|.
+
+\begin{description}
+  \item[Import] Reading datasets from various data sources.
+    \begin{itemize}
+      \item \verb|readr|
+      \item \verb|readxl| 
+      \item \verb|haven| 
+      \item \verb|httr| 
+      \item \verb|rvest|
+      \item \verb|xml2|
+    \end{itemize}
+  \item[Tidy] Clean up datasets.
+    \begin{itemize}
+      \item \verb|tibble|
+      \item \verb|tidyr|
+    \end{itemize}
+  \item[Transform] Aggregate, change variable format and derive new variables.
+    \begin{itemize}
+      \item \verb|dplyr|
+      \item \verb|forcats| 
+      \item \verb|hms| 
+      \item \verb|lubridate| 
+      \item \verb|stringr|
+    \end{itemize}
+  \item[Visualise] Creating charts using the Grammar of Graphics.
+    \begin{itemize}
+      \item \verb|ggplot2|
+    \end{itemize}
+  \item[Model] Train and test statistical models.
+    \begin{itemize}
+      \item \verb|broom|
+      \item \verb|modelr|
+    \end{itemize}
+  \item[Program] Coding in pipeline-style.
+    \begin{itemize}
+      \item \verb|magrittr|
+      \item \verb|purrr|
+    \end{itemize}
+\end{description}
+
+\section{Data Transformation}
+
+In most of the time, data does not come to you in exactly the right format. Often you need to compute new variables, or to summaries and rename the original ones. In some cases, you may have to reorder the observations to make the data easier to work with. An excellent package for these tasks is the \verb|dplyr| package. There are five key functions in this package that allow you to solve the vast majority of data manipulation challenges.
+
+\begin{itemize}
+\item Subset the observations by criteria - \verb|filter()|
+\item Reorder the observations - \verb|arrange()|
+\item Pick variables by name - \verb|select()|
+\item Compute new variables as a function of existing variables - \verb|mutate()|
+\item Collapse many values down to a single summary value - \verb|summarise()| or \verb|summarize()|
+\end{itemize}
+
+All aforementioned functions work similarly. The first argument is a \verb|data frame| containing the source data. The subsequent arguments describe what to do with the data. All the functions return the processed data in a new \verb|data frame|. These can all be used in conjunction with the \verb|group_by()| function, which changes the scope of each function from operating on the entire dataset to operating on it group-by-group. 
+
+\begin{Exercise}[title={Filtering Observations}]
+
+You can use the function \verb|filter()| to subset observations based on their values. The first argument is a \verb|data frame|, while the subsequent arguments are the filtering expressions.
+
+For filtering you can use the standard comparison operators (\verb|>|, \verb|>=|, \verb|<|, \verb|<=|, \verb|!=| (not equal), and \verb|==| (equal)). To combine multiple filtering arguments, you can separate them with a comma or use the \verb|&| symbol. In addition, logical operators can be used for more complex combinations.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{venn.PNG}
+\caption{Logical operators in R}
+\end{figure}
+
+Missing values are represented in R as \verb|NA|. They are contagious because any operation involving an unknown value will produce unknown results. For instance, the function \verb|filter()| only includes rows where the condition is \verb|TRUE|. It excludes both \verb|FALSE| condition and \verb|NA| values.
+
+You can use the function \verb|is.na()| to determine whether a value is missing. You can also use this to explicitly include missing values in a \verb|filter()| call.
+
+In example \ref{ex:tidyfilter}, We will learn how to use \verb|tidyverse| using a dataset on flights departing from New York City in 2013.
+
+<<ex:tidyfilter, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# load the required packages
+library(dplyr)
+library(nycflights13)
+# Inspect the data, noting the type of each variable
+# You also can use View(flights) to open the dataset
+flights
+# Select all flights on January 1st
+# Assigning them to a new variable jan1
+jan1 <- filter(flights, month == 1, day == 1)
+jan1
+# Select all flights from November or December 
+filter(flights, month == 11 | month == 12)
+# A useful shorthand for this problem is x %in% y
+# It selects every row where x is one of the values in y
+filter(flights, month %in% c(11, 12))
+# Let’s select only the flights that weren’t delayed
+# (on arrival or departure) by more than two hours:
+filter(flights, arr_delay <= 120, dep_delay <= 120)
+@
+
+Find all flights in the \verb|flights| dataset that:
+\begin{enumerate}
+\item Had an arrival delay of two or more hours.
+\item Flew to Houston (IAH or HOU).
+\item Were operated by United, American or Delta.
+\item Departed in summer (July, August and September)
+\item Arrived more than two hours late, but did not leave late.
+\item Were delayed by at least an hour, but made up over \(30\) minutes in flight.
+\item How many flights have a missing \verb|dep_time|? What other variables are missing?
+\end{enumerate}
+
+\end{Exercise}
+
+
+\begin{Exercise}[title={Arranging Observations}]
+
+The function \verb|arrange()| changes the order of observations in a dataset. It sorts the observations by a specified set of variable names\footnote{More complicated expressions can also be used for ordering.} in ascending order. 
+
+If you provide more than one variable name, each additional variable will be used to break ties in the values of preceding variable. Use \verb|desc()| to reorder variable in descending order. Missing values are always sorted at the end. Example \ref{ex:tidyarrange} shows how the \verb|arrange()| function can be used.
+
+<<ex:tidyarrange, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Arrange flights by year, then month, then day
+arrange(flights, year, month, day)
+# Use desc() to reorder by a column in descending order
+arrange(flights, desc(arr_delay))
+# Missing values are always sorted at the end:
+df <- tibble(x = c(5, 2, NA))
+arrange(df, x)
+arrange(df,desc(x))
+@
+
+Sort the \verb|flights| dataset to find:
+\begin{enumerate}
+  \item The fastest flights.
+  \item The most delayed flights.
+  \item The flights that left earliest.
+  \item Which flights travelled the longest?
+\end{enumerate}
+
+\end{Exercise}
+
+\begin{Exercise}[title={Selecting Variables}]
+It is not uncommon to get datasets with hundreds or even thousands of variables. In this case, the first challenge is often narrowing in on the variables you are actually interested in.
+
+The \verb|select()| function allows you to rapidly zoom in on a useful subset using operations based on the names of the variables.
+
+There are a number of helper functions you can use within \verb|select()|. These are also shown in example \ref{ex:tidyselect}:
+\begin{enumerate}
+  \item \verb|starts_with("abc")| matches variable names that begin with \verb|"abc"|.
+  \item \verb|ends_with("xyz")| matches variable names that end with \verb|"xyz"|.
+  \item \verb|contains("ijk")| matches variable names that contain \verb|"ijk"|.
+  \item \verb|num_range("x", 1:3)| matches \verb|x1|, \verb|x2|, and \verb|x3|.
+\end{enumerate}
+
+The function \verb|select()| can in principle be used to rename variables, but it drops all of the variables not explicitly mentioned. Therefore it is better to use the \verb|rename()| function which keeps all variables not explicitly mentioned.
+
+Another option is to use \verb|select()| in conjunction with the \verb|everything()| helper. This is useful if you want to move several variables to the start of the \verb|data frame|. 
+
+<<ex:tidyselect, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Select columns by name
+select(flights, year, month, day)
+# Select all columns between ‘year’ and ‘day’ (inclusive)
+select(flights, year:day)
+# Select all columns except those from year to day (inclusive)
+select(flights, -(year:day))
+# Rename a variable using rename()
+rename(flights, tail_num = talinum)
+# Reorder columns using the everything() helper
+select(flights, time_hour, air_time, everything())
+@
+
+\begin{enumerate}
+  \item Can you find two ways to select \verb|dep_time|, \verb|dep_delay|, \verb|arr_time| and \verb|arr_delay| from the \verb|flights| dataset in one line of code?
+  \item What happens if you include the name of a variable multiple times in a \verb|select()| call?
+\end{enumerate}
+
+\end{Exercise}
+
+\begin{Exercise}[title={Computing New Variables}]
+In the data transformation process, it is often useful to compute new variables that are functions of existing ones. For this we can use the \verb|mutate()| function. This function always adds new variables at the end of the dataset. Alternatively, you can use the \verb|transmute()| function if you only want to keep the newly-computed variables and remove the old ones. For both \verb|mutate()| and \verb|transmute()|, you can refer to columns that you have just created in the same function call.
+
+There are many useful creation functions you can use with \verb|mutate()| to create new variables:
+
+\begin{description}
+  \item [Arithmetic operators] The operators \verb|+|, \verb|-|, \verb|*|, \verb|/|, \verb|^| are all vectorised using the so-called 'recycling rules' (i.e. if one parameter is shorter than the other, it will be automatically extended to be the same length.)
+
+  \item [Modular arithmetic] \verb|%/%| for integer division (discards remainder) and \verb|%%| for remainder only (modulo).
+
+  \item [Logs] Very useful for dealing with data that ranges across multiple orders of magnitude.
+
+  \item [Logical comparison] \verb|<|, \verb|<=|, \verb|>|, \verb|>=|, \verb|!=|
+
+  \item[Ranking] There are several of these – the most common one is \verb|min_rank()| which does the most usual type of ranking (e.g. first, second, third, fourth) and gives the smallest values the ranks
+\end{description}
+
+In example \ref{ex:tidymutate}, we will start by creating a narrower dataset so we can see the new variables.
+
+<<ex:tidymutate, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Select several columns only
+flights_sml <- select(flights,  
+ 		year:day,  
+ 		ends_with("delay"), 
+ 		distance, 
+ 		air_time)
+# Use these the smaller data frame derive new columns
+mutate(flights_sml,  
+  	gain = arr_delay - dep_delay,  
+ 	speed = distance / air_time * 60)
+# You can refer to columns that you have just created
+mutate(flights_sml,
+  	gain = arr_delay - dep_delay,
+  	hours = air_time / 60,
+  	gain_per_hour = gain / hours)
+# Keep only the new variables using transmute()
+transmute(flights,
+ 	gain = arr_delay - dep_delay,
+ 	hours = air_time / 60,
+ 	gain_per_hour = gain / hour)
+# Modular arithmetic: modulo
+7 %% 2
+# Modular arithmetic: integer division
+7 %/% 2
+# Compute hour and minute from dep_time
+transmute(flights,
+ 	dep_time,
+ 	hour = dep_time %/% 100,
+ 	minute = dep_time %% 100)
+# Example of ranking
+y <- c(1, 2, 2, NA, 3, 4)
+min_rank(y)
+min_rank(desc(y))
+@
+
+
+\begin{enumerate}
+  \item Currently \verb|dep_time| and \verb|sched_dep_time| are convenient to look at but hard to compute with because they’re not really continuous numbers. Convert them to a more convenient representation of number of minutes since midnight.
+  \item Compare new variable \verb|air_time| as \verb|arr_time - dep_time|. What do you expect to see? What problem do you see? What do you need to do to fix it?
+  \item What does \verb|1:3 + 1:10| return and why? How about \verb|1:3 + 1:9|?
+\end{enumerate}
+
+\end{Exercise}
+
+\begin{Exercise}[title={Grouped Summaries}]
+
+The last key function is \verb|summarise()| or \verb|summarize()|. It collapses a data frame into a single row. This function is particularly useful when used in conjunction with \verb|group_by()|. This changes the unit of analysis from the whole dataset to individual groups. Then you can use functions on the grouped \verb|data frame| in order to obtain grouped summaries.
+
+When combining several operations it is usually better to join them together using the pipe operator \verb|\%>\%| rather than repeatedly making new variables.
+
+(see example where we want to explore the relationship between the distance and average delay for each location).
+
+Whenever doing any aggregation, it is always a good idea to include either the total count \verb|n()|, or the count of non-missing values \verb|sum(!is.na(x))|. To count the number of unique values, use \verb|n_distinct()|. By including count statistics, you can make sure that you are not drawing conclusions based on small amount of data.
+
+Useful summary functions:
+\begin{description}
+\item [Measures of location] Arithmetic average \verb|mean()| and median \verb|median()|.
+\item [Measures of spread] Standard deviation \verb|sd()| and interquartile range \verb|IQR()|.
+\item [Measures of rank] Minimum value \verb|min()|, maximum value \verb|max()| as well as the quantiles \verb|quantile()|
+\item [Measures of position] \verb|first()|  and \verb|last()|
+\end{description}
+
+\end{Exercise}
 
 
 \chapter{Regression Models}
@@ -647,7 +958,8 @@ The logistic model described in example \ref{ex:logistic} can be expressed as eq
 \label{logisticexample}
 \begin{split}
 P(manual) & = \frac{1}{1+e^{-(\beta_0 +\beta_1 x_{mpg} +\beta_2 x_{hp} +\beta_3 x_{disp})}} \\
-P(automatic) & = 1 - P(manual)
+P(automatic) & = P(\neg manual) \\
+& = 1 - P(manual)
 \end{split}
 \end{equation}
 
@@ -655,10 +967,10 @@ P(automatic) & = 1 - P(manual)
 
 \chapter{Tree-based Methods}
 
-Tree-based algorithms belong to the supervised learning discipline. For any given set of labelled objects, trees would produce a set of prediction rules. It is based on the concept of region (denoted as \(\mathcal{R}_i\)) which refers to a subset of the original object space. Trees would produce a prediction for all objects situating within the same region. 
+Tree-based algorithms belong to the supervised learning discipline. For a given set of labelled objects, decision tree can produce a set of sequential prediction rules based on categorical and numeric predictor variables. It is based on the concept of prediction region (denoted as \(\mathcal{R}_i\)) which refers to a subset of the original object space. Objects situation within the same region share the same prediction.
 
-At the heart of tree-based method is a concept called binary recursive partitioning. It is a top-down process which starts from initial object space. At the first recursion, the algorithm would split the master region \(\mathcal{R}_1\) into two at a cut-off point. This produces two corresponding new regions \(\mathcal{R}_2 \subseteq \mathcal{R}_1\) and \(\mathcal{R}_3 \subseteq \mathcal{R}_1\) with two distinct prediction values. The cutoff point \(s\) determines where to slice the master region. All objects within \(\{X|X_1 \geq s\}\) belong to \(\mathcal{R}_2\) and those with \(\{X|X_1 < s\}\) belong to \(\mathcal{R}_3\). This process runs recursively until it hits a termination criteria.
-			
+At the heart of tree-based method is a concept called binary recursive partitioning. It is a top-down process which starts from initial object space. At the first recursion, the algorithm would split the master region \(\mathcal{R}_1\) into two at a cut-off point. This produces two corresponding new regions \(\mathcal{R}_2 \subseteq \mathcal{R}_1\) and \(\mathcal{R}_3 \subseteq \mathcal{R}_1\) with two distinct prediction values. The cutoff point \(s\) determines where to slice the master region. All objects within \(\{X|X_1 < s\}\) belong to \(\mathcal{R}_2\) and those with \(\{X|X_1 \geq s\}\) belong to \(\mathcal{R}_3\). This process runs recursively until it hits the termination criteria.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{rpart.PNG}
@@ -669,12 +981,13 @@ At the heart of tree-based method is a concept called binary recursive partition
 
 Decision tree is the simplest form of any tree-based models. It uses standard recursive partitioning to produce prediction regions. Decision tree is a very generic algorithm which fits both regression and classification problem. This means it can predict both continuous real numbers and discrete categories depending on the type of problem. The region prediction for a classification tree is decided by the majority class, while the prediction for a regression tree is defined as the simple average of all members within the region. The tree-splitting structure is called the topology, which can be interpreted graphically in most cases.
 
-On the downside, one of the biggest problems of partitioning is that it tends to produces very deep and complex trees which may risk overfitting the data. Various control parameters can be used to mitigate the overfitting problem. For example, recursion can terminate once all regions are small enough to contain less than \(10\) objects.
+On the downside, recursive partitioning tends to produces very complex trees which may overfit the data. Various control parameters can be used to mitigate the risk of overfitting. For example, recursion can terminate once all regions are small enough to contain less than \(5\) objects.
 
 \begin{Exercise}[title={Growing a Decision Tree}]
 
-In the R language, there are many packages which implement tree-based algorithm. In this exercise, we will use the \verb|rpart| function in the rpart package to build a simple decision trees for a regression problem. The aim of this exercise is to predict car efficiency (\verb|mpg| variable) using the \verb|mtcars| dataset.
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+In the R language, there are many packages which implement tree-based algorithm. In exercise \ref{ex:decisiontree}, we will use the \verb|rpart| function in the rpart package to build a simple decision trees for a regression problem. The aim of this exercise is to predict car efficiency (\verb|mpg| variable) using the \verb|mtcars| dataset.
+
+<<ex:decisiontree,fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Load the rpart package for recursive partitioning
 # Load the rpart.plot package for tree visualisation
 library(rpart)
@@ -682,7 +995,7 @@ library(rpart.plot)
 # Build a decision tree to predict mpg using several input variables 
 myTree <- rpart(formula = mpg ~ wt + hp + factor(carb) + factor(am), 
                 data = mtcars,
-                control = rpart.control(minsplit=5)) 
+                control = rpart.control(minsplit=5))
 # Read the tree topology
 myTree
 # Read the detailed summary of the tree
@@ -706,19 +1019,19 @@ rpart.plot(myTree, fallen.leaves = FALSE)
 
 \end{Exercise}
 
-
 \begin{Exercise}[title={Tree Pruning}]
 
-It is a common practice to grow a complex tree and then decide how to prune it afterwards. By removing weak branches of the tree, it usually enhance predictive power of the model and eventually makes it more robust.
+It is a common practice to grow a complex decision tree first, and then decide how to prune it afterwards. Removing weaker branches of the tree usually enhances the model's predictive power which eventually makes it more generalisable.
 
-The command \verb|printcp(myTree)| returns the relative error of the tree at each and every node. It is defined as \(1-R^2\) and therefore always starts with \(1\) at the top level. As the tree grows, the \(R^2\) value would increase and approach \(1\) while the corresponding relative error will diminish towards zero. The \verb|cp| value is simply the amount of error reduced when a region is split into two. We can specify a threshold \verb|cp| value so that branches with weak predictive power can be pruned away.
+In exercise \ref{ex:dtreeprune}, the command \verb|printcp(myTree)| returns the relative error of the tree at each and every node. It is defined as \(1-R^2\) and therefore always starts with \(1\) at the top level. As the tree grows, the \(R^2\) value increases and approachs \(1\) therefore the corresponding relative error will diminish towards zero. You can use the function \verb|prune()| to remove weak branches. The complexity parameter \verb|cp| refers to the amount of error reduced when a region is split. We can specify a threshold \verb|cp| value so that branches with weak predictive power can be pruned.
 
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+<<ex:dtreeprune, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # View the cp values
 plotcp(myTree)
 printcp(myTree)
 # Prune the tree at a certain threshold cp value
 # You can change the threshold value
+?prune
 myNewTree <- prune(myTree, cp = 0.03)
 rpart.plot(myNewTree, fallen.leaves = FALSE)
 @
@@ -727,32 +1040,28 @@ rpart.plot(myNewTree, fallen.leaves = FALSE)
 
 \section{Random Forest}
 
-A random forest is a collection of many small decision trees. Each of the trees are trained using the same dataset, but with randomly selected predictor variables. For a random forest model with \(P\) independent variables, only \(p < P\) variables are randomly selected for each tree. Such randomess causes variation among the trees. Some trees would have strong prediction power while some others would be weaker.
+Random forest is a collection of many tiny decision trees. All trees in the forest are trained using the same dataset, but with randomly selected predictor variables. In a random forest with \(P\) independent variables, only \(p < P\) variables are randomly selected at each split. Such randomess causes variation among the trees. Some trees would have strong prediction power while some others would be weaker.
 
-Once all the trees are grown, the random forest algorithm combines the output of all trees and use the simple average of the region as prediction value if it is regression problem. Alternatively if it is a classification problem, the majority label of the region would become the prediction value.
+Once all the trees are grown, the random forest algorithm combines the output of all trees and uses the simple average as prediction value if it is regression problem. Alternatively if it is a classification problem, the majority label of the region becomes the prediction value.
 
 It is widely recognised that prediction accuracy of random forest is far better than an individual decision tree. However as a trade-off, random forest is often harder to interpret manually as the decision rule becomes more complicated.
 
 \begin{Exercise}[title={Planting a Random Forest}]
-In this exercise, we would plant a random forest with many individual decision trees. Each tree would randomly select a few variables for consideration. You can use the \verb|randomForest| package to build random forest rapidly.
+Exercise \ref{ex:randomforest} demonstrates how to train a random forest model. Each tree in the forest would randomly select a few variables for assessment. You can use the \verb|randomForest| package to build random forest rapidly.
 
-The importance of each predictor variable is usually indicatde by the decrease of node impurity. A powerful predictor would substantially decrease node impurity. For regression, it is measured by residual sum of squares. For classification, the node impurity is measured by the Gini index. You can use the function \verb|importance(myForest)| or \verb|varImpPlot(myForest)| to calculate the importance measurement.
+The importance of each predictor variable is indicated by the decrease of node impurity. A powerful predictor would substantially decrease node impurity. For regression, it is measured by residual sum of squares. For classification, the node impurity is measured by the Gini index. You can use the function \verb|importance(myForest)| or \verb|varImpPlot(myForest)| to calculate the importance measurement.
 
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+<<ex:randomforest ,fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 library(randomForest)
-# The randomForest package does not support factor encoding on-the-fly
-# So let us clone the data frame and encode the variable first.
-mtcars2 <- with(data = mtcars,
-                expr = {carb = factor(carb)
-                        am = factor(am)
-                        return(mtcars)})
+library(dplyr)
 # Build a random forest with 1000 trees
 # Each tree has 2 randomly selected variables
 # You can change the parameters
 myForest <- randomForest(mpg ~ wt + hp + carb + am, 
                          ntree = 1000,
                          mtry = 2,
-                         data = mtcars2)
+                         data = mtcars %>% mutate(carb = factor(carb), 
+                                                  am = factor(am)))
 # Plot the error as the forest expands
 plot(myForest)
 # Plot the distribution of tree size
@@ -780,13 +1089,13 @@ Different activation functions can provide stronger gradients while maintaining 
 	Sigmoid activation
 	\begin{equation}
 	\label{sigmoid}
-	\sigma (x)= \frac{1}{1+e^{-x}}
+	f(x)= \frac{1}{1+e^{-x}}
 	\end{equation}
 	
 	Hyperbolic tangent activation
 	\begin{equation}
 	\label{tanh}
-	tanh(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}
+	f(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}
 	\end{equation}
 	
 	Softplus activation
@@ -853,9 +1162,9 @@ The output prediction is made at the network's final layer. Each neuron at this 
 
 \section{Multilayer Perceptron}
 
-A multilayer perceptron (MLP) network is the simplest form of all neural network. It consists a configurable number of stacked hidden layers, where every neurons in subsequent layers are fully interconnected.
+A multilayer perceptron (MLP) is the simplest form of all neural network. It consists of several stacked hidden layers, where every neurons in the hidden layers are fully interconnected.
 
-It is common practice to use zero-centred values for neural network training. In addition, it is vital to check that all variables share the same measurement unit prior to running the model. To achieve this, we would normalise all variables into \(z\)-score \eqref{zscore} so that they have the same spread. For any individual value \(x_i\), the \(z\)-score can be calculated as the distance from the arithmetic mean \(\bar{x}\) divided by standard deviation \(\sigma\) of the variable.
+It is common practice to use zero-centred values for neural network training\footnote{Zero-centred values have stronger gradient, thus speed up optimisation through gradient descent.}. To achieve this, you can normalise variables into \(z\)-score \eqref{zscore} so that they have similar range. For any individual value \(x_i\), the \(z\)-score can be calculated as the distance from the arithmetic mean \(\bar{x}\) divided by standard deviation \(\sigma\) of the variable.
 
 \begin{subequations}
 	\begin{equation}
@@ -866,16 +1175,13 @@ It is common practice to use zero-centred values for neural network training. In
 
 At the training phase, network weights are usually initialised randomly. They are then optimised through backpropagation to achieve gradent descent. The weights improves gradually according to a predefined learning rate until they ultimately converge at the minimum value. One of the drawbacks is that backpropagation does not guarantee reaching global minimum if there are multiple minima across the parameter space. Such problem is usually mitigated by using advanced optimisers with adaptive learning rate.
 
-
 \begin{Exercise}[title={Training MLP for Regression Problem}]
 
-There are many packages which implements neural network in the R language, including \verb|neuralnets|, \verb|nnet|, \verb|RSNNS|, \verb|caret|, \verb|h2o|, \verb|MXNet|, \verb|kerasR|... etc. Generally speaking, all these packages implement the same underlying algorithm and the difference usually lies in syntax, execution speed and hardware compatibility.
+There are many packages which implements neural network in the R language. Traditional packages include \verb|neuralnets|, \verb|nnet|, \verb|RSNNS|, \verb|caret|... etc. Modern deep learning frameworks such as \verb|h2o|, \verb|MXNet| and \verb|kerasR| are also available in R, but they usually require premium hardware set-up. In general, all neural network packages implement the same underlying algorithm and the difference usually lies in syntax, execution speed and hardware compatibility.
 
-In this section, we will continue to use the \verb|mtcars| dataset. The objective of this exercise is to predict the \verb|mpg| value of each car given all other known attributes of it. We would use the \verb|neuralnet| package to create a simple multilayer perceptron (MLP) model.
+We will continue to use the \verb|mtcars| dataset in this exercise. The objective of this exercise is to predict the \verb|mpg| value of each car given all other known attributes of it. We would use the \verb|neuralnet| package to create a simple multilayer perceptron (MLP) model. Code in example \ref{ex:neuralnet} trains a fully-connected multilayer perceptron with two hidden layers.
 
-The following code trains a fully-connected multilayer perceptron with two hidden layers. The code will also visualise the iterative errors, network topology and compute the mean squared error (MSE) for both training and test set.
-
-<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:neuralnet, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 library(dplyr)
 library(neuralnet)
 # The mtcars dataset has a mixture of numeric and categorical variables
@@ -889,12 +1195,17 @@ mtcars_numeric_normalised <- (mtcars_numeric - mtcars_mean) / mtcars_sd
 # Construct a two layers MLP using all numeric variables.
 # By default it uses sigmoid active function
 myNN1 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
-          data = mtcars_numeric_normalised,
-          hidden = c(4,3),
-          linear.output = TRUE,
-          lifesign = 'full')
+                   data = mtcars_numeric_normalised,
+                   hidden = c(4,3),
+                   linear.output = TRUE,
+                   lifesign = 'full')
 # Visualise the network topology
 plot(myNN1)
+@
+
+Example \ref{ex:neuralnet2} shows that you can load the package \verb |NeuralNetTools| to create better topology plot. In addition, you can plot the observed data against network predictions to visualise the error. For a regression problem, mean squared error (MSE) defined as \( \frac{1}{N} \sum_{n=1}^{N} (\hat{y}_n-y_n)^2 \) is usually used as the error measurement.
+
+<<ex:neuralnet2, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Use a helper package for prettier graphics (optional)
 library(NeuralNetTools)
 plotnet(myNN1)
@@ -921,9 +1232,9 @@ plot(myNN1, rep="best")
 \caption{MLP model with two hidden layers}
 \end{figure}
 
-In many packages, the default neural activation function is sigmoid function. You can use trhe following code to use custom activation.
+Sigmoid function is traditionally used in shallow networks. It can suffer from weak gradient when stacked in deep networks. You can use the code in example \ref{ex:neuralnetactivation} to customise the activation function.
 
-<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:neuralnetactivation, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Build the second model
 # Keep everything the same but change to softplus activation
 myNN2 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
@@ -942,9 +1253,9 @@ myNNPred2 <- myNNResult2$net.result[,1] *
 myNNError2 <- mean((myNNPred2 - mtcars$mpg)^2)
 @
 
-Neural networks can also deal with categorical inputs. They are usually converted into one-hot encoding to feed into the model\footnote{For a categorical variable with \(K\) unique values, one-hot encoding would produce \(K\) new variables. Each new variables would have value \(\{1,0\}\). Please note that this is different from dummy encoding in statistical modelling.}. The following code converts all categorical variables in the \verb|mtcars| dataset into one-hot encoding. The encoded values afre then binded to the numeric values and jointly used for network training.
+Neural networks can also deal with categorical inputs. They are usually converted into one-hot encoding to feed into the model\footnote{For a categorical variable with \(K\) unique values, one-hot encoding would produce \(K\) new variables. Each new variables would have value \(\{1,0\}\). Please note that this is different from dummy encoding in statistical modelling.}. Code in example \ref{ex:neuralnetencode} converts all categorical variables in the \verb|mtcars| dataset into one-hot encoding. The encoded values afre then binded to the numeric values and jointly used for training.
 
-<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:neuralnetencode, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Loads the purrr package to access the imap function
 library(purrr)
 # Selecting all the categorical variables in the dataset
@@ -1004,26 +1315,26 @@ plot(myNN3, rep="best")
 
 \chapter{Time Series Analysis}
 
-Many datasets have temporal dimension. A time series is a series of observations ordered by chronologically.  There are two main types of time series data: 
+Many datasets have temporal dimension. Time series refers to a chronologically-ordered sequence of observations. There are two main types of time series data: 
 \begin{inparaenum}[1)]
 \item regularly-sampled\footnote{Regularly sampled time series has observations taken at fixed interval. This includes examples like heart rate, network traffic, daily weather... etc.}, and
 \item irregularly-sampled\footnote{Refers to when observations are not recorded at fixed interval, such as incidents of earthquakes.}
 \end{inparaenum}
-In this section, we would only focus on time series data sampled at regularly-spaced intervals.
+In this chapter, we would focus on time series data sampled at regularly-spaced intervals.
 
-In time series data, temporal properties are often the point-of-interest. That include trend, seasonality, or temporal dependency among different variables. Analysing these properties allows users to gain useful insights. For example, users may extrapolate trend to create forecast going into the future. Alternatively, users may understand the nature of recurring patterns by analysing seasonality. In this section, we will introduce several tools to explore these properties.
+Temporal properties are often the point-of-interest in time series analysis. This include trend, seasonality, or temporal dependency between different variables. Studying these properties can gain useful insights. For example, extrapolating trend can create forecast for the future. Alternatively, analysing seasonality can help users understand the nature of recurring patterns.
 
 \section{Auto-Correlation Function}
 
 Auto-correlation function (ACF) measures the correlation of a single variable along the temporal dimension between \(x_t\) and \(x_{t+h}\). In other words, it shows the correlation of the variable over different lag periods. 
 
-In the R language, you may use the \verb|Acf(x)| function within the package \verb|forecast| to plot the ACF correlogram. For most time series variables, the correlation is usually strong at lag \(h=1\) and gradually diminishes as lag period increases. Cyclic pattern in the correlogram suggests possible seasonality which you can analyse further.
+In the R language, you may use the \verb|Acf(x)| function within the package \verb|forecast| to plot the ACF correlogram. For most time series variables, correlation is usually strong at lag \(h=1\) and it gradually diminishes as lag period increases. Cyclic pattern in the correlogram suggests possible seasonality which you can analyse further.
 
-On the other hand, the partial auto-correlation function (PACF) is similar to the ACF in the sense that it also measures the correlation between different lag periods. The difference is that it controls the correlation across the temporal dimsnion so that only the contribution of an individual lag can be reflected.
+On the other hand, the partial auto-correlation function (PACF) is similar to the ACF in the sense that it also measures the correlation between different lag periods. The difference is that it controls the correlation across the temporal dimsnion so that only the contribution of an individual lag is reflected.
 
 \begin{Exercise}[title={Loading Datasets}]
 
-In this exercise, we would use an energy dataset. This dataset contains daily electricity generation and demand data published by a German transmission network called Amprion\footnote{Amprion - Demand in Conrrol Area \url{https://www.amprion.net/Grid-Data/Demand-in-Control-Area/}}. The first column is a date time variable and the rest are demand and generation data, each sampled at \(15\) minutes granularity. Let us start by loading the dataset from CSV file.
+In this exercise, we would use an external dataset. This dataset contains daily electricity generation and demand data published by a German transmission network called Amprion\footnote{Amprion - Demand in Conrrol Area \url{https://www.amprion.net/Grid-Data/Demand-in-Control-Area/}}. The first column is a date time variable and the rest are demand and generation data, each sampled at \(15\) minutes granularity. Code in example \ref{ex:loadamprion} show how to load the dataset from CSV file.
 
 \begin {table}[H]
 \caption {Description of the Amprion dataset}
@@ -1041,7 +1352,7 @@ In this exercise, we would use an energy dataset. This dataset contains daily el
 \end{center}
 \end{table}
 
-<<fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+<<ex:loadamprion, fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Read the Amprion dataset from CSV file
 # You might have to modify the path to point to your file location
 amprion <- read.csv('amprion.csv',
@@ -1053,7 +1364,7 @@ amprion <- read.csv('amprion.csv',
 amprion
 @
 
-One of the main drivers of demand and generation is weather. The weather dataset is published by the Deutscher Wetterdienst\footnote{DWD Climate Data Center \url{https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html}}. Weather observations are recorded every hour at the Bremen weather station.
+One of the main drivers of power demand and generation is weather. The weather dataset is published by the Deutscher Wetterdienst\footnote{DWD Climate Data Center \url{https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html}}. Weather observations are recorded every hour at the Bremen weather station. You can follow the code in example \ref{ex:loadbremen} to load the dataset.
 
 \begin {table}[H]
 \caption {Description of the Breman weather dataset}
@@ -1076,7 +1387,7 @@ One of the main drivers of demand and generation is weather. The weather dataset
 \end{center}
 \end{table}
 
-<<fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+<<ex:loadbremen, fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Load the Breman weather dataset
 bremen <- read.csv('bremen.csv',
                    colClasses = c('character',
@@ -1092,8 +1403,9 @@ bremen <- read.csv('bremen.csv',
 bremen
 @
 
-Before moving on to further analysis, we need to normalise the two datasets into the same granularity first. Once this is done, we can then join the two datasets together to form one table containing all variables.
-<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+Before moving on to further analysis, we need to aggregate the two datasets into the same granularity first. Once this is done, we can then join the two datasets together to form one table containing all variables. Example \ref{ex:joinamprionbremen} shows how to use SQL-like pipeline in \verb|dplyr| to aggregate and join the two datasets.
+
+<<ex:joinamprionbremen, fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Load the lubridate package to access more datetime functions
 library(lubridate)
 # Load the dplyr package for data wrangling
@@ -1116,7 +1428,7 @@ bremen_daily <- bremen %>%
                            as.Date()) %>%
                   group_by(date) %>% 
                   summarise(mean_airtemp = airtemp %>% mean(),
-                            max_sun = sun %>% sum(),
+                            max_sun = sun %>% max(),
                             mean_windspd = windspd %>% mean(),
                             mean_soil10 = soil10 %>% mean(),
                             mean_soil20 = soil20 %>% mean(),
@@ -1139,9 +1451,9 @@ myTable %>%
 
 \begin{Exercise}[title={Analysing Temporal Correlation}]
 
-Using the code below, you may create an ACF, a PACF and a CCF plot. The latter one refers to the cross-correlation function plot between two time series. In other words, it shows the temporal relationship among two variables across different lag.
+You can use the code in example \ref{ex:acf} to create the ACF and PACF correlograms. In addition, you can use the \verb|Ccf()| or \verb|ggCcf()| function to create a cross correlation function (CCF) correlogram. It analyses the temporal correlation between two variables.
 
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3>>=
+<<ex:acf, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Load the forecast package
 library(forecast)
 # Plots the ACF correlogram only
@@ -1190,13 +1502,13 @@ lag.plot(myTable$total_demand,lags = 28, layout = c(4,7))
 \end{Exercise}
 
 \section{Decomposition}
-Time series at regular interval can be either additive or multiplicative. Additive time series can be generally described as \(X_t=S_t+T_t+\epsilon_t\) where \(S_t\) refers to the seasonality at time \(t\) while \(T_t\) refers to the trend component. The observed data \(X_t\) is simply the sum total of trend, seasonal and error components. Alternative, a multiplicative time series is defined as \(X_t = S_t \times T_t \times \epsilon_t\). These components can be easily decomposed from the observed values.
+Time series can be either additive or multiplicative. Additive time series can be generally described as \(X_t=S_t+T_t+\epsilon_t\) where \(S_t\) refers to the seasonality at time \(t\) while \(T_t\) refers to the trend component. The observed data \(X_t\) is simply the sum total of trend, seasonal and error components. Alternative, a multiplicative time series is defined as \(X_t = S_t \times T_t \times \epsilon_t\). These components can be easily decomposed from the observed values.
 
 \begin{Exercise}[title={Identifying Trend and Seasonal Components}]
 
-From this exercise onwards, we would divide the dataset into training and testing set. We would use the training set to build models, the models would be apply to the testing set to assess their performance.
+To analyse the seasonality of a time series, you need to find out the ideal frequency of the seasonal component. Example \ref{ex:frequency} uses the function \verb|findfrequency()| to identify the frequency for a given time series. It uses spectal analysis to identify the frequency with strongest spectral density. Once the frequency is calculated, we can build a \verb|ts| object using the calculated frequency value. The function \verb|decompose()| converts the observed time series into trend component \(T_t \in [1,T]\), seasonal component \(S_t \in [1,T]\) and random residuals \(\epsilon_t \in [1,T]\). 
 
-The following code will help us find out the ideal frequency of the seasonal component. It uses spectal analysis to identify frequency with the strongest spectral density. Once the frequency is calculated, we can build a \verb|ts| object using the frequency value. The function \verb|decompose()| would convert the observed time series into trend component \(T_t \in [1,T]\), seasonal component \(S_t \in [1,T]\) and random residuals \(\epsilon_t \in [1,T]\).
+The code also divides the dataset into training and testing set. The training set is used to run analysis and train models. Once models are trained, they are applied to the testing set to assess model performance.
 
 <<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
 # Divide the dataset into training and testing set
@@ -1231,14 +1543,14 @@ plot(myDecomp)
 
 \begin{Exercise}[title={Linear Time Series Forecast}]
 
-Given that you already learnt how to decompose time series data in the previous exercise, we can make further use of the decomposition outputs. In this exercise, we will build a simple forecasting model using the trend and seasonal components as independent variables. The mathematical formula of a linear model with \(M\) predictor variables can be expressed as \eqref{tslm}.
+In this exercise, we will build a simple forecasting model using the trend and seasonal components as independent variables. The mathematical formula of a linear model with \(M\) predictor variables can be expressed as \eqref{tslm}. Code in example \ref{ex:tslm} shows how to build a time series linear regression model with several covariate variables as predictors. It also visualises the forecast output as a chart. The coloured area surrounding the line represents the confidence interval of your prediction.
 
 \begin{equation}
 \label{tslm}
 X_t = \beta_0 + \beta_{trend} T_t + \beta_{seasonal}S_t + \sum_{m=1}^{M}(\beta_m {x_m}_t) + \epsilon_t
 \end{equation}
 
-<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:tslm, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 library(forecast)
 # Perform linear regression model with decomposed time series components
 # You can also add interaction and polynomial terms here
@@ -1260,8 +1572,6 @@ plot(myTsForecast1)
 myTestError1 <- mean((myTsForecast1$mean - myTestingSet$total_demand)^2)
 @
 
-The output of the above code would produce a chart with your forecast visualised as coloured line. The coloured area surrounding the line represents the confidence interval of your prediction.
-
 \begin{figure}[H]
 \centering
 <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=3>>=
@@ -1270,9 +1580,9 @@ plot(myTsForecast1)
 \caption{Linear time series forecasting with trend and seasonal components}
 \end{figure}
 
-You can run a simple linear regresion model using the same set of predictor variables with the \verb|lm()| function to compare with the time series model output. 
+To compare the time series regression model output with standard regression, you can run a simple linear regresion model using the same set of predictor variables with the \verb|lm()| function. This is shown in example \ref{ex:tslmvslm}.
 
-<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:tslmvslm, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 myTsModel2 <- lm(myTs ~ mean_airtemp * mean_windspd + 
                  poly(max_sun,degree = 2) + 
                  mean_soil10 + mean_soil20,
@@ -1295,7 +1605,7 @@ ggplot() +
   geom_line(aes(x=date, y=myTsForecast2, colour='green'), myTestingSet) + 
   scale_colour_manual(guide = 'legend', name = 'Model', 
          values =c('blue'='blue','green'='green'), 
-         labels = c('Time Series Model','Simple Linear')) + 
+         labels = c('Time Series Regression Model','Simple Linear Regression')) + 
   labs(x='Date',
        y='Total Demand (MW)') +
   theme(legend.position = 'bottom')
@@ -1305,7 +1615,7 @@ ggplot() +
 
 \section{ARIMA Model}
 
-ARIMA is an acronym for Auto-Regressive Integrative Moving Average model. It is a statistical technique which incorporates lag within the statistical model. It can be described as the combination of three separate parts: autoregression, integration and moving average. ARIMA has three corresponding parameters \(p\),\(d\),and \(q\) which is normally expressed as \(ARIMA(p,d,q)\) or as separate terms \(AR(p)\), \(I(d)\) and \(MA(q)\).
+ARIMA is the acronym for Auto-Regressive Integrative Moving Average model. It is a statistical technique which incorporates lag within the model. It can be described as the combination of three separate parts: autoregression, integration and moving average. ARIMA has three corresponding parameters \(p\),\(d\),and \(q\) which is normally expressed as \(ARIMA(p,d,q)\) or as separate terms \(AR(p)\), \(I(d)\) and \(MA(q)\).
 
 The \(AR(p)\) part suggests that observation \(X_t\) is dependent on the linear combination of lagged terms up to \(p\) lag periods. A pure \(AR(p)\) model is expressed as \(X_t=\sum_{i=i}^{p}(\phi_i X_{t-i})\). The moving average part \(MA(q)\) indicates the residual is inherited from up to \(q\) lag periods. A pure \(MA(q)\) model can be expressed as as \(X_t=\sum_{i=1}^{q}(\theta_i \epsilon_{t-i}) + \epsilon_t \). As a result, a simple \(ARMA(p,q)\) model can be expressed as the following where \(\phi_i\) and \(\theta_i\) are model coefficients, while \(X_{t-i}\) represent observed data at \(i^{th}\) lag step and \(\epsilon_{t-i}\) refers to the random error at the \(i^{th}\) lag step \eqref{arma}.
 
@@ -1320,15 +1630,15 @@ The \(AR(p)\) part suggests that observation \(X_t\) is dependent on the linear 
 
 ARIMA model assumes the time series conforms stationarity\footnote{A stationary time series has consistent statistical properties across all time, such as equal mean and variance.}. The integrative component \(I(d)\) ensures stationarity by taking \(d\) number of integrative steps over time. A first order integrative model \(I(1)\) is simply the difference between current step and the immediate previous lag step. It is expressed as \( X_t^{'}=X_t - X_{t-1} \). Similarly, a second order integrative model \(I(2)\) is expressed as \( X_t^{''} = X_t^{'} - X_{t-1}^{'} = X_t - 2X_{t-1}+X_{t-2} \).
 
-Time series data with seasonality can be expressed \(ARIMA(p,d,q)(P,D,Q)_m\) where the uppercase parameters represent the seasonal component of the model. The \(m\) value is a positive non-zero integer indicating the frequency. The estimates \(AR(P)\), \(I(D)\) and \(MA(Q)\) are linearly combined together with the non-seasonal part to create the seasonal ARIMA (SARIMA) model.
+Time series data with seasonality can be expressed as \(ARIMA(p,d,q)(P,D,Q)_m\) where the uppercase parameters represent the seasonal component of the model. The \(m\) value is a positive non-zero integer indicating the frequency of the seasonality. The estimates \(AR(P)\), \(I(D)\) and \(MA(Q)\) are linearly combined together with the non-seasonal part to create the seasonal ARIMA (SARIMA) model.
 
 \begin{Exercise}[title={Automated ARIMA}]
 
-The standard ARIMA implementation accepts six parameters \(p\), \(d\), \(q\), \(P\), \(D\) and \(Q\) which will produce a seasonal time series model. In many cases, these values are usually not known to the user and all possible values are examined case-by-case to get the best fit.
+The standard ARIMA implementation accepts six parameters \(p\), \(d\), \(q\), \(P\), \(D\) and \(Q\) which produces a seasonal time series model. In many cases, these values are usually not known to the user and all possible values are examined case-by-case to get the best fit.
 
-In the \verb|forecast| package\footnote{The package author has published a detailed book: \url{https://www.otexts.org/fpp/}}, you may use the function \verb|Arima()| to experiment parameters manually. Alternatively, it is quite common to use automated method to search for good parameters. The method \verb|auto.arima()| tries all parameter values within the given constraints. It can also fit linear regression using predictor variables if the \verb|xreg| attribute is supplied to the function. This is considerably slower than the \verb|Arima()| function due to overhead for parameter search.
+In the \verb|forecast| package\footnote{The package author has published a detailed book: \url{https://www.otexts.org/fpp/}}, you may use the function \verb|Arima()| to experiment parameters manually. Alternatively, it is quite common to use automated method to search for good parameters. The method \verb|auto.arima()| tries all parameter values within the given constraints. It can also fit linear regression using predictor variables if the \verb|xreg| attribute is supplied to the function. This is considerably slower than the \verb|Arima()| function due to overhead for parameter search. Example \ref{ex:autoarima} demonstrates parameter searching using automated ARIMA.
 
-<<fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:autoarima, fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 library(forecast)
 library(dplyr)
 # Build an ARIMA model automatically
@@ -1368,8 +1678,10 @@ myTestError3 <- mean((myTsForecast3$mean - myTestingSet$total_demand)^2)
 \end{Exercise}
 
 \begin{Exercise}[title={Custom ARIMA}]
-After you have calculated the automated ARIMA forecast, you might realise the forecast tends to flat out when forecast horizon increases. This is because the \verb|auto.arima()| function selects the best parameters based on an indicated called AIC. It maximises the log-likelihood of the training data and gives preference to simpler models. We can manually tweak the ARIMA model with custom parameters using the \verb|Arima()| function instead:
-<<fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE>>=
+
+After running the automated ARIMA forecast, you might realise the forecast tends to flat out when forecast horizon increases. This is because the \verb|auto.arima()| function selects the best parameters based on an indicated called AIC. It maximises the log-likelihood of the training data and gives preference to simpler models. We can manually tweak the ARIMA model with custom parameters using the \verb|Arima()| function instead. This is demonstrated in example \ref{ex:customarima}.
+
+<<ex:customarima, fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE, rexample=TRUE>>=
 # Use custom parameters for the ARIMA model
 # In this case we can try ARIMA(2,0,0)(1,1,1)
 # You can change the parameters here
@@ -1390,12 +1702,12 @@ summary(myTsModel4)
 myTsForecast4 <- forecast(myTsModel4, 
                           xreg = myTestingSet %>% 
                             select(mean_airtemp,
-                                         mean_windspd,
-                                         max_sun,
-                                         mean_soil10,
-                                         mean_soil20,
-                                         mean_soil50,
-                                         mean_soil100))
+                                   mean_windspd,
+                                   max_sun,
+                                   mean_soil10,
+                                   mean_soil20,
+                                   mean_soil50,
+                                   mean_soil100))
 # Visualise the forecast
 autoplot(myTsForecast4)
 plot(myTsForecast4)
@@ -1409,12 +1721,12 @@ myTestError4 <- mean((myTsForecast4$mean - myTestingSet$total_demand)^2)
 myTsModel4 <- Arima(y = myTs, 
                     xreg = myTrainingSet %>% 
                             dplyr::select(mean_airtemp,
-                                   mean_windspd,
-                                   max_sun,
-                                   mean_soil10,
-                                   mean_soil20,
-                                   mean_soil50,
-                                   mean_soil100),
+                                          mean_windspd,
+                                          max_sun,
+                                          mean_soil10,
+                                          mean_soil20,
+                                          mean_soil50,
+                                          mean_soil100),
                     order = c(2,0,0), 
                     seasonal = c(1,1,1)) 
 myTsForecast4 <- forecast(myTsModel4, 
@@ -1436,9 +1748,9 @@ plot(myTsForecast4)
 
 \begin{Exercise}[title={Model-based Simulation}]
 
-With a full \(ARIMA(p,d,q)(P,D,Q)_m\) model, users can easily create model-based simulation. The following code will generate \(100\) simulated runs and plot the average of all runs as point forecast on a chart.
+With a full \(ARIMA(p,d,q)(P,D,Q)_m\) model, model-based simulation can be created very easily. The code in example \ref{ex:arimasim} will generate \(100\) simulated runs and plot the average of all runs as point forecast on a chart.
 
-<<fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:arimasim, fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Use one of the trained ARIMA model for simulation
 # Wrapping the simulation in a lapply loop
 mySimulation <- lapply(1:100, function(i){
@@ -1493,12 +1805,11 @@ myTestError5
 
 \chapter{Survival Analysis}
 
-For problems involving events occuring at irregularly interval, they can be studied through survival analysis. It is commonly used to analyse time-to-event in many research areas, such as medicine, economics, engineering and biology. For example, survival analysis is famously used in clinical research to analyse the effects of different drugs on sustaining patient's life. In this case, the time to death is used an indicator for drug performance. We will go through several techniques in this chapter.
+Events occuring at irregular time interval can be studied through survival analysis. It is commonly used to analyse time-to-event in many research areas, such as medicine, economics, engineering and biology. For example, survival analysis is traditionally used in clinical research to analyse the effects of different drugs on sustaining patient's life. In this case, the time to death is used an indicator for drug performance. We will go through several techniques in this chapter.
 
 \section{Kaplan-Meier Estimator}
 
-Kaplan-Meier estimator is used to measure how many subjects survives after a certain amount time after treatment started. 
-At time \(t \leqslant	T\), the estimator is given by equation \eqref{kmestimator} where \(d_{t^{'}}\) represents the number of events and \(n_{t^{'}}\) represents the number of subjects at risk.
+Kaplan-Meier estimator is used to measure how many subjects survives in a clinical trial since treatment began. At time \(t \leqslant	T\), the estimator is given by equation \eqref{kmestimator} where \(d_{t^{'}}\) represents the number of events and \(n_{t^{'}}\) represents the number of subjects at risk.
 
 \begin{equation}
 \label{kmestimator}
@@ -1508,11 +1819,11 @@ At time \(t \leqslant	T\), the estimator is given by equation \eqref{kmestimator
 
 \begin{Exercise}[title={Fitting a Kaplan-Meier Curve}]
 
-There are many implementationf for survival analysisin the R language. The most commonly used one is the \verb|survival| package. You can use the \verb|survfit()| function to fit a Kaplan-Meier curve with categorical predictors.
+There are many implementations for survival analysis in the R language. The most commonly used one is the \verb|survival| package. You can use the \verb|survfit()| function to fit a Kaplan-Meier curve with categorical predictors.
 
-In this exercise, we use the \verb|lung| dataset within the \verb|survival| package which contains lung cancer patients survival time. You can use the command \verb|?lung| to read the detailed dataset description. To fit a Kaplan-Meier Curve, we need to define the target event (i.e. death, in this example) and the time-to-event. This is done by defining a special object using the \verb|Surv(time, event)| function. The \verb|survfit| function fits a Kaplan-Meier curve against the target event using the supplied variables.
+In this exercise, we use the \verb|lung| dataset within the \verb|survival| package which contains lung cancer patients survival time. You can use the command \verb|?lung| to read the detailed dataset description. To fit a Kaplan-Meier Curve, we need to define the target event (i.e. death, in this example) and the time-to-event. Code in example \ref{ex:surv} shows how to define the \verb|Surv| object using the \verb|Surv(time, event)| function. The \verb|survfit| function fits a Kaplan-Meier curve against the target event using the supplied variables.
 
-<<fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE>>=
+<<ex:surv, fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE, rexample=TRUE>>=
 # Load the survival package for curve fitting
 library(survival)
 # Use the survminer package for better graphics
@@ -1563,7 +1874,7 @@ ggsurvplot(mySurvFit2,
 
 \section{Cox Proportional Harzard Model}
 
-To investigate the statistical effects of multiple predictor variables on survival probability, a technique named Cox regression can be used. Cox regression can take into account categorical, ordinal as well as numerical range variables. It analyses the simultaneously effects of multiple variables on survivial and assumes that the effects of these covariates are time-independent.
+To investigate the statistical effects of multiple predictor variables on survival probability, a technique named Cox regression can be used. Cox regression can take into account categorical, ordinal as well as numerical range variables. It analyses the effects of multiple variables on survivial and assumes that the effects of these covariates are time-independent.
 
 The harzard function \(h_t\) is give by equation \eqref{coxph}. The term \(h_{0,t}\) in the equation represents the baseline harzard when all covariates are zero. The linear terms \(x_1, x_2, x_3,..., x_M \) are the predictor variables, while \(\beta_1, \beta_2, \beta_3,..., \beta_M \) are their corresponding coefficients. For each coefficient \(\beta_m\), the exponential term \(e^{\beta_m}\) represents the harzard ratio of the covariate variable \(x_m\). If \(e^{\beta_m} > 1\), the corresponding covariate is positively correlated with increase in hazard. On the other hand, \(x_m\) is negatively correlated with harzard if \(e^{\beta_m} < 1\). In the case where \(e^{\beta_m} = 1\), the variable \(x_m\) has no effects on harzard.
 
@@ -1581,9 +1892,9 @@ s_{i, k} =  x_{i,k} - \sum_{i=1}^{j \in R(t)} x_{i, m} \hat{p_j}
 
 \begin{Exercise}[title={Training a Cox Regression Model}]
 
-Cox regression model can be trained using the \verb|coxph()| funciton in the \verb|survival| package. In the following example using the \verb|lung|dataset, the cox model analyses the effects of different covariate variables on the time-to-death of a group of cancer patients. 
+Cox regression model can be trained using the \verb|coxph()| function in the \verb|survival| package. Example \ref{ex:cox} builds a Cox regression model and analyses the effects of different covariate variables on the time-to-death of a group of cancer patients.
 
-<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+<<ex:cox, fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
 # Build a Cox model with predictor variables
 myCoxModel1 <- coxph(Surv(time, status==2) ~ factor(sex) + age + 
                        ph.ecog + ph.karno + 
@@ -1601,9 +1912,9 @@ Likewise, \verb|ph.ecog| is also a significant variable. Each unit increase in \
 
 \begin{Exercise}[title={Cox Regression Diagnostics}]
 
-The code below tests the Cox proportional hazard assumption by calculating the Schoenfeld residuals. If there are observable patterns along the temporal dimension, the model assumptions may have been violated.
+Example \ref{ex:zph} tests the Cox proportional hazard assumption by calculating the Schoenfeld residuals. If there are observable patterns along the temporal dimension, the model assumptions may have been violated.
 
-<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE>>=
+<<ex:zph, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE, rexample=TRUE>>=
 # Test the proportional harzard assumption of a Cox regression
 myCoxZph1 <- cox.zph(myCoxModel1)
 # Print the results of the test 
@@ -1626,7 +1937,7 @@ ggcoxzph(myCoxZph1,var = c('age','ph.ecog','ph.karno'))
 
 \chapter{Unsupervised Learning}
 
-Unsupervised learning refers to identifying the underlying structure of an unlabelled dataset. Clustering is one of the most common applications of unsupervised learning, which aims at allocating similar objects into common groups.
+Unsupervised learning identifies the underlying structure of an unlabelled dataset. Clustering is one of the most common applications of unsupervised learning, which aims at allocating similar objects into common groups.
 
 In a given set of unlabelled objects, there can be different ways to produce clusters. Figure \ref{fig:clusters} below shows the effects of choosing differennt number of clusters.
 
@@ -1731,7 +2042,7 @@ multiplot(clust1, clust2, clust3, clust4,cols = 2)
 
 \section{\(K\)-means Clustering}
 
-\(K\)-means clustering is arguably the most common clustering algorithm due to its intrinsic simplicity. It produces clusters by minimising the Euclidean distance between objects and the centroid of their own cluster. The Euclidean distance between two \(P\)-dimensional vectors \(\vec{x_j}\) and \(\vec{x_k}\) is defined as:
+\(K\)-means clustering a very common clustering algorithm due to its intrinsic simplicity. It produces clusters by minimising the Euclidean distance between objects and the centroid of their own cluster. The Euclidean distance between two \(P\)-dimensional vectors \(\vec{x_j}\) and \(\vec{x_k}\) is defined as equation \eqref{euclidean}.
 
 \begin{equation}
 \label{euclidean}
@@ -1739,7 +2050,7 @@ d(\vec{x_j}, \vec{x_k}) = \sqrt{ \sum_{p=1}^{P} (x_{j,p} - x_{k,p} )^2 }
 \end{equation}
 
 \begin{algorithm}[H]
-	\label{kmeans}
+	\label{algo:kmeans}
 	\caption{\(K\)-means clustering}
 	\SetKwInOut{Input}{Input}
 	\Input{Set of unlabelled object \( X=\{\vec{x}_1, \vec{x}_2, \vec{x}_3, ... ,\vec{x}_N \}\)}
@@ -1768,15 +2079,17 @@ d(\vec{x_j}, \vec{x_k}) = \sqrt{ \sum_{p=1}^{P} (x_{j,p} - x_{k,p} )^2 }
   \Return Object cluster assignment \( \{\omega_1, \omega_2, \omega_3, ..., \omega_K \} \)
 \end{algorithm}
 
-Given that the dataset unlabelled, the true number of cluster is not known to us. The \(K\) value which represents the number of clusters is usually experimented one-by-one and the best value is determined from the output. 
+Since the dataset is unlabelled, the true number of cluster is unknown. The \(K\) value which represents the number of clusters is usually experimented one-by-one and the best value is determined from the output. 
 
 In the R language, the \(K\)-means clustering algorithm is implemented very efficiently. You can use the \verb|kmeans()| function in the \verb|stats| package to perform \(K\)-means clustering.
 
 \begin{Exercise}[title={Dimensionality Reduction}]
 
-In this exercise, we will use the \verb|mtcars| dataset. This dataset contains six numeric variables, in other words, it is a \(P=6\) dimensionality dataset. We can use dimensionality reduction techniques such as principal component analysis (PCA) to visualise them. It converts input variables into principal components (PCs) in the order of maximum variance. The following code would execute PCA and visualise the top two PCs on a scatterplot. 
+In example \ref{ex:pca}, we will use the \verb|mtcars| dataset. This dataset contains six numeric variables. In other words, car can be represented as \(P=6\) dimensional objects. In practical applications of \(K\)-means algorithm, it is very common to normalise the numeric variables using \(z\)-scores if they are recorded in different units. Normalisation would ensure that all variables are fairly represented.
 
-<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+You can use dimensionality reduction techniques such as principal component analysis (PCA) to visualise the data. PCA converts input variables into principal components (PCs) in the order of maximum variance. The following code would execute PCA and visualise the top two PCs on a scatterplot. 
+
+<<ex:pca, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Select the numeric variables from the mtcars dataset
 mtcars_numeric <- mtcars %>% select(mpg, disp, hp, drat, wt, qsec)
 # Calculate the mean and standard deviation for each variables
@@ -1807,11 +2120,9 @@ autoplot(myPca, loadings.label = TRUE) +
 
 \begin{Exercise}[title={\(K\)-means Clustering}]
 
-With a \(P=6\) dimensional dataset, we can apply \(K\)-means algorithm on it to compute the clusters. In most cases, the number of cluster \(K\) is not known in advance. We can experiement different values here. 
+With a \(P=6\) dimensional dataset, we can apply \(K\)-means algorithm on it to compute the clusters. Since the number of cluster \(K\) is unknown, we can experiement different values in this example \ref{ex:kmeans}. The clustering results can be visualised in a low-dimensional space with two principal components.
 
-In practical applications of \(K\)-means algorithm, it is very common to normalise the variables using \(z\)-scores if they are recorded in different units. Normalisation would ensure that all variables are fairly represented.
-
-<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:kmeans, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # We know there are three types of of flowers, so let's start with K=3
 # You can try different values
 myKClust <- kmeans(mtcars_numeric_normalised, centers = 3)
@@ -1875,7 +2186,7 @@ multiplot(myClustPlot1,myClustPlot2,myClustPlot3,cols = 3)
 
 \section{Hierarchical Clustering}
 
-In a given unlabelled dataset containing objects \(\vec{x}_i, i=\{1,2,3,...,N\} \), the maximum number of cluster is \(N\) where each cluster contains only \(1\) member object. In this case, each cluster centroid which is denoted as \( \vec{\mu}_i \) contains rich information which perfectly describes its member object as \( \vec{\mu}_i = \vec{x}_i \). However, such information would be practically useless. If we start with \(N\) clusters, we can merge the closest two clusters into one therefore adding the least amount of error to the system. In this way, we would have obtained \(N-1\) clusters. If we repeat this merging process again and again until there are no more clusters left to merge, you would eventually obtain one single cluster which comprises every member of the object set. This is how agglomerative hierarchical clustering algorithm works. 
+In a given unlabelled dataset containing objects \(\vec{x}_i, i=\{1,2,3,...,N\} \), the maximum number of cluster is \(N\) where each cluster contains only \(1\) member object. In this case, the cluster centroids denoted as \( \vec{\mu}_i \) contain rich information which perfectly describes their member objects as \( \vec{\mu}_i = \vec{x}_i \). However, such information would be practically useless. To improve this, we can start with \(N\) clusters and merge the closest two clusters into one. This would have obtained \(N-1\) clusters by adding the least amount of error into the system. This merging process can be iteratively repeated until there are no more clusters left to merge. This is how agglomerative hierarchical clustering algorithm works. 
 
 In hierarchical clustering, the closeness metric between two clusters \( \omega_i \) and \( \omega_j \) is denoted as function \( D(\omega_i,\omega_j) \). There are several common choices of including 
 \begin{inparaenum}[1)]
@@ -1918,7 +2229,7 @@ In hierarchical clustering, the closeness metric between two clusters \( \omega_
 	\label{ward}
   \begin{split}
 	D(\omega_i, \omega_j) = 
-	        & \underbrace{ \sum_{k \in \omega_i \cup \omega_j } \Big(\vec{x}_k - ( \frac{1}{|\omega_i \cup \omega_j|} \sum_{\vec{x}_{{k}^{'}} \in \omega_i \cup \omega_j} \vec{x}_{{k}^{'}} \Big)^2 ) }_\text{Sum of squares of \(\omega_i \cup \omega_j\)} - \\
+	        & \underbrace{ \sum_{k \in \omega_i \cup \omega_j } \Big(\vec{x}_k - ( \frac{1}{|\omega_i \cup \omega_j|} \sum_{\vec{x}_{{k}^{'}} \in \omega_i \cup \omega_j} \vec{x}_{{k}^{'}} ) \Big)^2  }_\text{Sum of squares of \(\omega_i \cup \omega_j\)} - \\
         	& \underbrace{ \sum_{i \in \omega_i } \Big(\vec{x}_i - ( \frac{1}{|\omega_i|} \sum_{\vec{x}_{{i}^{'}} \in \omega_i}\vec{x}_{{i}^{'}}) \Big)^2 }_\text{Sum of squares of \(\omega_i\)} - \\
         	& \underbrace{ \sum_{j \in \omega_j } \Big(\vec{x}_j - ( \frac{1}{|\omega_j|} \sum_{\vec{x}_{{j}^{'}} \in \omega_j}\vec{x}_{{j}^{'}}) \Big)^2 }_\text{Sum of squares of \(\omega_j\)}
 	\end{split}
@@ -1927,12 +2238,11 @@ In hierarchical clustering, the closeness metric between two clusters \( \omega_
 
 
 \begin{algorithm}[H]
-	\label{hclust}
+	\label{algo:hclust}
 	\caption{Agglomerative hierarchical clustering}
 	\SetKwInOut{Input}{Input}
 	\Input{Set of unlabelled object \(X = \{ \vec{x}_1, \vec{x}_2, \vec{x}_3,..., \vec{x}_N\}\)}
 	\Input{Linkage function \(D(\omega_i,\omega_j)\)}
-	%\tcc{  }
 	\For{\( n \in \{1,2,3,...,N\} \)}{
 	  \( \omega_n \leftarrow \{\vec{x}_n\} \) \;
 	}
@@ -1941,13 +2251,11 @@ In hierarchical clustering, the closeness metric between two clusters \( \omega_
 	  \( \Omega^{'} = \{\} \) \;
 	  \For{\(i \in \{1,2,3,..., |\Omega|\}\)}{
 	    \( \Omega^{'}_i \leftarrow D(\omega_i, \omega_j), j=\{1,2,3,...,|\Omega|\}  \) \;
-	    %\( j \leftarrow \aggregate{argmax}{j} d(\omega_i, \omega_j), j={1,2,3,...,|\Omega|} \) \;
 	  }
 	  \( \{i,j\} \leftarrow \aggregate{argmin}{i,j} \Omega^{'} \) \;
 	  \( \omega_{ij} \leftarrow \Omega^{'}_i \cup \Omega^{'}_j \) \;
     \( \Omega \leftarrow \Omega^{'} \setminus \Omega^{'}_i \setminus \Omega^{'}_j \cup \omega_{ij} \) \;
 	}
-  %\Return Cluster centroids \( C \)\;
 \end{algorithm}
 
 The result of hierarchical clustering can be visualised using a tree-like structure called dendrogram. The merging sequence of clusters as well as object closeness can be easily read from the dendrogram. The height of the node at the dendrogram indicates the closeness metric of the two clusters when they are merged. After analysing the dendrogram, users can decide how many clusters to retain. This is usually an objective decision. Once decided, the dendrogram can be cut to obtain the desired number of clusters. Alternatively, we can cut the dendrogram at a certain fixed height to discard trivial clusters at the bottom.
@@ -1993,9 +2301,9 @@ multiplot(plotlist = plt, cols = 4)
 
 \begin{Exercise}[title={Constructing a Dendrogram}]
 
-In the R language, hierarchical clustering can be performed using the \verb|hclust()| function which is included in the default \verb|stats| package. The function requires a distance matrix of objects which is normally pre-computed using the \verb|dist()| function. The \verb|hclust()| function uses complete linkage by default if the \verb|method| parameter is not specified. You can change the linkage function and check the difference in output results. The following code snippet produces a simple dendrogram.
+In the R language, hierarchical clustering can be performed using the \verb|hclust()| function which is included in the default \verb|stats| package. The function requires a distance matrix of objects which is normally pre-computed using the \verb|dist()| function. The \verb|hclust()| function uses complete linkage by default if the \verb|method| parameter is not specified. You can change the linkage function and check the difference in output results. The code snippet in example \ref{ex:hclust} performs hierarchical clustering and visualises the result as a simple dendrogram.
 
-<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:hclust, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Calculate distance matrix
 # Using Euclidean distance here but you can change it
 myDist <- mtcars_numeric_normalised %>% dist(method = 'euclidean')
@@ -2023,9 +2331,9 @@ ggdendrogram(myHClust)
 
 \begin{Exercise}[title={Cutting a Dendrogram}]
 
-Dendrogram can be cut to remove smaller clusters at lower height. This can be achieved using the \verb|cutree()| function in R. You can either specify the number of clusters to retain using parameter \verb|k|, this would retain the top \verb|k| clusters of the dendrogram. Alternatively, you can use the \verb|h| parameter to specify at which height the dendrogram should be cut. You can use the code below to cut the dendrogram and visualise the results.
+Dendrogram can be cut to remove smaller clusters at lower height. This can be achieved using the \verb|cutree()| function in R. You can either specify the number of clusters to retain using parameter \verb|k|, this would retain the top \verb|k| clusters of the dendrogram. Alternatively, you can use the \verb|h| parameter to specify at which height the dendrogram should be cut. Example \ref{ex:cutdendro} shows how to cut a dendrogram. It also demonstrates various ways to visualise a dendrogram.
 
-<<fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:cutdendro, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Cut the dendrogram by specifying how many clusters to retain
 # You can change the number of clusters here
 myCutClusters1 <- cutree(myHClust, k = 5) %>% factor()

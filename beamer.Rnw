@@ -9,6 +9,32 @@
 
 
 \documentclass{beamer}
+
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{microtype}
+\usepackage{times}
+\usepackage[utf8]{inputenc}     
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{exercise}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{paralist}
+\usepackage[super]{nth}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{pstricks}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes, shapes.geometric, arrows}
+
 \begin{document}
 \title{
   \huge Business Analytics in R \\ 
@@ -22,13 +48,15 @@
 
 \frame{\titlepage} 
 
-\frame{\frametitle{Table of contents}\tableofcontents} 
-
-
 \section{Regression Models} 
 
 \frame{\frametitle{Linear Regression} 
-Each frame should have a title.
+
+In most of the time, data does not come to you in exactly the right format. Often you need to compute new variables, or to summaries and rename the original ones. In some cases, you may have to reorder the observations to make the data easier to work with. An excellent package for these tasks is the \verb|dplyr| package.	There are five key functions in this package that allow you to solve the vast majority of data manipulation challenges.
+
+These can all be used in conjunction with the \verb|group_by()| function, which changes the scope of each function from operating on the entire dataset to operating on it group-by-group. 
+
+All aforementioned functions work similarly. The first argument is a \verb|data frame| containing the source data. The subsequent arguments describe what to do with the data. All the functions return the processed data in a new \verb|data frame|.
 }
 
 \subsection{Regression Diagnostics}
