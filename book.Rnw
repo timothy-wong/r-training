@@ -722,16 +722,16 @@ plot(myModel3)
 \end{figure}
 
 \begin{description}
-  \item [$\bullet$ Residuals vs Fitted]
+  \item [Residuals vs Fitted]
   Checks for non-linear relationship. For a good linear fit, residuals are normally distributed along a straight line centred at zero (i.e. a horizontal line). Contrarily, curvy line indicate poor model fit with possible non-linear effects.
 
-  \item [$\bullet$ Normal Quantile-Quantile]
+  \item [Normal Quantile-Quantile]
   One the of main assumptions of linear regression is that the residual is drawn from zero-centred Gaussian distribution \(\epsilon_i\sim\mathcal{N}(0,\sigma^2)\). To verify whether the proposed model satisfies this assumption, we can use a normal quantile-quantile plot (Q-Q plot) to perform a quick check. It aligns model residuals against a theoretical normal distribution. If the residuals spread along a straight line on the Q-Q plot, it suggests that the residuals are normally distributed. Alternatively, if the data points deviate from the line it indicates vice versa. In this case, parametric model assumption does not hold and you might have to consider improving your model.
 		
-  \item [$\bullet$ Scale-Location]
+  \item [Scale-Location]
   Shows the distribution of the standardised residuals along the range of fitted values. As standard linear model is assumed to be homoscedastic, the residual variance should not vary along the range of fitted values (i.e. expects a near-horizontal line). If the standardised residual forms a distinguishable patten (e.g. fanning out or curvy), then the model may be heteroscedastic and hence violates the underlying assumption.
   
-  \item [$\bullet$ Residual vs Leverage (Cook's Distance)]
+  \item [Residual vs Leverage (Cook's Distance)]
   Observations having high leverage pose greater influence to the model. This means that the model estimates are strongly affected by these cases. If such obserations have high residuals (i.e. large Cook's distance), they can sometimes be considered as outliers. On the other hand, most observations would have low leverage and short Cook's distance. This means that the model estimates would not have varied a lot if few such observations were to be added or discarded.
 \end{description}
 \end{Exercise}
@@ -882,7 +882,7 @@ To robustly check whether a variable is truly drawn from a Poisson distribution,
 library(vcd)
 gf <- goodfit(mtcars$carb, type= "poisson", method= "ML")
 # Plots the observed frequency vs theoretical Poisson distribution.
-# The hanging bars should fill the space if it was perfectly Poisson.
+# The hanging bars should fill the space if it is perfectly Poisson.
 plot(gf)
 # Checks the statistical p-value of the goodness-of-fit test.
 # If p<=0.05 then it is safe to say that the variable is Poisson.
@@ -906,16 +906,16 @@ Example \ref{ex:poissonreg} trains a Poisson regression model using the \verb|mt
 
 <<ex:poissonreg, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Build a Poisson model to predict the number of carburetors in a car.
-myModel5 <- glm(carb ~ hp + wt + factor(am), 
-                family="poisson",
-                data=mtcars)
+myPoissonModel <- glm(carb ~ hp + wt + factor(am), 
+                      family="poisson",
+                      data=mtcars)
 # Read the model summary
-summary(myModel5)
+summary(myPoissonModel)
 # Read the model diagnostic
-plot(myModel5)
+plot(myPoissonModel)
 # Visualise the observed / fitted values as a table
 tibble(observed = mtcars$carb,
-       fitted = myModel5$fitted.values) %>% View()
+       fitted = myPoissonModel$fitted.values) %>% View()
 @
 \end{Exercise}
 
@@ -969,15 +969,15 @@ In the example \ref{ex:logistic}, the model has three independent variables \ver
 <<ex:logistic, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Build a logistic regression model to predict the dependent variable am
 # (1=manual; 0=auto)
-myModel6 <- glm(am ~ mpg + hp + disp, family="binomial", data=mtcars)
-summary(myModel6)
+myLogisticModel <- glm(am ~ mpg + hp + disp, family="binomial", data=mtcars)
+summary(myLogisticModel)
 # Calculate the odds-ratios by taking the exponential of the coefficients
 # Can you explain the effects of each of these independent variables?
-exp(myModel6$coefficients)
+exp(myLogisticModel$coefficients)
 # You may also calculate the 95% confidence interval of the odds-ratio
-exp(cbind(oddsratio=myModel6$coefficients, confint(myModel6)))
+exp(cbind(oddsratio=myLogisticModel$coefficients, confint(myLogisticModel)))
 # Returns the modelled probability
-myProb <- predict(myModel6, mtcars, type="response")
+myProb <- predict(myLogisticModel, mtcars, type="response")
 # Turn the probability into a binary class (i.e. TRUE vs FALSE)
 # Probability > 0.5 means the vehicle likely to have manual transmission
 myPrediction <- myProb > 0.5
@@ -1029,7 +1029,7 @@ In the R language, there are many packages which implement tree-based algorithm.
 # Load the rpart.plot package for tree visualisation
 library(rpart)
 library(rpart.plot)
-# Build a decision tree to predict mpg using several input variables 
+# Build a decision tree to predict mpg
 myTree <- rpart(formula = mpg ~ wt + hp + factor(carb) + factor(am), 
                 data = mtcars,
                 control = rpart.control(minsplit=5))

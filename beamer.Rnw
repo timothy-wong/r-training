@@ -21,7 +21,8 @@
   Introduction to Statistical Programming
 }
 \author{
-  Timothy Wong\thanks{\url{timothy.wong@hotmail.co.uk}}
+  Timothy Wong\thanks{\url{timothy.wong@hotmail.co.uk}} \\
+  James Gammerman\thanks{\url{person@organisation.com}}
 }
 
 \begin{document}
@@ -32,6 +33,330 @@
 
 \begin{frame}[shrink]{Outline}
     \tableofcontents
+\end{frame}
+
+\section{Opening}
+
+\begin{frame}{What is the R language?}
+  \begin{itemize}
+    \item Offers modern and sophisticated statistical algorithms
+    \item Used by millions of analysts and researchers worldwide
+    \item Has a thriving open-source community
+    \item Enables big Data analytics
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Easy to Use}
+  \begin{itemize}
+    \item \verb|PROC REG| 	= \verb|lm()| or \verb|glm()|
+    \item \verb|PROC SQL| 	= \verb|%>%|
+    \item \verb|PROC SORT| 	= \verb|arrange()|
+    \item \verb|PROC MEANS|	= \verb|mean()|, \verb|sd()|
+    \item \verb|PROC GPLOT|	= \verb|plot()|, \verb|ggplot()|, \verb|autoplot()|
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{RStudio Server Pro}
+  \begin{itemize}
+    \item RStudio is your integrated development environment (IDE)
+  \end{itemize}
+  \includegraphics[width=\textwidth]{rstudio.PNG}
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Packages}
+\begin{itemize}
+  \item \textbf{CRAN} is the Comprehensive R Archive Network.
+  \item User-contributed packages: source code, binaries, documentation.
+\end{itemize}
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Install a new package with all its dependencies
+install.packages('ggplot2', dependencies = TRUE)
+# Load an installed package 
+# (both lines are identical)
+library(ggplot2)
+library('ggplot2')
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Packages}
+\begin{itemize}
+  \item \textbf{CRAN Task View} is a curated list of packages.
+  \item \url{https://cran.r-project.org/web/views/}
+\end{itemize}
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+library(ctv)
+# Install a CRAN Task View
+install.views("Econometrics")
+# Update a CRAN Task View
+update.views("Econometrics")
+@
+\end{frame}
+
+  
+
+
+\begin{frame}[fragile, shrink]{Vectors}
+\begin{itemize}
+  \item R is a vectorised programming language.
+  \item Vector contains objects of the same data type.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Create a vector of integers one to ten
+myVec1 <- 1:10
+# Find out the length of vector
+length(myVec1)
+# Reverse the vector
+rev(myVec1)
+# Create a custom vector of 10, 15, 20, 25, 30
+myVec2 <- c(10, 15, 20, 25, 30)
+myVec2
+# Create a vector of sequential numbers
+myVec3 <- seq(from = -10, to = 10, by = 0.5)
+myVec3
+@
+\end{frame}
+
+
+\begin{frame}[fragile]{Subsetting a Vector}
+\begin{itemize}
+  \item You can subset members from a vector.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Select the second member of the vector
+myVec1[2]
+# Subset a range from the vector
+myVec1[2:4]
+# Subset specified elements
+myVec1[c(4,2,3)]
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Vectorised Operations}
+\begin{itemize}
+  \item Operations in R are vectorised.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Arithmetic operations
+myVec1 + 10
+myVec1 - 10
+myVec1 * 2
+myVec1 / 2
+myVec1 ^ 2
+log(myVec1)
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Looping}
+\begin{itemize}
+  \item Looping can be slow.
+  \item Always try to vectorise your code.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', cache=TRUE>>=
+# Vectorised operation is fast
+system.time({
+  myResult <- 1:100000 * 2
+})
+# Looping is quite slow
+system.time({
+  myResult <- sapply(1:100000, function(x){ x * 2 })
+})
+# Appending to vector is much slower
+system.time({
+  myResult <- c()
+  for(i in 1:100000){
+    myResult <- c(myResult, i * 2)
+  }
+})
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Functions}
+\begin{itemize}
+  \item Functions are vectorised.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Defines a custom function
+myFunc <- function(x) {
+  x * 2
+}
+# Execute the function with one input
+myFunc(5)
+# Execute the function with an integer vector
+myFunc(1:10)
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Character Vectors}
+\begin{itemize}
+  \item Vector can also contain character objects.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Vector can contain character objects
+myVec4 <- c('Bill', 'Mark', 'Steve', 'Jeff', 'Larry')
+myVec4
+# Constant character vectors in R
+LETTERS
+letters
+month.name
+month.abb
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Vectors - Other Data Types}
+\begin{itemize}
+  \item Vector can contain objects of any data type.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# This is a vector of character objects
+myVec5 <- c('2017-07-13',
+            '2017-10-11',
+            '2017-11-21',
+            '2018-01-16', 
+            '2018-03-27')
+# This is a vector of date objects
+myVec6 <- as.Date(myVec5)
+# Compute the day of week - returns a vector of characters
+# Notice that these are all vectorised functions
+weekdays(myVec6)
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{List}
+\begin{itemize}
+  \item List is a generic container for objects of different data types
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myFavBook <- list(title = 'R for Data Science',
+                  authors = c('Garrett Grolemund', 'Hadley Wickham'),
+                  publishDate = as.Date('2016-12-12'),
+                  price = 18.17,
+                  currency = 'USD',
+                  edition = 1,
+                  isbn = 1491910399)
+myFavBook
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Subsetting a List}
+\begin{itemize}
+  \item You can subset a particular member from a list
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Select a named member of a list
+# Using the dollar sign, followed by name without bracket
+myFavBook$title
+# Using double squared brackets with member's name as string
+myFavBook[['authors']]
+# Select the fourth member in the list
+myFavBook[[4]]
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Special Numbers in R}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Pi is constant 3.14159...
+pi
+# One divided by zero is infinity
+1/0
+# Negative number divided by zero is negative infinity
+-1/0
+# Infinity divided by infinity is Not-a-Number (NaN)
+Inf/Inf
+# Not available (NA) plus one is still NA
+NA + 1
+# Effects of different special numbers
+c(5, 10, 15, NA, 25, 30, NaN, 35, 40, Inf, 50, -Inf, 60) / 5
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Data Frame}
+\begin{itemize}
+  \item Table with rows (observations) and columns (variables).
+  \item Analogous to an Excel workbook.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myFavMovies1 <- data.frame(title = c('Dr. No',
+                                     'Goldfinger',
+                                     'Diamonds are Forever',
+                                     'Moonraker',
+                                     'The Living Daylights',
+                                     'GoldenEye',
+                                     'Casino Royale'),
+                           year = c(1962, 1964, 1971, 1979, 
+                                    1987, 1995, 2006),
+                           box = c(59.5, 125, 120, 210.3,
+                                   191.2, 355, 599),
+                           bondActor = c('Sean Connery',
+                                         'Sean Connery',
+                                         'Sean Connery',
+                                         'Roger Moore',
+                                         'Timothy Dalton',
+                                         'Pierce Brosnan',
+                                         'Daniel Craig'))
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Data Frame}
+<<fig.show='asis', results=TRUE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+myFavMovies1
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Tibble}
+\begin{itemize}
+  \item Similar to traditional \verb|data frame|.
+  \item \verb|tibble| is the modern standard in R.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+library(dplyr)
+myFavMovies2 <- tibble(title = c('Dr. No',
+                                 'Goldfinger',
+                                 'Diamonds are Forever',
+                                 'Moonraker',
+                                 'The Living Daylights',
+                                 'GoldenEye',
+                                 'Casino Royale'),
+                       year = c(1962, 1964, 1971, 1979, 
+                                1987, 1995, 2006),
+                       box = c(59.5, 125, 120, 210.3,
+                               191.2, 355, 599),
+                       bondActor = c('Sean Connery',
+                                     'Sean Connery',
+                                     'Sean Connery',
+                                     'Roger Moore',
+                                     'Timothy Dalton',
+                                     'Pierce Brosnan',
+                                     'Daniel Craig'))
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Tibble}
+<<fig.show='asis', results=TRUE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+myFavMovies2
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Subsetting a Tibble}
+<<fig.show='asis', results=TRUE, eval=FALSE, warning=FALSE, message=FALSE, error=FALSE>>=
+# Get one column by name
+myFavMovies2[['title']]
+myFavMovies2$title
+# Get a range of columns by position ID
+myFavMovies2[, 1:2]
+myFavMovies2[1:2]
+# Get rows 1 to 3
+myFavMovies2[1:3, ]
+# Get the 'year' variable of row 1-3 
+myFavMovies2[1:3, 'year']
+# Get the 'title' and 'year' variables of row 4-7 
+myFavMovies2[4:7, c('title','year')]
+@
 \end{frame}
 
 \section{Introduction to Data Analysis}
@@ -45,8 +370,11 @@ Univariate linear regression model
 \[ \hat{y}_i=\beta_0+\beta_1 x_i \]
 \begin{itemize}
   \item Analogous to a straight line \( y=mx+c\)
-  \item Can be chained with \(M\) dependent variables \[ \hat{y}_i=\beta_0 + \sum_{m=1}^{M}\beta_m x_{m,i} \]
-  \item Residual term defined as \( \epsilon_i = y_i - \hat{y}_i \)
+  \item Can be chained with \(M\) dependent variables (Multivariate)
+    \[ \hat{y}_i=\beta_0 + \sum_{m=1}^{M}\beta_m x_{m,i} \]
+  \item Residual term \( \epsilon_i = y_i - \hat{y}_i \) assumed to be Gaussian 
+    \[\epsilon_i\sim\mathcal{N}(0,\sigma^2) \]
+  \item Also known as ordinary least squared (OLS) regression
 \end{itemize}
 % \vskip 1cm
 % \begin{block}{Examples}
@@ -54,12 +382,252 @@ Univariate linear regression model
 % \end{block}
 \end{frame}
 
+\begin{frame}[fragile,shrink]{Linear Regression in R}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Build a univariate linear model
+# These two lines are equivalent
+myModel1 <- lm(mpg ~ wt, mtcars)
+myModel1 <- lm(formula = mpg ~ wt, data = mtcars)
+# Read the model summary
+summary(myModel1)
+@
+\end{frame}
+
+
+\begin{frame}[fragile]{More Linear Regression Models}
+
+\begin{description}
+\item [Multivariate linear model] Additional independent variables can be chained using the \verb|+| symbol. Categorical variables can be encoded as dummy on-the-fly using \verb|factor()|.
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myModel2 <- lm(mpg ~ wt + hp + qsec + factor(am), mtcars)
+@
+
+\item [Polynomial term] Model can become more flexible when an independent variable is converted into polynomial terms. Use the \verb|poly()| function.
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myModel3 <- lm(mpg ~ wt + qsec + factor(am) + 
+                 poly(hp, 3), mtcars)
+@
+
+\item [Interaction term] Two variables can be combined to create synergy effect. The \verb|*| symbol is used to combine variables together.
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myModel4 <- lm(mpg ~ wt * hp + qsec + factor(am), mtcars)
+@
+\end{description}
+\end{frame}
+
+\begin{frame}{Regression Diagnostics}
+\begin{description}
+  \item [Residuals vs Fitted]
+  Checks for non-linear relationship. Look for a near horizontal line.
+
+  \item [Normal Quantile-Quantile]
+  It aligns model residuals against a theoretical normal distribution. If the residuals spread along a straight diagonal line on the Q-Q plot, it suggests that the residuals are normally distributed.
+		
+  \item [Scale-Location]
+  Checks for homoscedasticity and heteroscedasticity. It is homoscedastic if observations scatter without any observable pattern.
+  
+  \item [Residual vs Leverage (Cook's Distance)]
+  Identifies observations having strong influence to the model.
+\end{description}
+\end{frame}
+
+\begin{frame}[fragile,shrink]{Diagnostics Plots}
+<<fig.show='asis', eval=TRUE,echo=FALSE,results=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+par(mfrow = c(2,2))
+plot(myModel3)
+par(mfrow = c(1,1))
+@
+\end{frame}
+
+
+\begin{frame}{Overfitting}
+\begin{itemize}
+  \item Flexible models are prone to overfitting.
+  \item Overfitting makes the model less generalisable.
+  \item Solution
+  \begin{itemize}
+    \item Use less flexible methods.
+    \item Impose regularisation.
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Overfitting: Visual Explaination}
+	\centering\[\hat{y} = \beta_0 + \sum\limits_{j=1}^{8} {\beta_{wt}}_j x_{wt}^j + \sum\limits_{k=1}^{5} {\beta_{hp}}_k x_{hp}^k \]
+<<fig.show='asis', eval=TRUE,echo=FALSE,results=FALSE, warning=FALSE, message=FALSE, error=FALSE>>=
+  J <- 8
+  K <- 5
+  myModel4 <- lm(mpg ~ poly(wt,J) + poly(hp,K), mtcars)
+  wt_along <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 50)
+  hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
+  f <- function(k1, k2, model){ z <- predict(model, data.frame(wt=k1, hp=k2 )) }
+  myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
+  myPlane <- persp(x = wt_along, xlab = 'Weight',
+                   y = hp_along, ylab = 'Horsepower',
+                   z = myPrediction, zlab = 'Miles-per-Gallon',
+                   theta = 30, phi = 30, expand = 0.5, col = "lightblue")
+  myPoints <- trans3d(x = mtcars$wt,
+                      y = mtcars$hp,
+                      z = mtcars$mpg,
+                      pmat=myPlane)
+  points(myPoints, col='red')
+@
+\end{frame}
+
 \subsection{Poisson Regression}
+
+\begin{frame}[fragile, shrink]{Poisson Distribution}
+  \begin{itemize}
+    \item Count of distinct events are drawn from Poisson distribution.
+    \begin{itemize}
+      \item Always positive.
+      \item In most cases they are integers.
+    \end{itemize}
+    \item e.g. Number of people in a room, number of flights delayed per day... etc.
+  \end{itemize}
+  <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=5, fig.height=2>>=
+  library(dplyr)
+  library(ggplot2)
+poisson_max <- 20
+tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=1), frequency=0:poisson_max, lambda=1) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=2), frequency=0:poisson_max, lambda=2)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=3), frequency=0:poisson_max, lambda=3)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=4), frequency=0:poisson_max, lambda=4)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=5), frequency=0:poisson_max, lambda=5)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=6), frequency=0:poisson_max, lambda=6)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=7), frequency=0:poisson_max, lambda=7)) %>%
+  union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=8), frequency=0:poisson_max, lambda=8)) %>%
+  ggplot(aes(x=frequency, y=density, colour=factor(lambda))) +
+  geom_line() + 
+  labs(x='Frequency', y='Density', colour='Lambda') +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif')
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Testing for Poisson Distribution}
+\begin{itemize}
+  \item Chi-square goodness of fit test.
+\end{itemize}
+<<fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Performs the Chi-squared goodness-of-fit test.
+# It checks whether the variable is drawn from a Poisson distribution.
+library(vcd)
+gf <- goodfit(mtcars$carb, type= "poisson", method= "ML")
+# Checks the statistical p-value of the goodness-of-fit test.
+# If p<=0.05 then it is safe to say that the variable is Poisson.
+summary(gf)
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Goodness of Fit Plot}
+<<fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Plots the observed frequency vs theoretical Poisson distribution.
+# The hanging bars should fill the space if it was perfectly Poisson.
+plot(gf)
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Poisson Regression}
+<<fig.show='hide',results=TRUE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+# Build a Poisson model to predict the number of carburetors in a car.
+myPoissonModel <- glm(carb ~ hp + wt + factor(am), 
+                      family="poisson",
+                      data=mtcars)
+# Read the model summary
+summary(myPoissonModel)
+@
+\end{frame}
+
 \subsection{Logistic Regression}
 
 \section{Tree-based Methods}
+
+\begin{frame}{Recursive Partitioning}
+  \begin{itemize}
+    \item Cut off point is denoted as \(s\).
+    \item Divides data into regions (leaves) \(\mathcal{R}_1, \mathcal{R}_2, \mathcal{R}_3, ...\) recursively.
+    \item Works with real values as well as categorical variables.
+    \item Large tree risks overfitting
+    \begin{itemize}
+      \item Removes weaker leaves.
+      \item Regularisation.
+    \end{itemize}
+  \end{itemize}
+  \includegraphics[width=\textwidth]{rpart.PNG}
+\end{frame}
+
 \subsection{Decision Tree}
+
+\begin{frame}[fragile]{Decision Tree}
+\begin{itemize}
+  \item Trees can be trained with a formula and optional control parameters.
+\end{itemize}
+<<fig.show='none', results=FALSE, eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+# Load the rpart package for recursive partitioning
+library(rpart)
+# Build a decision tree to predict mpg
+myTree <- rpart(formula = mpg ~ wt + hp +
+                  factor(carb) + 
+                  factor(am), 
+                data = mtcars,
+                control = rpart.control(minsplit=5))
+# Read the detailed summary of the tree
+summary(myTree)
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Decision Tree: Visualisation}
+<<fig.show='asis', results=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+# Load the rpart.plot package for tree visualisation
+library(rpart.plot)
+rpart.plot(myTree)
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Tree Pruning}
+<<fig.show='asis', results=TRUE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+printcp(myTree)
+plotcp(myTree)
+@
+\end{frame}
+
 \subsection{Random Forest}
+
+
+\begin{frame}{Random Forest}
+\begin{itemize}
+  \item Consists of many decision trees
+  \begin{itemize}
+    \item Randomly selected variables will be used in each split
+    \item Usually no need to prune them (all trees are allowed to grow big)
+  \end{itemize}
+  \item \(M\) trees in a random forest produces \(M\) predictions
+  \begin{itemize}
+    \item Final prediction is calculated as mean value for regression problem
+    \item Classification problem will use most the common label (majority voting)
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Training a Random Forest}
+<<fig.show='none', results=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+library(randomForest)
+library(dplyr)
+# Build a random forest with 1000 trees
+# Each tree has 2 randomly selected variables
+# You can change the parameters
+myForest <- randomForest(mpg ~ wt + hp + carb + am, 
+                         ntree = 1000,
+                         mtry = 2,
+                         data = mtcars %>% mutate(carb = factor(carb), 
+                                                  am = factor(am)))
+# Plot the error as the forest expands
+plot(myForest)
+@
+\end{frame}
 
 \section{Neural Networks}
 \subsection{Multilayer Perceptron}
