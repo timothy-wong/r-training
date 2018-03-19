@@ -154,35 +154,33 @@ knit_hooks$set(rexample = function(before, options, envir) {
 %%%%%%%%%%%
 \chapter*{Preface}
 
-\begin{fquote}[Yes, Prime Minister][1986]
-{Jim Hacker: The statistics are irrefutable...\\
-Sir Humphrey: Statistics? You can prove anything with statistics.\\
-Jim Hacker: Even the truth.\\
-Sir Humphrey: Yes... No!}
-\end{fquote}
+% \begin{fquote}[Yes, Prime Minister][1986]
+% {Jim Hacker: The statistics are irrefutable...\\
+% Sir Humphrey: Statistics? You can prove anything with statistics.\\
+% Jim Hacker: Even the truth.\\
+% Sir Humphrey: Yes... No!}
+% \end{fquote}
 
 R is an open source language for statistical programming. It is widely used among statisticians, academic researchers, and business analysts across the world. This book is part of a training course designed for business analysts.
 
 \section*{Web Access}
-The \LaTeX source code and compiled PDF version of this book can be digitially accessed via public repository at \url{https://github.com/timothy-wong/r-training}
+The \LaTeX\xspace source code and the compiled PDF version of this book can be digitially accessed at \url{https://github.com/timothy-wong/r-training}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Give credit where credit is due. %
 % Say thanks!                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{Acknowledgements}
-\begin{itemize}
-\item A special word of thanks goes to the open source R community. 
-\item I would also like to thanks analytics users who pioneer the use of the R language.
-\end{itemize}
-\mbox{}\\
+% \section*{Acknowledgements}
+% \begin{itemize}
+% \item A special word of thanks goes to the open source R community. 
+% \item I would also like to thanks analytics users who pioneer the use of the R language.
+% \end{itemize}
+% \mbox{}\\
 %\mbox{}\\
 \noindent Tim \\
 \noindent \url{timothy.wong@hotmail.co.uk}
 
-
-
-\chapter{Tidyverse}
+\chapter{Introduction to Data Analysis}
 
 The \verb|tidyverse| is a coherent system of packages for data manipulation, exploration and visualisation that share a common design philosophy. These were mostly developed by the prolific R developer Hadley Wickham\footnote{\url{http://hadley.nz}}, but they are now being expanded by several contributors. The \verb|tidyverse| packages are intended to make data scientists and statisticians more productive by guiding them through the workflow of a typical project. This is illustrated in figure \ref{tidyverseworkflow}.
 
@@ -233,7 +231,7 @@ Surrounding all these tools is programming. This is a tool that you use in every
 	\caption{Stages of data analysis}
 \end{figure}
 
-This list provides an overview of the main \verb|tidyverse| packages and how they fit into this typical workflow. In this training course we will focus on the packages \verb|dplyr| and \verb|ggplot2|.
+This list provides an overview of the main \verb|tidyverse| packages and how they fit into this typical workflow.
 
 \begin{description}
   \item[Import] Reading datasets from various data sources.
@@ -473,10 +471,6 @@ min_rank(desc(y))
 
 The last key function is \verb|summarise()| or \verb|summarize()|. It collapses a data frame into a single row. This function is particularly useful when used in conjunction with \verb|group_by()|. This changes the unit of analysis from the whole dataset to individual groups. Then you can use functions on the grouped \verb|data frame| in order to obtain grouped summaries.
 
-When combining several operations it is usually better to join them together using the pipe operator \verb|\%>\%| rather than repeatedly making new variables.
-
-(see example where we want to explore the relationship between the distance and average delay for each location).
-
 Whenever doing any aggregation, it is always a good idea to include either the total count \verb|n()|, or the count of non-missing values \verb|sum(!is.na(x))|. To count the number of unique values, use \verb|n_distinct()|. By including count statistics, you can make sure that you are not drawing conclusions based on small amount of data.
 
 Useful summary functions:
@@ -486,6 +480,48 @@ Useful summary functions:
 \item [Measures of rank] Minimum value \verb|min()|, maximum value \verb|max()| as well as the quantiles \verb|quantile()|
 \item [Measures of position] \verb|first()|  and \verb|last()|
 \end{description}
+
+When combining several operations it is usually better to join them together using the pipe operator \verb|%>%| rather than repeatedly making new variables. This is illustrated in example \ref{ex:tidysummarise}.
+
+<<ex:tidysummarise, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Example of summarise() function alone
+# You can also use summarize()
+# These two are equivalent
+summarise(flights, delay = mean(dep_delay, na.rm = TRUE))
+# Combining summarise() with group_by() and a dplyr verb
+by_day <- group_by(flights, year, month, day)
+summarise(by_day, delay = mean(dep_delay, na.rm = TRUE))
+# Multiple operations without a pipe
+by_dest <- group_by(flights, dest)
+delay <- summarise(by_dest,
+                   count = n(),
+                   dist = mean(distance, na.rm = TRUE),
+                   delay = mean(arr_delay, na.rm = TRUE))
+filter(delay, count > 20)
+# There are three steps to prepare the flight delay data: 
+# 1) Group flights by destination
+# 2) Summarise average distance, delay and number of flights
+# 3) Filter to remove noisy points
+# They can be chained together using pipeline '%>%'
+mySummary <- flights %>%
+  group_by(dest) %>%
+  summarise(
+    count = n(),
+    dist = mean(distance, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE)) %>%
+  filter(count > 20)
+# Using summarise() to measure standard deviation
+# Distance to some destination has larger spread than others
+flights %>%
+ 	group_by(dest) %>% 
+ 	summarise(dist_sd = sd(distance, na.rm = TRUE)) %>%
+ 	arrange(desc(dist_sd))
+@
+
+\begin{enumerate}
+  \item Which carrier has the worst delays?
+  \item For each destination, compute the total minutes of delay. For each flight, compute the proportion of the total delay for its destination.
+\end{enumerate}
 
 \end{Exercise}
 
@@ -866,8 +902,9 @@ plot(gf)
 
 \begin{Exercise}[title={Building a Poisson Model}]
 
-Example \ref{ex:poissonregression} trains a Poisson regression model using the \verb|mtcars| dataset. The variable \verb|carb| is used as dependent variable while \verb|hp|, \verb|wt| and \verb|am| are used as independent predictor variables. The regression output can be interpreted in a similar way as the ones from linear model.
-<<ex:poissonregression ,fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3,rexample=TRUE>>=
+Example \ref{ex:poissonreg} trains a Poisson regression model using the \verb|mtcars| dataset. The variable \verb|carb| is used as dependent variable while \verb|hp|, \verb|wt| and \verb|am| are used as independent predictor variables. The regression output can be interpreted in a similar way as the ones from linear model.
+
+<<ex:poissonreg, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Build a Poisson model to predict the number of carburetors in a car.
 myModel5 <- glm(carb ~ hp + wt + factor(am), 
                 family="poisson",
@@ -1047,11 +1084,12 @@ Once all the trees are grown, the random forest algorithm combines the output of
 It is widely recognised that prediction accuracy of random forest is far better than an individual decision tree. However as a trade-off, random forest is often harder to interpret manually as the decision rule becomes more complicated.
 
 \begin{Exercise}[title={Planting a Random Forest}]
-Exercise \ref{ex:randomforest} demonstrates how to train a random forest model. Each tree in the forest would randomly select a few variables for assessment. You can use the \verb|randomForest| package to build random forest rapidly.
+
+Example \ref{ex:randomforest} demonstrates how to train a random forest model. Each tree in the forest would randomly select a few variables for assessment. You can use the \verb|randomForest| package to build random forest rapidly.
 
 The importance of each predictor variable is indicated by the decrease of node impurity. A powerful predictor would substantially decrease node impurity. For regression, it is measured by residual sum of squares. For classification, the node impurity is measured by the Gini index. You can use the function \verb|importance(myForest)| or \verb|varImpPlot(myForest)| to calculate the importance measurement.
 
-<<ex:randomforest ,fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
+<<ex:randomforest, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 library(randomForest)
 library(dplyr)
 # Build a random forest with 1000 trees
@@ -1203,7 +1241,7 @@ myNN1 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
 plot(myNN1)
 @
 
-Example \ref{ex:neuralnet2} shows that you can load the package \verb |NeuralNetTools| to create better topology plot. In addition, you can plot the observed data against network predictions to visualise the error. For a regression problem, mean squared error (MSE) defined as \( \frac{1}{N} \sum_{n=1}^{N} (\hat{y}_n-y_n)^2 \) is usually used as the error measurement.
+Example \ref{ex:neuralnet2} shows that you can load the package \verb|NeuralNetTools| to create better topology plot. In addition, you can plot the observed data against network predictions to visualise the error. For a regression problem, mean squared error (MSE) defined as \( \frac{1}{N} \sum_{n=1}^{N} (\hat{y}_n-y_n)^2 \) is usually used as the error measurement.
 
 <<ex:neuralnet2, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Use a helper package for prettier graphics (optional)
@@ -1479,7 +1517,7 @@ lag.plot(myTable$total_demand, lags = 28)
 
 \begin{figure}[H]
 \centering
-<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=7>>=
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=6>>=
 library(forecast)
 tsdisplay(myTable$total_demand, 
           main = 'Total daily power demand (MW)',
@@ -1510,7 +1548,7 @@ To analyse the seasonality of a time series, you need to find out the ideal freq
 
 The code also divides the dataset into training and testing set. The training set is used to run analysis and train models. Once models are trained, they are applied to the testing set to assess model performance.
 
-<<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5>>=
+<<ex:frequency, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Divide the dataset into training and testing set
 TEST_SET_BEGIN <- '2017-01-01'
 myTrainingSet <- myTable %>% filter(date < TEST_SET_BEGIN)
@@ -1533,7 +1571,7 @@ plot(myDecomp)
 
 \begin{figure}[H]
 \centering
-<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=6>>=
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=5>>=
 plot(myDecomp)
 @
 \caption{Decomposing an additive time series}
@@ -1601,11 +1639,15 @@ myTestError2
 # Visualise the predictions of the two models
 ggplot() +
   geom_line(aes(x=date, y=total_demand), myTrainingSet) + 
-  geom_line(aes(x=date, y=myTsForecast1$mean, colour='blue'), myTestingSet) +
-  geom_line(aes(x=date, y=myTsForecast2, colour='green'), myTestingSet) + 
+  geom_line(aes(x=date, y=myTsForecast1$mean, colour='blue'),
+            myTestingSet) +
+  geom_line(aes(x=date, y=myTsForecast2, colour='green'),
+            myTestingSet) + 
   scale_colour_manual(guide = 'legend', name = 'Model', 
-         values =c('blue'='blue','green'='green'), 
-         labels = c('Time Series Regression Model','Simple Linear Regression')) + 
+         values =c('blue'='blue',
+                   'green'='green'), 
+         labels = c('Time Series Regression Model',
+                    'Simple Linear Regression')) + 
   labs(x='Date',
        y='Total Demand (MW)') +
   theme(legend.position = 'bottom')
@@ -1925,7 +1967,7 @@ ggcoxzph(myCoxZph1)
 
 \begin{figure}[H]
 \centering
-<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=7>>=
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=6>>=
 ggcoxzph(myCoxZph1,var = c('age','ph.ecog','ph.karno'))
 @
 \caption{Scaled Schoenfeld residuals of a selected set of variables plotted against time}
@@ -2078,6 +2120,8 @@ d(\vec{x_j}, \vec{x_k}) = \sqrt{ \sum_{p=1}^{P} (x_{j,p} - x_{k,p} )^2 }
   \Return Cluster centroids \(  \{ \vec{\mu}_1, \vec{\mu}_2, \vec{\mu}_3, ..., \vec{\mu}_K  \} \) \;
   \Return Object cluster assignment \( \{\omega_1, \omega_2, \omega_3, ..., \omega_K \} \)
 \end{algorithm}
+
+The algorithm starts with a randomly select subset of \(K\) objects as initial cluster centroids such as \( \{ \vec{\mu}_1, \vec{\mu}_2, \vec{\mu}_3, ..., \vec{\mu}_K  \} \). The Euclidean distance between initial centroids and each object in the unlabelled set is calculated. The cluster assignment of an object belongs to the centroid with shortest distance. Once cluster assignment is completed for all objects, the centroid is recomputed as the mean of the cluster. This process iterates until the new cluster assignment is identical to the one at the previous iteration.
 
 Since the dataset is unlabelled, the true number of cluster is unknown. The \(K\) value which represents the number of clusters is usually experimented one-by-one and the best value is determined from the output. 
 
