@@ -7,6 +7,7 @@
 %
 \mode<presentation>
 {
+  %\usetheme{Ilmenau}
   \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
   \usecolortheme{default} % or try albatross, beaver, crane, ...
   \usefonttheme{default}  % or try serif, structurebold, ...
@@ -22,8 +23,21 @@
 }
 \author{
   Timothy Wong\thanks{\url{timothy.wong@hotmail.co.uk}} \\
-  James Gammerman\thanks{\url{person@organisation.com}}
+  James Gammerman\thanks{\url{jgammerman@gmail.com}}
 }
+
+\defbeamertemplate*{section page}{ifttheme}%[1][]
+{\vbox{}\vskip-3.2cm%
+\begin{beamercolorbox}[sep=0.3cm,ht=0.5\paperheight,wd=\paperwidth]{red}
+    \begin{center}
+        \begin{minipage}[c]{0.55\paperwidth}
+        \centering \Huge \insertsection%\par
+        \end{minipage}
+    \end{center}
+\end{beamercolorbox}
+}
+
+\AtBeginSection[]{\frame{\sectionpage}}
 
 \begin{document}
 
@@ -35,14 +49,14 @@
     \tableofcontents
 \end{frame}
 
-\section{Opening}
+\section{Introduction}
 
 \begin{frame}{What is the R language?}
   \begin{itemize}
     \item Offers modern and sophisticated statistical algorithms
     \item Used by millions of analysts and researchers worldwide
     \item Has a thriving open-source community
-    \item Enables big Data analytics
+    \item Enables big data analytics
   \end{itemize}
 \end{frame}
 
@@ -432,7 +446,7 @@ myModel4 <- lm(mpg ~ wt * hp + qsec + factor(am), mtcars)
 \end{frame}
 
 \begin{frame}[fragile,shrink]{Diagnostics Plots}
-<<fig.show='asis', eval=TRUE,echo=FALSE,results=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+<<fig.show='asis', eval=TRUE,echo=FALSE,results=FALSE, warning=FALSE, message=FALSE, error=FALSE>>=
 par(mfrow = c(2,2))
 plot(myModel3)
 par(mfrow = c(1,1))
@@ -508,6 +522,8 @@ tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=1), frequency=0:pois
 \begin{frame}[fragile, shrink]{Testing for Poisson Distribution}
 \begin{itemize}
   \item Chi-square goodness of fit test.
+  \item Fits the data against theoretical Poisson distribution.
+  \item Look for statistical significance.
 \end{itemize}
 <<fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
 # Performs the Chi-squared goodness-of-fit test.
@@ -521,13 +537,12 @@ summary(gf)
 \end{frame}
 
 \begin{frame}[fragile, shrink]{Goodness of Fit Plot}
-<<fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+<<fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=10, fig.height=5, size='scriptsize'>>=
 # Plots the observed frequency vs theoretical Poisson distribution.
-# The hanging bars should fill the space if it was perfectly Poisson.
+# The hanging bars should fill the space if it is perfectly Poisson.
 plot(gf)
 @
 \end{frame}
-
 
 \begin{frame}[fragile, shrink]{Poisson Regression}
 <<fig.show='hide',results=TRUE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
@@ -541,6 +556,63 @@ summary(myPoissonModel)
 \end{frame}
 
 \subsection{Logistic Regression}
+
+\begin{frame}[fragile, shrink]{Binomial Distribution}
+
+\begin{itemize}
+  \item There are only two possible outcomes \( \{ Y, \neg Y \} \).
+  \begin{itemize}
+    \item Toss a coin (Head or tail)
+    \item Taking an examination (Pass or fail)
+    \item Selling a product (Sold or unsold)
+  \end{itemize}
+  \item Likelihood of event \(Y\) and \(\neg Y\) expressed as probablity \(P(Y) + P(\neg Y) = 1\).
+  \item Logistic function squeezes real value range \(X\) into \((0,1)\) to express probablity.
+    \[P(Y)=\frac{1}{1+e^{-X}}\]
+  <<fig.show='asis', eval=TRUE, echo=FALSE, results=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=5, fig.height=2>>=
+  logit_min <- -5
+  logit_max <- 5
+  logistic <- seq(logit_min, logit_max, 0.1)
+  ggplot(mapping = aes(x=logistic,
+                       y=1/(1+exp(-logistic)))) +
+    geom_line()+
+    labs(x='X', y='Logistic function') +
+    scale_colour_brewer(palette="Set2") +
+    theme_classic(base_family = 'serif')
+  @
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Logistic Regression}
+\begin{itemize}
+  \item Equation for logistic regression
+    \[P(Y)=\frac{1}{1+e^{-(\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M)}}\]
+  \item Coefficients \( \beta_1, \beta_2, \beta_3, ..., \beta_M  \) can be converted into odds ratios \(OR(x_1), OR(x_2), OR(x_3),...,OR(x_M)\).
+    \[{OR}(x_1) = \frac{odds(x_1+1)}{odds(x_1)} = \frac{e^{\beta_0+\beta_1 (x_1+1)+\beta_2 x_2+...+\beta_M x_M}}{e^{\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M}} = e^{\beta_1}\]
+    \item \(OR(x_1)\) Represents the change in probability when \(x_1\) increases by \(1\) unit.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Training a Logistic Regression Model}
+
+\begin{itemize}
+\item Build a logistic regression model to predict the dependent variable \verb|am|. (\verb|1|=manual; \verb|0|=auto)
+\end{itemize}
+  <<fig.show='hide',eval=TRUE,results=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myLogisticModel <- glm(am ~ mpg + hp + disp,
+                       family="binomial",
+                       data=mtcars)
+summary(myLogisticModel)
+@
+
+Calculate the odds ratios for this model.
+<<fig.show='hide',results=TRUE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Calculate the odds-ratios by taking the exponential of the coefficients
+# You may also calculate the 95% confidence interval of the odds-ratio
+exp(cbind(oddsratio = myLogisticModel$coefficients,
+          confint(myLogisticModel)))
+@
+\end{frame}
 
 \section{Tree-based Methods}
 
@@ -579,7 +651,7 @@ summary(myTree)
 \end{frame}
 
 \begin{frame}[fragile, shrink]{Decision Tree: Visualisation}
-<<fig.show='asis', results=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+<<fig.show='asis', results=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE,fig.width=8, fig.height=4>>=
 # Load the rpart.plot package for tree visualisation
 library(rpart.plot)
 rpart.plot(myTree)
@@ -587,7 +659,7 @@ rpart.plot(myTree)
 \end{frame}
 
 \begin{frame}[fragile, shrink]{Tree Pruning}
-<<fig.show='asis', results=TRUE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+<<fig.show='asis', results=TRUE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE,fig.width=8, fig.height=4>>=
 printcp(myTree)
 plotcp(myTree)
 @
@@ -613,7 +685,7 @@ plotcp(myTree)
 \end{frame}
 
 \begin{frame}[fragile, shrink]{Training a Random Forest}
-<<fig.show='none', results=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE>>=
+<<fig.show='none', results=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE,fig.width=8, fig.height=4>>=
 library(randomForest)
 library(dplyr)
 # Build a random forest with 1000 trees
@@ -632,21 +704,526 @@ plot(myForest)
 \section{Neural Networks}
 \subsection{Multilayer Perceptron}
 
+\begin{frame} [shrink] {Artificial Neurons}
+\begin{itemize}
+  \item Inspired by neurons in biological brain.
+  \item McCulloch and Pitts described neuron as a logical process.
+  \begin{itemize}
+    \item Neuron takes several inputs \(\{ x_1, x_2, x_3,..., x_M \}\)
+    \item Fires (activates) if the combined weighted input \( \sum_{m=1}^M w_m x_m \) exceeds threshold.
+    \item Output can either be fire \(1\) or not fire \(0\).
+  \end{itemize}
+  \item Rosenblatt's Mark I Perceptron
+  \includegraphics[width=0.45\textwidth]{perceptron.jpg}%
+  \includegraphics[width=0.25\textwidth]{perceptron2.jpg}
+\end{itemize}
+\end{frame}
+
+\begin{frame} {Modern Neural Networks}
+\begin{itemize}
+  \item Neural nets are based on non-linear processing power.
+  \item Trained via gradient descent optimisers (backpropagation).
+  \begin{itemize}
+    \item Network initialise randomly.
+    \item Requires differentiable loss function.
+    \item Requires strong gradient in order to improve.
+    \item Model weights improve iteratively.
+    \item Converge at local minimum.
+  \end{itemize}
+  \item Neurons can be stacked as layers.
+  \begin{itemize}
+    \item Can either be shallow (\(1\) layer) or deep (many layers).
+    \item State-of-the art neural networks have highly bespoke topologies.
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} [shrink] {Activation}
+\begin{itemize}
+  \item Weighted inputs are combined linearly.
+    \[ X = \sum_{m=1}^M w_m x_m \]
+  \item Non-linear activation functions
+    \begin{itemize}
+      \item Sigmoid
+      \item Hyperbolic tangent
+      \item etc...
+    \end{itemize}
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=10, fig.height=4>>=
+range <- seq(-3,3,0.05)
+
+func_sigmoid <- 1/(1+exp(-range))
+func_tanh <-tanh(range)
+func_softplus <- log(1+exp(range))
+func_relu <- sapply(range, max, 0)
+
+tibble(func='Sigmoid', value= func_sigmoid, range = range) %>%
+  union_all(tibble(func='Hyperbolic tangent', value= func_tanh, range = range)) %>%
+  union_all(tibble(func='Softplus', value= func_softplus, range = range)) %>%
+  union_all(tibble(func='ReLU', value= func_relu, range = range)) %>%
+  union_all(tibble(func='Linear', value= range, range = range)) %>%
+  ggplot(aes(x=range, y=value, colour=func)) +
+  geom_line() +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'right') +
+  labs(x='x', y='f(x)', colour='Activation Function')
+@
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Multilayer Perceptron: Topology}
+\begin{itemize}
+\item Layers are fully-interconnected.
+\item Usually having two or more layers.
+\end{itemize}
+<<fig.show='asis', eval=TRUE, results='hide',echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5,cache=TRUE>>=
+library(dplyr)
+library(neuralnet)
+mtcars_numeric <- mtcars[,c('mpg', 'disp', 'hp', 'drat', 'wt', 'qsec')]
+mtcars_mean <- mtcars_numeric %>% lapply(mean)
+mtcars_sd <- mtcars_numeric %>% lapply(sd)
+mtcars_numeric_normalised <- (mtcars_numeric - mtcars_mean) / mtcars_sd
+myNN1 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
+                   data = mtcars_numeric_normalised,
+                   hidden = c(4,3),
+                   linear.output = TRUE,
+                   lifesign = 'full')
+plot(myNN1,rep = 'best')
+@
+\end{frame}
+
 
 \section{Time Series Analysis}
 \subsection{Auto-Correlation Function}
+
+\begin{frame} [shrink] {Time Series Data}
+\begin{itemize}
+  \item Observations repeatedly taken at regular interval.
+  \item Explore variable relationship across temporal space.
+  \begin{description}
+    \item [Auto-correlation Function (ACF)] 
+    Measures the correlation of a single variable along the temporal dimension between \(x_t\) and \(x_{t+h}\). It shows the correlation of the variable over different lag periods. For most time series variables, correlation is usually strong at lag \(h=1\) and it gradually diminishes as lag period increases. Cyclic pattern in the correlogram suggests possible seasonality which you can analyse further.
+ 
+    \item [Partial Auto-correlation Function (PACF)]
+    Also measures the correlation between different lag periods, but it controls the correlation across the temporal dimsnion so that only the contribution of an individual lag is reflected.
+    
+    \item [Cross Correlation Function (CCF)] Analyses the temporal correlation between two variables.
+  \end{description}
+\end{itemize}
+\end{frame}
+
+\begin{frame} [fragile] {ACF and PACF Correlograms}
+<<fig.show='asis', eval=TRUE, results='hide',echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',cache=TRUE,fig.width=10,fig.height=8>>=
+amprion <- read.csv('amprion.csv',
+                    colClasses = c('character',
+                                   'numeric',
+                                   'numeric',
+                                   'numeric')) %>% as_tibble()
+bremen <- read.csv('bremen.csv',
+                   colClasses = c('character',
+                                  'numeric',
+                                  'numeric',
+                                  'numeric',
+                                  'factor',
+                                  'numeric',
+                                  'numeric',
+                                  'numeric',
+                                  'numeric')) %>% as_tibble()
+library(lubridate)
+library(dplyr)
+amprion_daily <- amprion %>%
+                  mutate(date = datetime %>%
+                           ymd_hms() %>%
+                           floor_date('day') %>%
+                           as.Date()) %>%
+                  group_by(date) %>%
+                  summarise(total_demand = sum(demand),
+                            total_pv = sum(pv),
+                            total_wp = sum(wp))
+bremen_daily <- bremen %>%
+                  mutate(date = datetime %>%
+                           ymd_hms() %>%
+                           floor_date('day') %>%
+                           as.Date()) %>%
+                  group_by(date) %>%
+                  summarise(mean_airtemp = airtemp %>% mean(),
+                            max_sun = sun %>% max(),
+                            mean_windspd = windspd %>% mean(),
+                            mean_soil10 = soil10 %>% mean(),
+                            mean_soil20 = soil20 %>% mean(),
+                            mean_soil50 = soil50 %>% mean(),
+                            mean_soil100 = soil100 %>% mean())
+myTable <- amprion_daily %>%
+  left_join(bremen_daily, by = 'date')
+TEST_SET_BEGIN <- '2017-01-01'
+myTrainingSet <- myTable %>% filter(date < TEST_SET_BEGIN)
+myTestingSet <- myTable %>% filter(date >= TEST_SET_BEGIN)
+library(forecast)
+tsdisplay(myTrainingSet$total_demand,
+          points = FALSE)
+@
+\end{frame}
+
 \subsection{Decomposition}
+
+\begin{frame}{Decomposition}
+\begin{itemize}
+  \item Time series can be decomposed into:
+  \begin{itemize}
+    \item Seasonal component \( S_t \)
+    \item Trend component \( T_t \)
+    \item Residual component \( \epsilon_t \)
+  \end{itemize}
+  \item Additive time series is expressed as \(X_t=S_t+T_t+\epsilon_t\)
+  \item Multiplicative time series is expressed as \(X_t=S_t \times T_t \times \epsilon_t\)
+\end{itemize}
+<<fig.show='asis', eval=TRUE, results='hide',echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',cache=TRUE,fig.width=10,fig.height=5>>=
+myTs <- ts(data = myTrainingSet$total_demand,
+           frequency = 7)
+myDecomp <- decompose(myTs,
+                      type = 'additive')
+plot(myDecomp)
+@
+\end{frame}
+
+\begin{frame}{Time Series Linear Regression Model}
+  \begin{itemize}
+    \item Decomposed components can be used as independent variable in linear regression:
+    \[X_t = \beta_0 + \beta_{trend} T_t + \beta_{seasonal}S_t + \sum_{m=1}^{M}(\beta_m {x_m}_t) + \epsilon_t \]
+    \item Components can also form interaction terms with other independent variables.
+  \end{itemize}
+\end{frame}
+
 \subsection{ARIMA Model}
 
+\begin{frame} {Auto-regressive Moving Average Model (ARMA)}
+\begin{itemize}
+\item \(ARMA(p,q)\) model
+\[\underbrace{X_t}_\text{Observation} = 
+\underbrace{ \beta_0 }_\text{intercept}+ 
+\underbrace{ \sum_{i=i}^{p}(\phi_i X_{t-1}) }_\text{AR(p)} + 
+\underbrace{ \sum_{i=1}^{q}(\theta_i \epsilon_{t-i}) }_\text{MA(q)} + 
+\underbrace{\epsilon_t}_\text{residual}\]
+
+\item \(ARIMA(p,d,q)\) model
+  \begin{itemize}
+    \item Auto-regressive Integrative Moving Average
+    \item \(I(d)\) \(d^{th}\) order integration can be added.
+    \begin{itemize}
+    \item Integration refers to the difference from previous time step
+    \item First order differencing \( I(1): X_t^{'}=X_t - X_{t-1} \)
+    \item To satisfy \textbf{stationarity} requirement.
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame} [shrink] {Stationarity}
+
+\begin{itemize}
+  \item Equal properties (mean and variance) across time. 
+  \begin{itemize}
+    \item Only one below is a stationary time series. 
+    \item Which one is it?
+  \end{itemize}
+\end{itemize}
+<<fig.show='asis', eval=TRUE, results='hide',echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5,cache=TRUE>>=
+set.seed(2000)
+tsLength <- 5000
+ts1 <- rnorm(tsLength,0,1) %>% cumsum
+ts2 <- rnorm(tsLength,0,10)
+ts3 <- rnorm(tsLength,0,1) + sin((1:tsLength) / tsLength * pi * 8)
+ts4 <- rnorm(tsLength,1,10) %>% cumsum
+ts4 <- ts4^2
+
+tibble(t = 1:tsLength, y=ts1, id ='Specimen 1') %>%
+  union_all(tibble(t = 1:tsLength, y=ts2, id ='Specimen 2')) %>%
+  union_all(tibble(t = 1:tsLength, y=ts3, id ='Specimen 3')) %>%
+  union_all(tibble(t = 1:tsLength, y=ts4, id ='Specimen 4')) %>%
+  ggplot(aes(x=t, y=y, colour=id)) + geom_line() + facet_wrap('id',nrow = 2,scales = 'free_y') +
+  scale_y_continuous(labels = NULL)+
+  scale_x_continuous(labels = NULL)+
+  labs(x='Time', y='Value') +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') +
+  theme(legend.position = 'none')
+@
+\end{frame}
+
+\begin{frame} [fragile] {ARIMA with Seasonality (SARIMA)}
+\begin{itemize}
+  \item \(ARIMA(p,d,q)(P,D,Q)_m\)
+  \begin{itemize}
+    \item All parameter values can be automatically identified.
+    \item Simple models are always preferred
+    \item Intend to keep \(p+q+P+Q\) small.
+  \end{itemize}
+\end{itemize}
+<<fig.show='asis', eval=TRUE, results='hide',echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=4,cache=TRUE>>=
+myTsModel4 <- Arima(y = myTs, 
+                    xreg = myTrainingSet %>%
+                            dplyr::select(mean_airtemp,
+                                   mean_windspd,
+                                   max_sun,
+                                   mean_soil10,
+                                   mean_soil20,
+                                   mean_soil50,
+                                   mean_soil100),
+                    order = c(2,0,0),
+                    seasonal = c(1,1,1))
+myTsForecast4 <- forecast(myTsModel4, 
+                          xreg = myTestingSet %>% 
+                            dplyr::select(mean_airtemp,
+                                   mean_windspd,
+                                   max_sun,
+                                   mean_soil10,
+                                   mean_soil20,
+                                   mean_soil50,
+                                   mean_soil100))
+plot(myTsForecast4)
+@
+\end{frame}
 
 \section{Survival Analysis}
+
+\begin{frame} {Survival Analysis}
+\begin{itemize}
+\item Event occuring at irregular intervals.
+  \begin{itemize}
+  \item e.g. Patients gets sick, machine failing... etc
+  \end{itemize}
+\item Also known as \textbf{time-to-event analysis} or \textbf{event history analysis}.
+\end{itemize}
+\end{frame}
+
 \subsection{Kaplan-Meier Estimator}
+
+\begin{frame} {Kaplan-Meier Estimator}
+\begin{itemize}
+\item It is used to measure how many subjects survives in a clinical trial since treatment began. 
+\item Categorical variables only.
+\end{itemize}
+<<fig.show='asis', eval=TRUE, results='hide',echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=4,cache=TRUE>>=
+library(survival)
+library(survminer)
+mySurvFit2 <- survfit(Surv(time, status==2) ~ sex, lung %>% mutate(sex = factor(sex,levels = c(1,2), labels = c('Male','Female'))))
+ggsurvplot(mySurvFit2, 
+           palette = 'Set2',
+           conf.int = TRUE,
+           risk.table = TRUE,
+           risk.table.col = "strata",tables.height = 0.3,
+           pval = TRUE)
+@
+\end{frame}
+
 \subsection{Cox Proportional Harzard Model}
+
+\begin{frame}[fragile, shrink]{Cox Proportional Harzard Model}
+\begin{itemize}
+  \item It is a regression method which can take into account categorical and numeric variables.
+  \item Assumes effects are time-independent (proportional harzard assumption).
+  \item Harzard function \(h_t\) is defined as:
+  \[ h_t = h_{0,t} \times e^{\beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 +...+\beta_M x_M} \]
+\end{itemize}
+
+
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
+# Build a Cox model with predictor variables
+myCoxModel1 <- coxph(Surv(time, status==2) ~ factor(sex) + age + 
+                       ph.ecog + ph.karno + 
+                       pat.karno + 
+                       meal.cal + wt.loss, data = lung)
+# Read the model summary
+summary(myCoxModel1)
+@
+\end{frame}
 
 \section{Unsupervised Learning}
 \subsection{\(K\)-means Clustering}
+
+\begin{frame}{K-means Clustering}
+\begin{itemize}
+\item Works with unlabelled data.
+\item Arrange objects into groups (clusters)
+\item Objective interpretation of results as \(K\) is arbitrarily selected.
+\end{itemize}
+
+<<fig.show='asis', echo=FALSE, eval=TRUE, results=FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=4>>=
+# Multiple plot function
+#
+# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+# - cols:   Number of columns in layout
+# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+#
+# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+# then plot 1 will go in the upper left, 2 will go in the upper right, and
+# 3 will go all the way across the bottom.
+#
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+
+  numPlots = length(plots)
+
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                    ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+
+ if (numPlots==1) {
+    print(plots[[1]])
+
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+library(dplyr)
+km1 <- iris %>%
+  dplyr::select(Sepal.Length, Sepal.Width) %>%
+  kmeans(2)
+clust1 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km1$cluster %>% factor)) +
+  geom_point()+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km1$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'none') +
+  labs(x='Variable 1', y='Variable 2')
+
+km2 <- iris %>%
+  dplyr::select(Sepal.Length, Sepal.Width) %>%
+  kmeans(4)
+clust2 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km2$cluster %>% factor)) +
+  geom_point()+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km2$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'none') +
+  labs(x='Variable 1', y='Variable 2')
+
+km3 <- iris %>%
+  dplyr::select(Sepal.Length, Sepal.Width) %>%
+  kmeans(6)
+clust3 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km3$cluster %>% factor)) +
+  geom_point()+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km3$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'none') +
+  labs(x='Variable 1', y='Variable 2')
+
+km4 <- iris %>%
+  dplyr::select(Sepal.Length, Sepal.Width) %>%
+  kmeans(8)
+clust4 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km4$cluster %>% factor)) +
+  geom_point()+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km4$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'none') +
+  labs(x='Variable 1', y='Variable 2')
+
+multiplot(clust1, clust2, clust3, clust4,cols = 2)
+@
+
+\end{frame}
+
+
+\begin{frame}{Agglomerative Hierarchical Clustering}
+\begin{itemize}
+  \item \(N\) objects can form maximum \(N\) clusters, each having \(1\) member object.
+  \item Identify distance between closest cluster pair.
+  \item Merge them.
+  \item Repeat until there are no more clusters left.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Agglomerative Hierarchical Clustering: Example}
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=14, fig.height=8>>=
+StatChull <- ggproto("StatChull", Stat,
+  compute_group = function(data, scales) {
+    data[chull(data$x, data$y), , drop = FALSE]
+  },
+  
+  required_aes = c("x", "y")
+)
+stat_chull <- function(mapping = NULL, data = NULL, geom = "polygon",
+                       position = "identity", na.rm = FALSE, show.legend = NA, 
+                       inherit.aes = TRUE, ...) {
+  layer(
+    stat = StatChull, data = data, mapping = mapping, geom = geom, 
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+myDist <- mtcars[,c('disp','qsec')] %>% scale %>% dist()
+hc <- myDist %>% hclust()
+getHPlot <- function(i){
+  ggplot(mtcars, aes(x=disp, y=qsec, group=factor(cutree(hc, k=i)))) +
+  geom_point(size=0.5) +
+  stat_chull(fill = NA, colour = "red", size=1) +
+  #geom_text(aes(x=250, y=22,label=)) +
+  scale_colour_brewer(palette="Set2") +
+  theme_classic(base_family = 'serif') + 
+  theme(legend.position = 'bottom') +
+  labs(x=paste0('Iteration ', nrow(mtcars)-i+1 ), y=NULL) +
+  scale_x_continuous(labels = NULL) + 
+  scale_y_continuous(labels = NULL)
+}
+plt <- lapply(32:1, getHPlot)
+multiplot(plotlist = plt, cols = 8)
+@
+\end{frame}
+
 \subsection{Hierarchical Clustering}
 
+\section{Closing}
 
+\begin{frame} [shrink] {UK User Communities}
+\begin{itemize}
+  \item LondonR - \includegraphics[width=0.2\textwidth]{londonr.PNG}
+  \item ManchesterR - \includegraphics[width=0.2\textwidth]{manchesterr.png}
+  \item CaRdiff - \includegraphics[width=0.2\textwidth]{cardiff.JPG}
+  \item SheffieldR
+  \item EdinbR - \includegraphics[width=0.2\textwidth]{edinbr.PNG}
+  \item CambR - \includegraphics[width=0.1\textwidth]{cambr.JPG}
+  \item NottinghamR
+  \item BirminghamR - \includegraphics[width=0.1\textwidth]{birminghamr.JPG}
+  \item Oxford RUG - \includegraphics[width=0.1\textwidth]{oxfordrug.PNG}
+  \item Bristol Data Scientists - \includegraphics[width=0.2\textwidth]{bristolds.JPG}
+\end{itemize}
+\end{frame}
+
+\begin{frame} {International User Communities}
+  \begin{itemize}
+    
+    \item International R User Conference (useR!) \\
+    \includegraphics[width=0.2\textwidth]{userconf.PNG}
+    
+    \item Enterprise Application of the R Language (EARL) \\
+    \includegraphics[width=0.2\textwidth]{earlconf.PNG}
+    
+    \item European R User Meeting (ERUM) \\
+    \includegraphics[width=0.2\textwidth]{erumconf.JPG}
+    
+  \end{itemize}
+\end{frame}
 
 \end{document}

@@ -13,6 +13,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+\usepackage{cite}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage[english]{babel}
@@ -53,56 +54,56 @@
 
 \setlength{\parskip}{1em}
 
-%%%%********************************************************************
-% fancy quotes
-\definecolor{quotemark}{gray}{0.7}
-\makeatletter
-\def\fquote{%
-    \@ifnextchar[{\fquote@i}{\fquote@i[]}%]
-           }%
-\def\fquote@i[#1]{%
-    \def\tempa{#1}%
-    \@ifnextchar[{\fquote@ii}{\fquote@ii[]}%]
-                 }%
-\def\fquote@ii[#1]{%
-    \def\tempb{#1}%
-    \@ifnextchar[{\fquote@iii}{\fquote@iii[]}%]
-                      }%
-\def\fquote@iii[#1]{%
-    \def\tempc{#1}%
-    \vspace{1em}%
-    \noindent%
-    \begin{list}{}{%
-    \small%
-         \setlength{\leftmargin}{0.1\textwidth}%
-         \setlength{\rightmargin}{0.1\textwidth}%
-                  }%
-         \item[]%
-         \begin{picture}(0,0)%
-         \put(-15,-5){\makebox(0,0){\scalebox{3}{\textcolor{quotemark}{``}}}}%
-         \end{picture}%
-         \begingroup\itshape}%
- %%%%********************************************************************
- \def\endfquote{%
- \endgroup\par%
- \makebox[0pt][l]{%
- \hspace{0.8\textwidth}%
- \begin{picture}(0,0)(0,0)%
- \put(15,15){\makebox(0,0){%
- \scalebox{3}{\color{quotemark}''}}}%
- \end{picture}}%
- \ifx\tempa\empty%
- \else%
-    \ifx\tempc\empty%
-       \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb}%
-   \else%
-       \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb},\ \tempc%
-   \fi\fi\par%
-   \vspace{0.5em}%
- \end{list}%
- }%
- \makeatother
- %%%%***************
+% %%%%********************************************************************
+% % fancy quotes
+% \definecolor{quotemark}{gray}{0.7}
+% \makeatletter
+% \def\fquote{%
+%     \@ifnextchar[{\fquote@i}{\fquote@i[]}%]
+%            }%
+% \def\fquote@i[#1]{%
+%     \def\tempa{#1}%
+%     \@ifnextchar[{\fquote@ii}{\fquote@ii[]}%]
+%                  }%
+% \def\fquote@ii[#1]{%
+%     \def\tempb{#1}%
+%     \@ifnextchar[{\fquote@iii}{\fquote@iii[]}%]
+%                       }%
+% \def\fquote@iii[#1]{%
+%     \def\tempc{#1}%
+%     \vspace{1em}%
+%     \noindent%
+%     \begin{list}{}{%
+%     \small%
+%          \setlength{\leftmargin}{0.1\textwidth}%
+%          \setlength{\rightmargin}{0.1\textwidth}%
+%                   }%
+%          \item[]%
+%          \begin{picture}(0,0)%
+%          \put(-15,-5){\makebox(0,0){\scalebox{3}{\textcolor{quotemark}{``}}}}%
+%          \end{picture}%
+%          \begingroup\itshape}%
+%  %%%%********************************************************************
+%  \def\endfquote{%
+%  \endgroup\par%
+%  \makebox[0pt][l]{%
+%  \hspace{0.8\textwidth}%
+%  \begin{picture}(0,0)(0,0)%
+%  \put(15,15){\makebox(0,0){%
+%  \scalebox{3}{\color{quotemark}''}}}%
+%  \end{picture}}%
+%  \ifx\tempa\empty%
+%  \else%
+%     \ifx\tempc\empty%
+%        \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb}%
+%    \else%
+%        \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb},\ \tempc%
+%    \fi\fi\par%
+%    \vspace{0.5em}%
+%  \end{list}%
+%  }%
+%  \makeatother
+%  %%%%***************
  
 <<setup, include=FALSE>>=
 library(knitr)
@@ -125,9 +126,8 @@ knit_hooks$set(rexample = function(before, options, envir) {
 % Author
 \author{
   \textsc{Timothy Wong}\thanks{\url{timothy.wong@hotmail.co.uk}} \\
-  \textsc{James Gammerman}\thanks{\url{person@organisation.com}}
+  \textsc{James Gammerman}\thanks{\url{jgammerman@gmail.com}}
 }
-
 
 \begin{document}
 \frontmatter
@@ -170,17 +170,19 @@ The \LaTeX\xspace source code and the compiled PDF version of this book can be d
 % Give credit where credit is due. %
 % Say thanks!                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \section*{Acknowledgements}
-% \begin{itemize}
-% \item A special word of thanks goes to the open source R community. 
-% \item I would also like to thanks analytics users who pioneer the use of the R language.
-% \end{itemize}
+\section*{Acknowledgements}
+\begin{itemize}
+\item A special word of thanks goes to the open source R community.
+\item Some of the examples in \autoref{ch:intro} were adopted from Wickham and Grolemund's book~\cite{wickham}.
+\end{itemize}
 % \mbox{}\\
-%\mbox{}\\
-\noindent Tim \\
-\noindent \url{timothy.wong@hotmail.co.uk}
+% \mbox{}\\
+
+% \noindent Tim \\
+% \noindent \url{timothy.wong@hotmail.co.uk}
 
 \chapter{Introduction to Data Analysis}
+\label{ch:intro}
 
 The \verb|tidyverse| is a coherent system of packages for data manipulation, exploration and visualisation that share a common design philosophy. These were mostly developed by the prolific R developer Hadley Wickham\footnote{\url{http://hadley.nz}}, but they are now being expanded by several contributors. The \verb|tidyverse| packages are intended to make data scientists and statisticians more productive by guiding them through the workflow of a typical project. This is illustrated in figure \ref{tidyverseworkflow}.
 
@@ -192,9 +194,9 @@ Once you have tidy data, the usual next step is to transform it. This includes n
 
 There are two main engines of knowledge generation: \begin{inparaenum}[1)] \item visualisation and \item modelling \end{inparaenum}. These have complementary strengths and weaknesses so a good analysis will iterate between them many times.
 
-Data visualisation is a fundamentally human activity. A good visualisation will show you things that you did not expect, or raise new questions about the data. It might also cast doubt on the research hypothesis or hint that you need to collect different data. Visualisation do not scale particularly well because it requires human interpretation.
+Data visualisation is a fundamentally human activity. A good visualisation will show you things that you did not expect, or raise new questions about the data. It might also cast doubt on the research hypothesis or hint that you need to collect different data. Visualisation does not scale particularly well because it requires human interpretation.
 
-Models are complementary tools to visualisation. Once the research hypothesis are sufficiently precise, you can use a model to address them. Models are fundamentally mathematical or computational tools, so they generally scale well. 
+Models are complementary tools to visualisation. Once the research hypotheses are sufficiently precise, you can use a model to address them. Models are fundamentally mathematical or computational tools, so they generally scale well. 
 
 The last step of data science is communication, which is a critical part of any data analysis project. It does not matter how well your models and visualisation have led you to understand the data unless you can also communicate your results to others.
 
@@ -274,7 +276,7 @@ This list provides an overview of the main \verb|tidyverse| packages and how the
 
 \section{Data Transformation}
 
-In most of the time, data does not come to you in exactly the right format. Often you need to compute new variables, or to summaries and rename the original ones. In some cases, you may have to reorder the observations to make the data easier to work with. An excellent package for these tasks is the \verb|dplyr| package. There are five key functions in this package that allow you to solve the vast majority of data manipulation challenges.
+In most cases, data does not come to you in exactly the right format. Often you need to compute new variables, or to summarise and rename the original ones. In some cases, you may have to reorder the observations to make the data easier to work with. An excellent package for these tasks is the \verb|dplyr| package. There are five key functions in this package that allow you to solve the vast majority of data manipulation challenges.
 
 \begin{itemize}
 \item Subset the observations by criteria - \verb|filter()|
@@ -298,7 +300,9 @@ For filtering you can use the standard comparison operators (\verb|>|, \verb|>=|
 \caption{Logical operators in R}
 \end{figure}
 
-Missing values are represented in R as \verb|NA|. They are contagious because any operation involving an unknown value will produce unknown results. For instance, the function \verb|filter()| only includes rows where the condition is \verb|TRUE|. It excludes both \verb|FALSE| condition and \verb|NA| values.
+Missing values are represented in R as \verb|NA|. They are contagious because any operation involving an unknown value will produce unknown results. 
+
+The function \verb|filter()| only includes rows where the condition is \verb|TRUE|. It excludes both \verb|FALSE| condition and \verb|NA| values.
 
 You can use the function \verb|is.na()| to determine whether a value is missing. You can also use this to explicitly include missing values in a \verb|filter()| call.
 
@@ -329,7 +333,7 @@ Find all flights in the \verb|flights| dataset that:
 \begin{enumerate}
 \item Had an arrival delay of two or more hours.
 \item Flew to Houston (IAH or HOU).
-\item Were operated by United, American or Delta.
+\item Were operated by United (\verb|UA|), American (\verb|AA|) or Delta (\verb|DL|).
 \item Departed in summer (July, August and September)
 \item Arrived more than two hours late, but did not leave late.
 \item Were delayed by at least an hour, but made up over \(30\) minutes in flight.
@@ -417,7 +421,7 @@ There are many useful creation functions you can use with \verb|mutate()| to cre
 
   \item [Logical comparison] \verb|<|, \verb|<=|, \verb|>|, \verb|>=|, \verb|!=|
 
-  \item[Ranking] There are several of these – the most common one is \verb|min_rank()| which does the most usual type of ranking (e.g. first, second, third, fourth) and gives the smallest values the ranks
+  \item[Ranking] There are several of these – the most common one is \verb|min_rank()| which does the most usual type of ranking (e.g. first, second, third, fourth) and gives the smallest values the smallest ranks.
 \end{description}
 
 In example \ref{ex:tidymutate}, we will start by creating a narrower dataset so we can see the new variables.
@@ -469,17 +473,16 @@ min_rank(desc(y))
 
 \begin{Exercise}[title={Grouped Summaries}]
 
-The last key function is \verb|summarise()| or \verb|summarize()|. It collapses a data frame into a single row. This function is particularly useful when used in conjunction with \verb|group_by()|. This changes the unit of analysis from the whole dataset to individual groups. Then you can use functions on the grouped \verb|data frame| in order to obtain grouped summaries.
+The last key function is \verb|summarise()| or \verb|summarize()|. It collapses a data frame into a single row. This function is particularly useful when used in conjunction with \verb|group_by()|. This changes the unit of analysis from the whole dataset to individual groups. Then you can use functions on the grouped \verb|data frame| in order to obtain grouped summaries. These summary functions can be used in the \verb|summarise()| function:
 
-Whenever doing any aggregation, it is always a good idea to include either the total count \verb|n()|, or the count of non-missing values \verb|sum(!is.na(x))|. To count the number of unique values, use \verb|n_distinct()|. By including count statistics, you can make sure that you are not drawing conclusions based on small amount of data.
-
-Useful summary functions:
 \begin{description}
 \item [Measures of location] Arithmetic average \verb|mean()| and median \verb|median()|.
 \item [Measures of spread] Standard deviation \verb|sd()| and interquartile range \verb|IQR()|.
 \item [Measures of rank] Minimum value \verb|min()|, maximum value \verb|max()| as well as the quantiles \verb|quantile()|
 \item [Measures of position] \verb|first()|  and \verb|last()|
 \end{description}
+
+Whenever doing any aggregation, it is always a good idea to include either the total count \verb|n()| or the count of non-missing values \verb|sum(!is.na(x))|. To count the number of unique values, use \verb|n_distinct()|. By including count statistics, you can make sure that you are not drawing conclusions based on small amount of data. 
 
 When combining several operations it is usually better to join them together using the pipe operator \verb|%>%| rather than repeatedly making new variables. This is illustrated in example \ref{ex:tidysummarise}.
 
@@ -891,7 +894,7 @@ summary(gf)
 
 \begin{figure}[H]
 \centering
-<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=4>>=
+<<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=6>>=
 plot(gf)
 @
 \caption{Goodness-of-fit test for Poisson distribution}
@@ -1165,6 +1168,7 @@ tibble(func='Sigmoid', value= func_sigmoid, range = range) %>%
   union_all(tibble(func='Hyperbolic tangent', value= func_tanh, range = range)) %>%
   union_all(tibble(func='Softplus', value= func_softplus, range = range)) %>%
   union_all(tibble(func='ReLU', value= func_relu, range = range)) %>%
+  union_all(tibble(func='Linear', value= range, range = range)) %>%
   ggplot(aes(x=range, y=value, colour=func)) +
   geom_line() +
   scale_colour_brewer(palette="Set2") +
@@ -1405,7 +1409,7 @@ amprion
 One of the main drivers of power demand and generation is weather. The weather dataset is published by the Deutscher Wetterdienst\footnote{DWD Climate Data Center \url{https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html}}. Weather observations are recorded every hour at the Bremen weather station. You can follow the code in example \ref{ex:loadbremen} to load the dataset.
 
 \begin {table}[H]
-\caption {Description of the Breman weather dataset}
+\caption {Description of the Bremen weather dataset}
 \begin{center}
 \begin{tabular}{ | l | l | l |}
 \toprule[1.5pt]
@@ -1426,7 +1430,7 @@ One of the main drivers of power demand and generation is weather. The weather d
 \end{table}
 
 <<ex:loadbremen, fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
-# Load the Breman weather dataset
+# Load the Bremen weather dataset
 bremen <- read.csv('bremen.csv',
                    colClasses = c('character',
                                   'numeric',
@@ -2426,6 +2430,8 @@ plot(myPhylo,
 
 \end{Exercise}
 
+\bibliography{book}{}
+\bibliographystyle{plain}
 
 
 \end{document}
