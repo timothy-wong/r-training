@@ -75,7 +75,7 @@
   \begin{itemize}
     \item RStudio is your integrated development environment (IDE)
   \end{itemize}
-  \includegraphics[width=\textwidth]{rstudio.PNG}
+  \includegraphics[width=\textwidth]{img/rstudio.PNG}
 \end{frame}
 
 
@@ -627,7 +627,7 @@ exp(cbind(oddsratio = myLogisticModel$coefficients,
       \item Regularisation.
     \end{itemize}
   \end{itemize}
-  \includegraphics[width=\textwidth]{rpart.PNG}
+  \includegraphics[width=\textwidth]{img/rpart.PNG}
 \end{frame}
 
 \subsection{Decision Tree}
@@ -714,8 +714,8 @@ plot(myForest)
     \item Output can either be fire \(1\) or not fire \(0\).
   \end{itemize}
   \item Rosenblatt's Mark I Perceptron
-  \includegraphics[width=0.45\textwidth]{perceptron.jpg}%
-  \includegraphics[width=0.25\textwidth]{perceptron2.jpg}
+  \includegraphics[width=0.45\textwidth]{img/perceptron.jpg}%
+  \includegraphics[width=0.25\textwidth]{img/perceptron2.jpg}
 \end{itemize}
 \end{frame}
 
@@ -1198,16 +1198,16 @@ multiplot(plotlist = plt, cols = 8)
 
 \begin{frame} [shrink] {UK User Communities}
 \begin{itemize}
-  \item LondonR - \includegraphics[width=0.2\textwidth]{londonr.PNG}
-  \item ManchesterR - \includegraphics[width=0.2\textwidth]{manchesterr.png}
-  \item CaRdiff - \includegraphics[width=0.2\textwidth]{cardiff.JPG}
+  \item LondonR - \includegraphics[width=0.2\textwidth]{img/londonr.PNG}
+  \item ManchesterR - \includegraphics[width=0.2\textwidth]{img/manchesterr.png}
+  \item CaRdiff - \includegraphics[width=0.2\textwidth]{img/cardiff.JPG}
   \item SheffieldR
-  \item EdinbR - \includegraphics[width=0.2\textwidth]{edinbr.PNG}
-  \item CambR - \includegraphics[width=0.1\textwidth]{cambr.JPG}
+  \item EdinbR - \includegraphics[width=0.2\textwidth]{img/edinbr.PNG}
+  \item CambR - \includegraphics[width=0.1\textwidth]{img/cambr.JPG}
   \item NottinghamR
-  \item BirminghamR - \includegraphics[width=0.1\textwidth]{birminghamr.JPG}
-  \item Oxford RUG - \includegraphics[width=0.1\textwidth]{oxfordrug.PNG}
-  \item Bristol Data Scientists - \includegraphics[width=0.2\textwidth]{bristolds.JPG}
+  \item BirminghamR - \includegraphics[width=0.1\textwidth]{img/birminghamr.JPG}
+  \item Oxford RUG - \includegraphics[width=0.1\textwidth]{img/oxfordrug.PNG}
+  \item Bristol Data Scientists - \includegraphics[width=0.2\textwidth]{img/bristolds.JPG}
 \end{itemize}
 \end{frame}
 
@@ -1215,13 +1215,13 @@ multiplot(plotlist = plt, cols = 8)
   \begin{itemize}
     
     \item International R User Conference (useR!) \\
-    \includegraphics[width=0.2\textwidth]{userconf.PNG}
+    \includegraphics[width=0.2\textwidth]{img/userconf.PNG}
     
     \item Enterprise Application of the R Language (EARL) \\
-    \includegraphics[width=0.2\textwidth]{earlconf.PNG}
+    \includegraphics[width=0.2\textwidth]{img/earlconf.PNG}
     
     \item European R User Meeting (ERUM) \\
-    \includegraphics[width=0.2\textwidth]{erumconf.JPG}
+    \includegraphics[width=0.2\textwidth]{img/erumconf.JPG}
     
   \end{itemize}
 \end{frame}

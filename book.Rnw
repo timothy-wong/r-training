@@ -296,7 +296,7 @@ For filtering you can use the standard comparison operators (\verb|>|, \verb|>=|
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{venn.PNG}
+\includegraphics[width=\textwidth]{img/venn.PNG}
 \caption{Logical operators in R}
 \end{figure}
 
@@ -1013,7 +1013,7 @@ At the heart of tree-based method is a concept called binary recursive partition
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{rpart.PNG}
+\includegraphics[width=\textwidth]{img/rpart.PNG}
 \caption{Recursive partitioning}
 \end{figure}
 			
