@@ -1,0 +1,175 @@
+\documentclass{article}
+
+\usepackage{textcomp}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\setlength{\parindent}{4em}
+\setlength{\parskip}{1em}
+
+\title{Business Analytics in R:\\
+Introduction to Statistical Programming}
+
+\author{
+  Timothy Wong\\
+  James Gammerman
+}
+
+\begin{document}
+
+\maketitle
+
+\section{Overview}
+\verb|R| is a very popular computer language for statistical programming. It is widely used in academia and data-centric industries such as medicine, biostatistics, quantitative finance and insurance. In the business analytics community, open-sourced programming languages such as \verb|R| are increasingly accepted as the primary analytical tool. 
+
+\section{Course Structure}
+This course begins by introducing the modern \verb|R| ecosystem. This covers the software toolsets, fundamental programming concepts, data types and basic operations. Participants will learn and practice essential data wrangling techniques such as filtering, aggregation and table joining.
+
+In later part of the course, participants learn about how to perform traditional statistical procedures such as Ordinary Least Squares regression in \verb|R|. More advanced statistics and machine learning topics are included, such as tree-based mathods, time series analysis and clustering techniques, etc.
+
+Each module of the course will begin with a short lecture, followed by a series of practical tasks. Participants will spend approximately 50\% of their time on practical programming.
+
+\section{Learning Outcomes}
+
+Upon course completion, all participants will have a good understanding of the \verb|R| ecosystem and be able to perform basic data wrangling tasks. Participants will also be able to build statistical models in \verb|R| using various techniques. Besides, participants will learn about how to compare modelling techniques. This includes understanding the pros and cons of various modelling approaches.
+
+\section{Prerequisites}
+This is a statistical programming course designed for non-\verb|R| users. Participants do not need any prior experience in the \verb|R| language but they are expected to have substantial experience in computer programming. Proficiency in at least one computer programming language is required. In addition, knowledge in statistics is highly beneficial.
+
+\section{Preparation}
+
+\subsection{IT Equipment}
+Course participants are welcomed to bring along their private laptop. Alternatively, participants can use their corporate device as well. Participants must make sure they have access to the \verb|R| programming environment. Access to corporate systems is \textbf{\textit{not}} provisioned as part of course enrolment.
+
+\subsection{Training Material}
+Training materials including the book, slides and datasets are open-sourced. These can be digitally accessed through the URL: \url{https://git.io/fzxW9}. There is no need to read the materials in advanced. Participants are welcomed to bring along a printed copy of the slides for easier note-taking.
+
+\newpage
+\section{Syllabus}
+
+\begin{description}
+
+\item[R Ecosystem] (1 hour)
+  \begin{itemize}
+    \item Open Source R
+    \item RStudio IDE
+    \item Packages
+    \item Repositories
+    \item User Communities
+  \end{itemize}
+  
+\item[Programming Concepts] (1 hour)
+  \begin{itemize}
+    \item Data types
+    \item Logical operators
+    \item Control statements
+    \item Code vectorisation
+    \item Subsetting
+    \item Functions
+  \end{itemize}
+  
+\item[Data Transformation] (3 hours)
+  \begin{itemize}
+      \item The \verb|tidyverse| package
+      \item Filtering
+      \item Aggregation
+      \item Comupting new variables
+      \item Grouping by
+      \item Table joining
+    \end{itemize}
+    
+
+
+\item[Regression Methods] (2 hours)
+  \begin{itemize}
+      \item Linear regression
+        \begin{itemize}
+          \item Polynomial regression model
+          \item Interaction terms
+          \item Regression table
+          \item Model diagnostics
+          \item Overfitting
+        \end{itemize}
+      \item Poisson regression
+        \begin{itemize}
+          \item Poisson distribution
+          \item Goodness-of-fit test
+        \end{itemize}
+      \item Logistic regression
+        \begin{itemize}
+          \item Binomial distribution
+          \item Odds-ratio
+        \end{itemize}
+    \end{itemize}
+    
+    
+
+
+\item[Tree-based Methods] (1.5 hours)
+  \begin{itemize}
+      \item Decision tree
+        \begin{itemize}
+          \item Recursive partitioning
+          \item Tree pruning
+          \item Visualisation
+        \end{itemize}
+      \item Random forest
+    \end{itemize}
+
+\item[Neural Networks] (1.5 hours)
+  \begin{itemize}
+    \item Neural activation
+    \item Non-linear activation functions
+    \item Gradient descent methods
+    \item Topologies
+    \item Multi-layer perceptron (MLP)
+  \end{itemize}
+  
+
+\item[Time Series Analysis] (3 hours)
+  \begin{itemize}
+    \item Temporal correlation (Correlogram)
+        \begin{itemize}
+          \item Auto-correlation function (ACF)
+          \item Partial auto-correlation function (PACF) 
+          \item Cross correlation function (CCF)
+        \end{itemize}
+        
+    \item Decomposition
+        \begin{itemize}
+          \item Additive time series
+          \item Multiplicative time series
+          \item Time series regression using decomposed components
+        \end{itemize}
+        
+    \item Auto-regressive integrative moving average (ARIMA) model
+        \begin{itemize}
+          \item Autoregressive (AR) model 
+          \item Moving average (MA) model
+          \item Stationarity
+          \item Seasonal ARIMA
+        \end{itemize}
+
+  \end{itemize}
+
+
+\item[Survival Analysis] (1.5 hours)
+  \begin{itemize}
+    \item Kaplan-Meier estimator
+    \item Cox proportional harzard model
+  \end{itemize}
+
+\item[Unsupervised Learning] (1 hours)
+  \begin{itemize}
+    \item K-means Clustering
+    \item Agglomerative hierarchical clustering
+  \end{itemize}
+\end{description}
+
+\section{Assessment}
+This is a non-assessed course but participants should respect each other by paying attention.
+
+\end{document}
