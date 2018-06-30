@@ -14,8 +14,8 @@
 Introduction to Statistical Programming}
 
 \author{
-  Timothy Wong\\
-  James Gammerman
+  Timothy Wong\thanks{\url{timothy.wong@hotmail.co.uk}} \\
+  James Gammerman\thanks{\url{jgammerman@gmail.com}}
 }
 
 \begin{document}

@@ -164,17 +164,10 @@ knit_hooks$set(rexample = function(before, options, envir) {
 %%%%%%%%%%%
 \chapter*{Preface}
 
-% \begin{fquote}[Yes, Prime Minister][1986]
-% {Jim Hacker: The statistics are irrefutable...\\
-% Sir Humphrey: Statistics? You can prove anything with statistics.\\
-% Jim Hacker: Even the truth.\\
-% Sir Humphrey: Yes... No!}
-% \end{fquote}
-
 R is an open source language for statistical programming. It is widely used among statisticians, academic researchers, and business analysts across the world. This book is part of a training course designed for business analysts.
 
 \section*{Web Access}
-The \LaTeX\xspace source code and the compiled PDF version of this book can be digitially accessed at \url{https://github.com/timothy-wong/r-training}
+The \LaTeX\xspace source code and the compiled PDF version of this book can be digitially accessed at \url{https://git.io/fzxW9}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Give credit where credit is due. %
