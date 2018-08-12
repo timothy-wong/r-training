@@ -107,7 +107,8 @@
  
 <<setup, include=FALSE>>=
 library(checkpoint)
-checkpoint(snapshotDate = '2018-03-22', 
+#checkpoint(snapshotDate = '2018-03-22', 
+checkpoint(snapshotDate = '2018-08-01', 
            auto.install.knitr = TRUE, 
            scan.rnw.with.knitr = TRUE, 
            verbose = TRUE,
@@ -140,6 +141,7 @@ knit_hooks$set(rexample = function(before, options, envir) {
 }
 
 \begin{document}
+% \SweaveOpts{concordance=TRUE}
 \frontmatter
 \maketitle
 
