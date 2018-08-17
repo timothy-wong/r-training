@@ -107,7 +107,7 @@
  
 <<setup, include=FALSE>>=
 library(checkpoint)
-checkpoint(snapshotDate = '2018-08-01', 
+checkpoint(snapshotDate = "2018-08-01", 
            auto.install.knitr = TRUE, 
            scan.rnw.with.knitr = TRUE, 
            verbose = TRUE,
@@ -117,7 +117,7 @@ checkpoint(snapshotDate = '2018-08-01',
 
 library(knitr)
 knit_hooks$set(rexample = function(before, options, envir) {
-  if (before) sprintf('\\begin{rexample}\\label{%s}\\hfill{}', options$label) else '\\end{rexample}'
+  if (before) sprintf("\\begin{rexample}\\label{%s}\\hfill{}", options$label) else "\\end{rexample}"
 })
 @
 
@@ -586,35 +586,35 @@ library(ggplot2)
 mtcars %>%
   ggplot(aes(x=mpg)) + 
   geom_histogram() + 
-  labs(x='Miles-per-gallon',
-       y='Count', 
-       title='Histogram showing the distribution of car performance')
+  labs(x="Miles-per-gallon",
+       y="Count", 
+       title="Histogram showing the distribution of car performance")
 # Scatterplot showing the relationship between mpg and wt
 library(ggplot2)
 mtcars %>%
   ggplot(aes(x=wt, y=mpg, colour=factor(cyl))) +
   geom_point() +
-  labs(x='Weight',
-       y='Miles-per-gallon',
-       colour='Number of cylinders',
+  labs(x="Weight",
+       y="Miles-per-gallon",
+       colour="Number of cylinders",
        title="Scatterplot showing car weight against performance")
 # Create a boxplot showing mpg distribution of different gear types
 mtcars %>%
   ggplot(aes(x=factor(am,
                     levels = c(0,1),
-                    labels = c('Automatic', 'Manual')), y=mpg)) + 
+                    labels = c("Automatic", "Manual")), y=mpg)) + 
   geom_boxplot() +
-  labs(x='Gear type',
-       y='Miles-per-gallon')
+  labs(x="Gear type",
+       y="Miles-per-gallon")
 # Draw a scatterplot with facets to visualise multiple variables 
 mtcars %>%
   ggplot(aes(x=hp, y=mpg, colour=factor(gear), size=disp)) +
   geom_point() +
   facet_grid(. ~ cyl) +
-  labs(x='Horsepower',
-       y='Miles-per-gallon',
-       colour='Number of gears',
-       size='Displacement')
+  labs(x="Horsepower",
+       y="Miles-per-gallon",
+       colour="Number of gears",
+       size="Displacement")
 # Draw a matrix scatterplot
 pairs(mtcars)
 # Load the package GGally
@@ -703,7 +703,7 @@ You can also compare nested models\footnote{Refers to models having additional p
 <<ex:linearanova, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Compare linear regression models using Chi-square test
 # Testing whether myModel2 and myModel3 are different from myModel1
-anova(myModel1, myModel2, myModel3, test='Chisq')
+anova(myModel1, myModel2, myModel3, test="Chisq")
 @
 
 \end{Exercise}
@@ -762,17 +762,17 @@ hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
 f <- function(k1, k2, model){ z <- predict(model, data.frame(wt=k1, hp=k2 )) }
 myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
 # Draw the 3D plane
-myPlane <- persp(x = wt_along, xlab = 'Weight',
-                 y = hp_along, ylab = 'Horsepower',
-                 z = myPrediction, zlab = 'Miles-per-Gallon',
-                 main = 'Fitted vs observed values in 3D space',
+myPlane <- persp(x = wt_along, xlab = "Weight",
+                 y = hp_along, ylab = "Horsepower",
+                 z = myPrediction, zlab = "Miles-per-Gallon",
+                 main = "Fitted vs observed values in 3D space",
                  theta = 30, phi = 30, expand = 0.5, col = "lightblue")
 # Add original data as red dots on the plane
 myPoints <- trans3d(x = mtcars$wt,
                     y = mtcars$hp,
                     z = mtcars$mpg,
                     pmat=myPlane)
-points(myPoints, col='red')
+points(myPoints, col="red")
 @
 
 \begin{figure}[H]
@@ -786,15 +786,15 @@ points(myPoints, col='red')
   hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
   f <- function(k1, k2, model){ z <- predict(model, data.frame(wt=k1, hp=k2 )) }
   myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
-  myPlane <- persp(x = wt_along, xlab = 'Weight',
-                   y = hp_along, ylab = 'Horsepower',
-                   z = myPrediction, zlab = 'Miles-per-Gallon',
+  myPlane <- persp(x = wt_along, xlab = "Weight",
+                   y = hp_along, ylab = "Horsepower",
+                   z = myPrediction, zlab = "Miles-per-Gallon",
                    theta = 30, phi = 30, expand = 0.5, col = "lightblue")
   myPoints <- trans3d(x = mtcars$wt,
                       y = mtcars$hp,
                       z = mtcars$mpg,
                       pmat=myPlane)
-  points(myPoints, col='red')
+  points(myPoints, col="red")
   @
 	\caption{A less flexible model showing better generalisability}
 \end{figure}
@@ -809,15 +809,15 @@ points(myPoints, col='red')
   hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
   f <- function(k1, k2, model){ z <- predict(model, data.frame(wt=k1, hp=k2 )) }
   myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
-  myPlane <- persp(x = wt_along, xlab = 'Weight',
-                   y = hp_along, ylab = 'Horsepower',
-                   z = myPrediction, zlab = 'Miles-per-Gallon',
+  myPlane <- persp(x = wt_along, xlab = "Weight",
+                   y = hp_along, ylab = "Horsepower",
+                   z = myPrediction, zlab = "Miles-per-Gallon",
                    theta = 30, phi = 30, expand = 0.5, col = "lightblue")
   myPoints <- trans3d(x = mtcars$wt,
                       y = mtcars$hp,
                       z = mtcars$mpg,
                       pmat=myPlane)
-  points(myPoints, col='red')
+  points(myPoints, col="red")
   @
 	\caption{A more flexible model illutrating the risk of overfitting}
 \end{figure}
@@ -857,9 +857,9 @@ tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=1), frequency=0:pois
   union_all(tibble(density = sapply(seq(0,poisson_max,1), dpois, lambda=8), frequency=0:poisson_max, lambda=8)) %>%
   ggplot(aes(x=frequency, y=density, colour=factor(lambda))) +
   geom_line() + 
-  labs(x='Frequency', y='Density', colour='Lambda') +
+  labs(x="Frequency", y="Density", colour="Lambda") +
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif')
+  theme_classic(base_family = "serif")
 @
 \caption{Poisson distribution with different \(\lambda\) values}
 \end{figure}
@@ -943,9 +943,9 @@ logistic <- seq(logit_min, logit_max, 0.1)
 ggplot(mapping = aes(x=logistic,
                      y=1/(1+exp(-logistic)))) +
   geom_line()+
-  labs(x='X', y='Logistic function') +
+  labs(x="X", y="Logistic function") +
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif')
+  theme_classic(base_family = "serif")
 @
 \caption{Graph showing the range of a logistic function}
 \end{figure}
@@ -1167,17 +1167,17 @@ func_tanh <-tanh(range)
 func_softplus <- log(1+exp(range))
 func_relu <- sapply(range, max, 0)
 
-tibble(func='Sigmoid', value= func_sigmoid, range = range) %>%
-  union_all(tibble(func='Hyperbolic tangent', value= func_tanh, range = range)) %>%
-  union_all(tibble(func='Softplus', value= func_softplus, range = range)) %>%
-  union_all(tibble(func='ReLU', value= func_relu, range = range)) %>%
-  union_all(tibble(func='Linear', value= range, range = range)) %>%
+tibble(func="Sigmoid", value= func_sigmoid, range = range) %>%
+  union_all(tibble(func="Hyperbolic tangent", value= func_tanh, range = range)) %>%
+  union_all(tibble(func="Softplus", value= func_softplus, range = range)) %>%
+  union_all(tibble(func="ReLU", value= func_relu, range = range)) %>%
+  union_all(tibble(func="Linear", value= range, range = range)) %>%
   ggplot(aes(x=range, y=value, colour=func)) +
   geom_line() +
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'right') +
-  labs(x='x', y='f(x)', colour='Activation Function')
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "right") +
+  labs(x="x", y="f(x)", colour="Activation Function")
 @
 \caption{Common neural activation functions}
 \label{fig:activation}
@@ -1243,7 +1243,7 @@ myNN1 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
                    data = mtcars_numeric_normalised,
                    hidden = c(4,3),
                    linear.output = TRUE,
-                   lifesign = 'full')
+                   lifesign = "full")
 # Visualise the network topology
 plot(myNN1)
 @
@@ -1259,12 +1259,12 @@ myNNResult1 <- compute(myNN1, mtcars_numeric_normalised %>% select(-mpg))
 # The predicted values are in scaled format (z-score)
 # Need to convert it back to original scale for comparison
 myNNPred1 <- myNNResult1$net.result[,1] *
-                mtcars_sd[['mpg']] + 
-                mtcars_mean[['mpg']]
+                mtcars_sd[["mpg"]] + 
+                mtcars_mean[["mpg"]]
 # Visualise the results on a scatterplot
 qplot(mtcars$mpg, myNNPred1) +
-  labs(x='Observed MPG',
-       y='Predicted MPG')
+  labs(x="Observed MPG",
+       y="Predicted MPG")
 # Calculate model error using mean squared error (MSE)
 myNNError1 <- mean((myNNPred1 - mtcars$mpg)^2)
 @
@@ -1287,13 +1287,13 @@ myNN2 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
           hidden = c(4,3),
           linear.output = TRUE,
           act.fct = function(x) { log(1+exp(x)) },
-          lifesign = 'full')
+          lifesign = "full")
 # Calculate the network prediction
 myNNResult2 <- compute(myNN2, mtcars_numeric_normalised %>% select(-mpg))
 # Convert the predicted values back to original scale
 myNNPred2 <- myNNResult2$net.result[,1] *
-                mtcars_sd[['mpg']] + 
-                mtcars_mean[['mpg']]
+                mtcars_sd[["mpg"]] + 
+                mtcars_mean[["mpg"]]
 # Calculate model error (MSE)
 myNNError2 <- mean((myNNPred2 - mtcars$mpg)^2)
 @
@@ -1311,7 +1311,7 @@ mtcars_encoded <- mtcars %>% select(cyl,vs,am,gear,carb) %>%
     myUniqueValues <- unique(myCol)
     myTib <- sapply(myUniqueValues, 
            function(myValue){ (myValue == myCol) * 1 }) %>% as_tibble
-    colnames(myTib) <- paste0(myName, '_', myUniqueValues)
+    colnames(myTib) <- paste0(myName, "_", myUniqueValues)
     return(myTib)
   }) %>% bind_cols()
 # Combines all numeric and categorical variables
@@ -1330,15 +1330,15 @@ myNN3 <- neuralnet(formula = mpg ~
           hidden = c(4,3),
           linear.output = TRUE,
           act.fct = function(x) { log(1+exp(x)) },
-          lifesign = 'full')
+          lifesign = "full")
 # Visualise the network topology
 plot(myNN3)
 # Calculate the network prediction
 myNNResult3 <- compute(myNN3, mtcars_all %>% select(-mpg))
 # Convert the predicted values back to original scale
 myNNPred3 <- myNNResult3$net.result[,1] *
-                mtcars_sd[['mpg']] + 
-                mtcars_mean[['mpg']]
+                mtcars_sd[["mpg"]] + 
+                mtcars_mean[["mpg"]]
 # Calculate model error (MSE)
 myNNError3 <- mean((myNNPred3 - mtcars$mpg)^2)
 # Compare the error of the three models
@@ -1400,11 +1400,11 @@ In this exercise, we would use an external dataset. This dataset contains daily 
 <<ex:loadamprion, fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Read the Amprion dataset from CSV file
 # You might have to modify the path to point to your file location
-amprion <- read.csv('amprion.csv',
-                    colClasses = c('character',
-                                   'numeric',
-                                   'numeric',
-                                   'numeric')) %>% as_tibble()
+amprion <- read.csv("amprion.csv",
+                    colClasses = c("character",
+                                   "numeric",
+                                   "numeric",
+                                   "numeric")) %>% as_tibble()
 # View the dataset
 amprion
 @
@@ -1434,16 +1434,16 @@ One of the main drivers of power demand and generation is weather. The weather d
 
 <<ex:loadbremen, fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Load the Bremen weather dataset
-bremen <- read.csv('bremen.csv',
-                   colClasses = c('character',
-                                  'numeric',
-                                  'numeric',
-                                  'numeric',
-                                  'factor',
-                                  'numeric',
-                                  'numeric',
-                                  'numeric',
-                                  'numeric')) %>% as_tibble()
+bremen <- read.csv("bremen.csv",
+                   colClasses = c("character",
+                                  "numeric",
+                                  "numeric",
+                                  "numeric",
+                                  "factor",
+                                  "numeric",
+                                  "numeric",
+                                  "numeric",
+                                  "numeric")) %>% as_tibble()
 # View the dataset
 bremen
 @
@@ -1459,7 +1459,7 @@ library(dplyr)
 amprion_daily <- amprion %>%
                   mutate(date = datetime %>% 
                            ymd_hms() %>% 
-                           floor_date('day') %>%
+                           floor_date("day") %>%
                            as.Date()) %>%
                   group_by(date) %>%
                   summarise(total_demand = sum(demand),
@@ -1469,7 +1469,7 @@ amprion_daily <- amprion %>%
 bremen_daily <- bremen %>%
                   mutate(date = datetime %>% 
                            ymd_hms() %>% 
-                           floor_date('day') %>%
+                           floor_date("day") %>%
                            as.Date()) %>%
                   group_by(date) %>% 
                   summarise(mean_airtemp = airtemp %>% mean(),
@@ -1481,15 +1481,15 @@ bremen_daily <- bremen %>%
                             mean_soil100 = soil100 %>% mean())
 # Join the two daily datasets together into a common table
 myTable <- amprion_daily %>%
-  left_join(bremen_daily, by = 'date')
+  left_join(bremen_daily, by = "date")
 # View the aggregated datasets
 View(myTable)
 # Plots the daily total demand
 myTable %>%
   ggplot(aes(x=date, y=total_demand)) + 
   geom_line() +
-  labs(x = 'Date',
-       y = 'Power Demand (MW)')
+  labs(x = "Date",
+       y = "Power Demand (MW)")
 @
 
 \end{Exercise}
@@ -1527,7 +1527,7 @@ lag.plot(myTable$total_demand, lags = 28)
 <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=6>>=
 library(forecast)
 tsdisplay(myTable$total_demand, 
-          main = 'Total daily power demand (MW)',
+          main = "Total daily power demand (MW)",
           points = FALSE,
           lag.max = 120)
 @
@@ -1557,7 +1557,7 @@ The code also divides the dataset into training and testing set. The training se
 
 <<ex:frequency, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Divide the dataset into training and testing set
-TEST_SET_BEGIN <- '2017-01-01'
+TEST_SET_BEGIN <- "2017-01-01"
 myTrainingSet <- myTable %>% filter(date < TEST_SET_BEGIN)
 myTestingSet <- myTable %>% filter(date >= TEST_SET_BEGIN)
 # Automatically search for ideal frequency using training data
@@ -1570,7 +1570,7 @@ myTs <- ts(data = myTrainingSet$total_demand,
            frequency = myFreq)
 # Decompose the time series into its constituent components
 myDecomp <- decompose(myTs,
-                      type = 'additive')
+                      type = "additive")
 # View the decomposed components
 autoplot(myDecomp)
 plot(myDecomp)
@@ -1646,18 +1646,18 @@ myTestError2
 # Visualise the predictions of the two models
 ggplot() +
   geom_line(aes(x=date, y=total_demand), myTrainingSet) + 
-  geom_line(aes(x=date, y=myTsForecast1$mean, colour='blue'),
+  geom_line(aes(x=date, y=myTsForecast1$mean, colour="blue"),
             myTestingSet) +
-  geom_line(aes(x=date, y=myTsForecast2, colour='green'),
+  geom_line(aes(x=date, y=myTsForecast2, colour="green"),
             myTestingSet) + 
-  scale_colour_manual(guide = 'legend', name = 'Model', 
-         values =c('blue'='blue',
-                   'green'='green'), 
-         labels = c('Time Series Regression Model',
-                    'Simple Linear Regression')) + 
-  labs(x='Date',
-       y='Total Demand (MW)') +
-  theme(legend.position = 'bottom')
+  scale_colour_manual(guide = "legend", name = "Model", 
+         values =c("blue"="blue",
+                   "green"="green"), 
+         labels = c("Time Series Regression Model",
+                    "Simple Linear Regression")) + 
+  labs(x="Date",
+       y="Total Demand (MW)") +
+  theme(legend.position = "bottom")
 @
 
 \end{Exercise}
@@ -1827,10 +1827,10 @@ ggplot() +
   geom_line(aes(x=date, y=value, group=run), mySimulationAll, alpha=0.02) + 
   stat_summary(aes(x=date, y=value), mySimulationAll,
                fun.y = mean, 
-               geom = 'line',
-               colour ='blue') +
-  labs(x='Date', 
-       y='Power Demand')
+               geom = "line",
+               colour ="blue") +
+  labs(x="Date", 
+       y="Power Demand")
 # Calculate the MSE error
 myTestError5 <- mean((myTsForecast5$fcast - myTestingSet$total_demand)^2)
 @
@@ -1907,9 +1907,9 @@ ggsurvplot(mySurvFit3,pval = TRUE)
 <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=4>>=
 library(survival)
 library(survminer)
-mySurvFit2 <- survfit(Surv(time, status==2) ~ sex, lung %>% mutate(sex = factor(sex,levels = c(1,2), labels = c('Male','Female'))))
+mySurvFit2 <- survfit(Surv(time, status==2) ~ sex, lung %>% mutate(sex = factor(sex,levels = c(1,2), labels = c("Male","Female"))))
 ggsurvplot(mySurvFit2, 
-           palette = 'Set2',
+           palette = "Set2",
            conf.int = TRUE,
            risk.table = TRUE,
            risk.table.col = "strata",tables.height = 0.3,
@@ -1975,7 +1975,7 @@ ggcoxzph(myCoxZph1)
 \begin{figure}[H]
 \centering
 <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=6>>=
-ggcoxzph(myCoxZph1,var = c('age','ph.ecog','ph.karno'))
+ggcoxzph(myCoxZph1,var = c("age","ph.ecog","ph.karno"))
 @
 \caption{Scaled Schoenfeld residuals of a selected set of variables plotted against time}
 \end{figure}
@@ -2044,44 +2044,44 @@ km1 <- iris %>%
   kmeans(2)
 clust1 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km1$cluster %>% factor)) +
   geom_point()+
-  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km1$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km1$centers %>% as_tibble, shape="X",colour="black", size=6)+
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'none') +
-  labs(x='Variable 1', y='Variable 2')
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "none") +
+  labs(x="Variable 1", y="Variable 2")
 
 km2 <- iris %>%
   select(Sepal.Length, Sepal.Width) %>%
   kmeans(4)
 clust2 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km2$cluster %>% factor)) +
   geom_point()+
-  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km2$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km2$centers %>% as_tibble, shape="X",colour="black", size=6)+
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'none') +
-  labs(x='Variable 1', y='Variable 2')
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "none") +
+  labs(x="Variable 1", y="Variable 2")
 
 km3 <- iris %>%
   select(Sepal.Length, Sepal.Width) %>%
   kmeans(6)
 clust3 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km3$cluster %>% factor)) +
   geom_point()+
-  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km3$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km3$centers %>% as_tibble, shape="X",colour="black", size=6)+
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'none') +
-  labs(x='Variable 1', y='Variable 2')
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "none") +
+  labs(x="Variable 1", y="Variable 2")
 
 km4 <- iris %>%
   select(Sepal.Length, Sepal.Width) %>%
   kmeans(8)
 clust4 <- iris %>% ggplot(aes(x= Sepal.Length, y= Sepal.Width, colour= km4$cluster %>% factor)) +
   geom_point()+
-  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km4$centers %>% as_tibble, shape='X',colour='black', size=6)+
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width),km4$centers %>% as_tibble, shape="X",colour="black", size=6)+
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'none') +
-  labs(x='Variable 1', y='Variable 2')
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "none") +
+  labs(x="Variable 1", y="Variable 2")
 
 multiplot(clust1, clust2, clust3, clust4,cols = 2)
 @
@@ -2160,8 +2160,8 @@ autoplot(myPca, loadings.label = TRUE)
 <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=4, fig.height=3>>=
 autoplot(myPca, loadings.label = TRUE) +
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'none')
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "none")
 @
 \caption{Biplot showing the first and second principal components}
 \end{figure}
@@ -2184,7 +2184,7 @@ ggplot(myPca$x, aes(x = PC1,
   geom_point() + 
   geom_label(aes(label=mtcars %>% rownames())) + 
   stat_ellipse() +
-  labs(colour='Cluster')
+  labs(colour="Cluster")
 @
 
 \begin{figure}[H]
@@ -2199,10 +2199,10 @@ myClustPlot1 <- ggplot(myPca$x, aes(x = PC1,
   geom_point() + 
   geom_label(aes(label=mtcars %>% rownames()), size=size) + 
   stat_ellipse() +
-  labs(colour='Cluster') +
+  labs(colour="Cluster") +
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'bottom')
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "bottom")
 
 kmPca2 <- kmeans(mtcars_numeric_normalised, centers = 3)$cluster
 myClustPlot2 <- ggplot(myPca$x, aes(x = PC1,
@@ -2211,10 +2211,10 @@ myClustPlot2 <- ggplot(myPca$x, aes(x = PC1,
   geom_point() + 
   geom_label(aes(label=mtcars %>% rownames()), size=size) + 
   stat_ellipse() +
-  labs(colour='Cluster') +
+  labs(colour="Cluster") +
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'bottom')
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "bottom")
 
 kmPca3 <- kmeans(mtcars_numeric_normalised, centers = 4)$cluster
 myClustPlot3 <- ggplot(myPca$x, aes(x = PC1,
@@ -2223,10 +2223,10 @@ myClustPlot3 <- ggplot(myPca$x, aes(x = PC1,
   geom_point() + 
   geom_label(aes(label=mtcars %>% rownames()), size=size) + 
   stat_ellipse() +
-  labs(colour='Cluster') +
+  labs(colour="Cluster") +
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'bottom')
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "bottom")
 
 multiplot(myClustPlot1,myClustPlot2,myClustPlot3,cols = 3)
 @
@@ -2330,7 +2330,7 @@ stat_chull <- function(mapping = NULL, data = NULL, geom = "polygon",
     params = list(na.rm = na.rm, ...)
   )
 }
-myDist <- mtcars[,c('disp','qsec')] %>% scale %>% dist()
+myDist <- mtcars[,c("disp","qsec")] %>% scale %>% dist()
 hc <- myDist %>% hclust()
 getHPlot <- function(i){
   ggplot(mtcars, aes(x=disp, y=qsec, group=factor(cutree(hc, k=i)))) +
@@ -2338,9 +2338,9 @@ getHPlot <- function(i){
   stat_chull(fill = NA, colour = "red", size=1) +
   #geom_text(aes(x=250, y=22,label=)) +
   scale_colour_brewer(palette="Set2") +
-  theme_classic(base_family = 'serif') + 
-  theme(legend.position = 'bottom') +
-  labs(x=paste0('Iteration ', nrow(mtcars)-i+1 ), y=NULL) +
+  theme_classic(base_family = "serif") + 
+  theme(legend.position = "bottom") +
+  labs(x=paste0("Iteration ", nrow(mtcars)-i+1 ), y=NULL) +
   scale_x_continuous(labels = NULL) + 
   scale_y_continuous(labels = NULL)
 }
@@ -2357,9 +2357,9 @@ In the R language, hierarchical clustering can be performed using the \verb|hclu
 <<ex:hclust, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Calculate distance matrix
 # Using Euclidean distance here but you can change it
-myDist <- mtcars_numeric_normalised %>% dist(method = 'euclidean')
+myDist <- mtcars_numeric_normalised %>% dist(method = "euclidean")
 # Perform hierarchical clustering using complete linkage
-myHClust <- myDist %>% hclust(method = 'complete')
+myHClust <- myDist %>% hclust(method = "complete")
 # You can change the closeness measurement
 # Read the documentation of the hclust function
 ?hclust
@@ -2401,23 +2401,23 @@ myPhylo <- myHClust %>% as.phylo()
 # Draw some plots
 # This is a phylogenic tree
 plot(myPhylo, 
-     type = 'phylogram',
+     type = "phylogram",
      tip.color = myColours[myCutClusters1])
 # This is a cladogram
 plot(myPhylo, 
-     type = 'cladogram',
+     type = "cladogram",
      tip.color = myColours[myCutClusters1])
 # This is a unrooted phylogenic tree
 plot(myPhylo, 
-     type = 'unrooted',
+     type = "unrooted",
      tip.color = myColours[myCutClusters1])
 # This is a fan phylogram
 plot(myPhylo, 
-     type = 'fan',
+     type = "fan",
      tip.color = myColours[myCutClusters1])
 # This is a radial phylogram
 plot(myPhylo, 
-     type = 'radial',
+     type = "radial",
      tip.color = myColours[myCutClusters1])
 @
 
@@ -2425,7 +2425,7 @@ plot(myPhylo,
 \centering
 <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=8, fig.height=8>>=
 plot(myPhylo, 
-     type = 'fan',
+     type = "fan",
      tip.color = brewer.pal(5, name="Set2")[myCutClusters1])
 @
 \caption{Fan phylogram showing hierarchical clusters}
