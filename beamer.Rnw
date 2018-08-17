@@ -18,6 +18,11 @@
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
 
+% These two lines are required to fix font issue.
+% Track here: https://tex.stackexchange.com/questions/133781/font-display-error-in-windows
+\usepackage{sansmathaccent}
+\pdfmapfile{+sansmathaccent.map}
+
 \title{
   Introduction to Statistical Programming
 }
@@ -25,6 +30,16 @@
   Timothy Wong\thanks{\url{timothy.wong@hotmail.co.uk}} \\
   James Gammerman\thanks{\url{jgammerman@gmail.com}}
 }
+<<setup, include=FALSE>>=
+library(checkpoint)
+checkpoint(snapshotDate = '2018-08-01', 
+           auto.install.knitr = TRUE, 
+           scan.rnw.with.knitr = TRUE, 
+           verbose = TRUE,
+           use.knitr = TRUE,
+           scanForPackages = TRUE,
+           checkpointLocation=getwd())
+@
 
 \defbeamertemplate*{section page}{ifttheme}%[1][]
 {\vbox{}\vskip-3.2cm%
@@ -1145,6 +1160,7 @@ multiplot(clust1, clust2, clust3, clust4,cols = 2)
 
 \end{frame}
 
+\subsection{Hierarchical Clustering}
 
 \begin{frame}{Agglomerative Hierarchical Clustering}
 \begin{itemize}
@@ -1192,7 +1208,6 @@ multiplot(plotlist = plt, cols = 8)
 @
 \end{frame}
 
-\subsection{Hierarchical Clustering}
 
 \section{Closing}
 
@@ -1213,16 +1228,16 @@ multiplot(plotlist = plt, cols = 8)
 
 \begin{frame} {International User Communities}
   \begin{itemize}
-    
+
     \item International R User Conference (useR!) \\
     \includegraphics[width=0.2\textwidth]{img/userconf.PNG}
-    
+
     \item Enterprise Application of the R Language (EARL) \\
     \includegraphics[width=0.2\textwidth]{img/earlconf.PNG}
-    
+
     \item European R User Meeting (ERUM) \\
     \includegraphics[width=0.2\textwidth]{img/erumconf.JPG}
-    
+
   \end{itemize}
 \end{frame}
 
