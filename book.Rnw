@@ -53,57 +53,6 @@
 \SetKw{Initialise}{Initialise}
 
 \setlength{\parskip}{1em}
-
-% %%%%********************************************************************
-% % fancy quotes
-% \definecolor{quotemark}{gray}{0.7}
-% \makeatletter
-% \def\fquote{%
-%     \@ifnextchar[{\fquote@i}{\fquote@i[]}%]
-%            }%
-% \def\fquote@i[#1]{%
-%     \def\tempa{#1}%
-%     \@ifnextchar[{\fquote@ii}{\fquote@ii[]}%]
-%                  }%
-% \def\fquote@ii[#1]{%
-%     \def\tempb{#1}%
-%     \@ifnextchar[{\fquote@iii}{\fquote@iii[]}%]
-%                       }%
-% \def\fquote@iii[#1]{%
-%     \def\tempc{#1}%
-%     \vspace{1em}%
-%     \noindent%
-%     \begin{list}{}{%
-%     \small%
-%          \setlength{\leftmargin}{0.1\textwidth}%
-%          \setlength{\rightmargin}{0.1\textwidth}%
-%                   }%
-%          \item[]%
-%          \begin{picture}(0,0)%
-%          \put(-15,-5){\makebox(0,0){\scalebox{3}{\textcolor{quotemark}{``}}}}%
-%          \end{picture}%
-%          \begingroup\itshape}%
-%  %%%%********************************************************************
-%  \def\endfquote{%
-%  \endgroup\par%
-%  \makebox[0pt][l]{%
-%  \hspace{0.8\textwidth}%
-%  \begin{picture}(0,0)(0,0)%
-%  \put(15,15){\makebox(0,0){%
-%  \scalebox{3}{\color{quotemark}''}}}%
-%  \end{picture}}%
-%  \ifx\tempa\empty%
-%  \else%
-%     \ifx\tempc\empty%
-%        \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb}%
-%    \else%
-%        \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb},\ \tempc%
-%    \fi\fi\par%
-%    \vspace{0.5em}%
-%  \end{list}%
-%  }%
-%  \makeatother
-%  %%%%***************
  
 <<setup, include=FALSE>>=
 library(checkpoint)
@@ -120,12 +69,6 @@ knit_hooks$set(rexample = function(before, options, envir) {
   if (before) sprintf("\\begin{rexample}\\label{%s}\\hfill{}", options$label) else "\\end{rexample}"
 })
 @
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% First page of book which contains 'stuff' like: %
-%  - Book title, subtitle                         %
-%  - Book author name                             %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Book's title and subtitle
 \title{
@@ -167,7 +110,7 @@ knit_hooks$set(rexample = function(before, options, envir) {
 R is an open source language for statistical programming. It is widely used among statisticians, academic researchers, and business analysts across the world. This book is part of a training course designed for business analysts.
 
 \section*{Web Access}
-The \LaTeX\xspace source code and the compiled PDF version of this book can be digitially accessed at \url{https://git.io/fzxW9}
+The \LaTeX\xspace source code and the compiled PDF version of this book can be digitially accessed at \url{https://github.com/timothywong731/r-training}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Give credit where credit is due. %
@@ -184,7 +127,80 @@ The \LaTeX\xspace source code and the compiled PDF version of this book can be d
 % \noindent Tim \\
 % \noindent \url{timothy.wong@hotmail.co.uk}
 
-\chapter{Introduction to Data Analysis}
+
+
+\chapter{Introduction to R}
+
+\verb|R| is a language for statistical programming. The language is open source and free for personal, academic and commerical use. It is available on multiple platforms including Windows, Linux and MacOS. In recent years, \verb|R| has gained popularity and became one of the fastest growing cprogramming languages in the world\footnote{\url{https://stackoverflow.blog/2017/10/10/impressive-growth-r/}}. In this chapter, we will go through the basics of \verb|R|.
+
+\section{Programming Enviornment}
+
+RStudio\footnote{\url{https://www.rstudio.com}} is a popular Integrated Development Environment (IDE) for the \verb|R| language. It is a very powerful editor which enables programmers to interact with the \verb|R| language. RStudio is open-sourced and the desktop version is free for personal use. 
+
+Inside RStudio, the display is divided into different tabs which user can customise. The following ones are particularly important:
+
+\begin{description}
+  \item [Source Editor]
+  Inside RStudio, users can access the source editor for \verb|R| code. This can be treated as a powerful text editor for various forms of R code, such as standard \verb|R| Script, \verb|R| Markdown, \verb|R| Notebook, \verb|R| Sweave and \verb|shiny| etc. The source editor does not execute any code, it purely helps user edit it efficiently.
+  
+  \item [Console]
+  The \verb|R| interpreter is shown in the Console window. This is the place where \verb|R| code is processed. User can highlight a segment of \verb|R| code in the main text editor and press \verb|Ctrl + Enter| to send it to execution. Once the code is sent, it will execute in the \verb|R| interpreter and the results will be displayed. Alternatively, user can just place the blinking cursor on a line and press the same keys. This sends the entire line to the interpreter for execution. User can press \verb|Ctrl + L| to clear existing screen output.
+  
+  \item [Environment]
+  User can access all the variables created in the current \verb|R| session. The workspace which includes all variables can be exported as \verb|.RData| file in the environment window. User can also import workspace from an existing \verb|.RData| file.
+  
+  \item [Files]
+  It allows users to browse files on the local storage system. User can navigate to their own home directory using the \verb|~| path.
+  
+  \item [Plots]
+  All graphical outputs produced by the \verb|R| interpreter are displayed in the plots tab. Users can export the graph as file in this tab.
+  
+  \item [Packages]
+  User can view the installed packages in this tab and load them manually.
+  
+  \item [Help]
+  Documentation can be searched and viewed in this tab. Users can open documentation of a particular function using \verb|?| character in the interpreter. For instance, \verb|?sum| will open up the documentation for the \verb|sum()| function. 
+  
+\end{description}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/rstudio.PNG}
+\caption{RStudio Server Pro (RSP)}
+\end{figure}
+
+
+\section{R Basics}
+
+In \verb|R|, user can assign value to variable using the \verb|<-| symbol. The \verb|#| character is used for commenting.
+
+<<ex:assignvariable, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Assign variables
+x <- 5
+y <- 20
+# Perform multiplication
+x * y
+@
+
+
+\verb|R| is a vectorised programming language. Vector of consecutive integers can be created using the \verb|:| character. Alternatively, vector of discrete values can be created using the function \verb|c()|.
+
+<<ex:createvectors, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Create a vector of integers one to ten
+myVec1 <- 1:10
+# Find out the length of vector
+length(myVec1)
+# Reverse the vector
+rev(myVec1)
+# Create a custom vector of 10, 15, 20, 25, 30
+myVec2 <- c(10, 15, 20, 25, 30)
+# Create a vector of sequential numbers with increment 0.5
+myVec3 <- seq(from = -2, to = 2, by = 0.5)
+@
+
+\section{Efficient Programming}
+
+\chapter{Data Analysis}
 \label{ch:intro}
 
 The \verb|tidyverse| is a coherent system of packages for data manipulation, exploration and visualisation that share a common design philosophy. These were mostly developed by the prolific R developer Hadley Wickham\footnote{\url{http://hadley.nz}}, but they are now being expanded by several contributors. The \verb|tidyverse| packages are intended to make data scientists and statisticians more productive by guiding them through the workflow of a typical project. This is illustrated in figure \ref{tidyverseworkflow}.

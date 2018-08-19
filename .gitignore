@@ -25,3 +25,8 @@ book.aux
 book.bbl
 book.blg
 book.out
+book.synctex(busy)
+outline-concordance.tex
+outline.log
+outline.synctex.gz
+outline.tex
