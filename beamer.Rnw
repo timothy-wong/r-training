@@ -17,11 +17,19 @@
 
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
+\usepackage{pstricks}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes, shapes.geometric, arrows}
 
 % These two lines are required to fix font issue.
 % Track here: https://tex.stackexchange.com/questions/133781/font-display-error-in-windows
 \usepackage{sansmathaccent}
 \pdfmapfile{+sansmathaccent.map}
+
+\tikzstyle{block1} = [rectangle, draw, fill=blue!20, text centered, rounded corners]
+\tikzstyle{block2} = [rectangle, draw, fill=red!20, text centered, rounded corners]
+\tikzstyle{block3} = [rectangle, draw, text centered]
+\tikzstyle{arrow} = [thick,->,>=stealth]
 
 \title{
   Introduction to Statistical Programming
@@ -632,9 +640,274 @@ system.time({
 \section{Data Transformation}
 
 
-\begin{frame}{The Tidyverse}
+\begin{frame}{Tidyverse}
+\begin{itemize}
+  \item A coherent system of packages for data manipulation, exploration and visualisation.
+  \item Typical workflow of a project:
+\end{itemize}
+
+    \begin{tikzpicture}[node distance = 2.5cm, auto]
+        \node [block3, dashed, label={above left:\tiny Program}] (bigbox){
+            \begin{tikzpicture}[node distance = 2.5cm, auto, solid]
+              \node [block1] (import) {Import};
+              \node [block1, right of=import] (tidy) {Tidy};
+              \node [block3, dashed, fill=gray!10, below of=tidy, label={above left:\tiny Understand}] (mybox){
+                  \begin{tikzpicture}[node distance = 2.5cm, auto, solid]
+                      \node [block2] (transform) {Transform};
+                      \node [block2, right of=transform] (visualise) {Visualise};
+                      \node [block2, below of=visualise] (model) {Model};
+                      \draw [arrow] (transform) -- (visualise);
+                      \draw [arrow] (visualise) -- (model);
+                      \draw [arrow] (model) -| (transform);
+                      \draw [arrow] (visualise) -- (transform);
+                      \draw [arrow] (model) -- (visualise);
+                      \draw [arrow] (transform) |- (model);
+                  \end{tikzpicture}
+              };
+              \node [block1, below of=mybox] (communicate) {Communicate};
+              \draw [arrow] (import) -- (tidy);
+              \draw [arrow] (tidy) -- (mybox);
+              \draw [arrow] (mybox) -- (communicate);
+            \end{tikzpicture}
+        };
+    \end{tikzpicture}
+    
 \end{frame}
 
+
+\begin{frame}[shrink, fragile]{Tidyverse: Packages}
+
+\begin{description}
+  \item[Import] Reading datasets from various data sources.
+    \begin{itemize}
+      \item \verb|readr|
+      \item \verb|readxl| 
+      \item \verb|haven| 
+      \item \verb|httr| 
+      \item \verb|rvest|
+      \item \verb|xml2|
+    \end{itemize}
+  \item[Tidy] Clean up datasets.
+    \begin{itemize}
+      \item \verb|tibble|
+      \item \verb|tidyr|
+    \end{itemize}
+  \item[Transform] Aggregate, change variable format and derive new variables.
+    \begin{itemize}
+      \item \verb|dplyr|
+      \item \verb|forcats| 
+      \item \verb|hms| 
+      \item \verb|lubridate| 
+      \item \verb|stringr|
+    \end{itemize}
+  \item[Visualise] Creating charts using the Grammar of Graphics.
+    \begin{itemize}
+      \item \verb|ggplot2|
+    \end{itemize}
+  \item[Model] Train and test statistical models.
+    \begin{itemize}
+      \item \verb|broom|
+      \item \verb|modelr|
+    \end{itemize}
+  \item[Program] Coding in pipeline-style.
+    \begin{itemize}
+      \item \verb|magrittr|
+      \item \verb|purrr|
+    \end{itemize}
+\end{description}
+\end{frame}
+
+\begin{frame}[fragile,shrink]{Data Transformation}
+\begin{itemize}
+  \item Subset the observations by condition - \verb|filter()|
+  \item Reorder the observations - \verb|arrange()|
+  \item Pick variables by name - \verb|select()|
+  \item Compute new variable as a function of existing variables - \verb|mutate()|
+  \item Aggregate many values into one - \verb|summarise()| or \verb|summarize()|
+  \item All of the above functions can be used with \verb|group_by()|
+  \item Syntax: \verb|function(data, actions_to_take)|
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile,shrink]{Loading Dataset}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Load the package
+library(nycflights13)
+# View the flights dataset interactively
+View(flights)
+# Print out the dataset on the console
+flights
+@
+\end{frame}
+
+
+\begin{frame}[fragile,shrink]{dplyr Query}
+\begin{itemize}
+  \item Finding average arrival delay time for each route and sort it.
+        (i.e. which route are delayed the most?)
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+library(dplyr)
+flights %>%
+  group_by(tailnum) %>%
+  summarise(delay = mean(arr_delay),
+            n = n()) %>%
+  arrange(desc(delay)) %>%
+  filter(n > 100)
+@
+\end{frame}
+
+\begin{frame}[fragile]{Filtering Observations}
+\begin{itemize}
+  \item Pick a subset of observations based on their values
+  \item Use logical operators: \verb|>|, \verb|>=|, \verb|<|, \verb|<=|, \verb|!=|, \verb|==|
+  \item More complex combinations of logical operators:
+    \includegraphics[width=0.7\textwidth]{img/venn.PNG}
+  \item Only returns observations where the condition is \verb|TRUE|. All \verb|FALSE| and \verb|NA| values are excluded.
+  \item Use the function \verb|is.na()| to check if the value is missing.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile,shrink]{Examples - filter()}
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Select all flights on January 1st
+# Assigning them to a new variable jan1
+jan1 <- filter(flights, month == 1, day == 1)
+jan1
+# Select all flights from November or December 
+filter(flights, month == 11 | month == 12)
+# A useful shorthand for this problem is x %in% y
+# It selects every row where x is one of the values in y
+filter(flights, month %in% c(11, 12))
+# Let’s select only the flights that weren’t delayed
+# (on arrival or departure) by more than two hours:
+filter(flights, arr_delay <= 120, dep_delay <= 120)
+@
+\end{frame}
+
+
+\begin{frame}[fragile]{Arranging Observations}
+\begin{itemize}
+  \item Changes the order of observations in a dataset.
+  \item Sorts the observations by a set of variables in ascending order
+  \begin{itemize}
+    \item Use \verb|desc()| to sort in descending order
+    \item If more than one variable is supplied, each additional variable will break ties in the values of the preceding variable.
+    \item \verb|NA| values are placed at the end
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile,shrink]{Examples - arrange()}
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Arrange flights by year, then month, then day
+arrange(flights, year, month, day)
+# Use desc() to reorder by a column in descending order
+arrange(flights, desc(arr_delay))
+# Missing values are always sorted at the end:
+df <- tibble(x = c(5, 2, NA))
+arrange(df, x)
+arrange(df,desc(x))
+@
+\end{frame}
+
+
+\begin{frame}[fragile]{Selecting Variables}
+\begin{itemize}
+  \item Returns specific variables in the dataset, dropping the others.
+  \item Comes with a number of helper functions you can use within \verb|select()| to pick out variables based on their names:
+  \begin{enumerate}
+    \item \verb|starts_with("abc")| matches variable names that begin with \verb|"abc"|.
+    \item \verb|ends_with("xyz")| matches variable names that end with \verb|"xyz"|.
+    \item \verb|contains("ijk")| matches variable names that contain \verb|"ijk"|.
+    \item \verb|num_range("x", 1:3)| matches \verb|x1|, \verb|x2|, and \verb|x3|.
+  \end{enumerate}
+  \item Can be used to rename variables, but better to use the \verb|rename()| function
+  \item To move several variables to the start of a data frame use \verb|select()| in conjunction with \verb|everything()|
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile,shrink]{Examples - select()}
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Select columns by name
+select(flights, year, month, day)
+# Select all columns between ‘year’ and ‘day’ (inclusive)
+select(flights, year:day)
+# Select all columns except those from year to day (inclusive)
+select(flights, -(year:day))
+# Rename a variable using rename()
+rename(flights, tail_num = talinum)
+# Reorder columns using the everything() helper
+select(flights, time_hour, air_time, everything())
+@
+\end{frame}
+
+
+\begin{frame}[fragile]{Compute New Variables}
+\begin{itemize}
+  \item Create new variables which are functions of existing ones
+  \item New variables are always added at the end of the dataset
+  \item To keep only the newly-computed variables and remove the old ones, use \verb|transmute()|.
+  \item Many functions can be used with \verb|mutate()| to create new variables:
+  \begin{description}
+    \item [Arithmetic operators] \verb|+|, \verb|-|, \verb|*|, \verb|/|, \verb|^|
+    \item [Modular arithmetic] \verb|%/%| for integer division and \verb|%%| for modulo
+    \item [Logs] Very useful for data ranging across multiple orders of magnitude
+    \item [Comparison] \verb|<|, \verb|<=|, \verb|>|, \verb|>=|, \verb|!=|, \verb|==|
+    \item [Ranking] There are several of these, the most common one is \verb|min_rank()|
+  \end{description}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile,shrink]{Examples - summarise()}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+mySummary <- flights %>%
+  group_by(dest) %>%
+  summarise(
+    count = n(),
+    dist = mean(distance, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE)) %>%
+  filter(count > 20)
+mySummary
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Grouped Summaries}
+\begin{itemize}
+  \item \verb|summarise()| and \verb|summarize()| aggregates a set of values into one.
+  \item Commonly used with \verb|group_by()| to analyse properties of individual groups.
+  \item Examples of summary functions:
+  \begin{description}
+    \item [Measures of location] Arithmetic average \verb|mean()| and median \verb|median()|.
+    \item [Measures of spread] Standard deviation \verb|sd()| and interquartile range \verb|IQR()|.
+    \item [Measures of rank] Minimum value \verb|min()|, maximum value \verb|max()| as well as the quantiles \verb|quantile()|
+    \item [Measures of position] \verb|first()|  and \verb|last()|
+  \end{description}
+  \item Use the pipe operator \verb|%>%| to combining several operations
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile,shrink]{Examples - mutate()}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Select several columns only
+flights_sml <- select(flights,
+                      year:day,
+                      ends_with("delay"),
+                      distance,
+                      air_time)
+# Use these the smaller data frame derive new columns
+mutate(flights_sml,
+  	gain = arr_delay - dep_delay,
+  	speed = distance / air_time * 60)
+@
+\end{frame}
 
 
 \section{Regression Models}
