@@ -64,7 +64,7 @@ checkpoint(snapshotDate = '2018-08-01',
     \tableofcontents
 \end{frame}
 
-\section{Introduction}
+\section{R Ecosystem}
 
 \begin{frame}{What is the R language?}
   \begin{itemize}
@@ -100,7 +100,10 @@ checkpoint(snapshotDate = '2018-08-01',
   \item User-contributed packages: source code, binaries, documentation.
 \end{itemize}
 <<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# Install a new package with all its dependencies
+# Return all installed packages
+installed.packages()
+# Install a new package and all its dependencies from CRAN
+# This will install to the default library location
 install.packages("ggplot2", dependencies = TRUE)
 # Load an installed package 
 # (both lines are identical)
@@ -112,53 +115,69 @@ library("ggplot2")
 \begin{frame}[fragile, shrink]{Packages}
 \begin{itemize}
   \item \textbf{CRAN Task View} is a curated list of packages.
+  \item Useful guide to get started with \verb|R|.
   \item \url{https://cran.r-project.org/web/views/}
 \end{itemize}
-<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-library(ctv)
-# Install a CRAN Task View
-install.views("Econometrics")
-# Update a CRAN Task View
-update.views("Econometrics")
-@
 \end{frame}
 
-  
+
+\begin{frame}[fragile, shrink]{Variable Assignment}
+\begin{itemize}
+  \item Assign variables using the \verb|<-| symbol.
+  \item Do not use reserved words. This will confuse the interpreter.
+\end{itemize}
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Assign variables
+myVarX <- 5
+myVarY <- 20
+# Perform multiplication
+myVarX * myVarY
+# Look at the reserved words
+?Reserved
+@
+\end{frame}
 
 
 \begin{frame}[fragile, shrink]{Vectors}
 \begin{itemize}
   \item R is a vectorised programming language.
-  \item Vector contains objects of the same data type.
+  \item Vector contains elements of the same data type.
 \end{itemize}
 <<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# Create a vector of integers one to ten
 myVec1 <- 1:10
 # Find out the length of vector
 length(myVec1)
 # Reverse the vector
+# This does not change the value of myVec1
 rev(myVec1)
 # Create a custom vector of 10, 15, 20, 25, 30
 myVec2 <- c(10, 15, 20, 25, 30)
 myVec2
-# Create a vector of sequential numbers
-myVec3 <- seq(from = -10, to = 10, by = 0.5)
+# Create a vector of sequential numbers with increment 0.5
+myVec3 <- seq(from = -2, to = 2, by = 0.5)
 myVec3
+# Elements of a vector can be named
+myVec4 <- c(`New York` = 8.5,
+            `London` = 8.6,
+            `Moscow` = 11.9)
+myVec4
 @
 \end{frame}
 
 
 \begin{frame}[fragile]{Subsetting a Vector}
 \begin{itemize}
-  \item You can subset members from a vector.
+  \item You can subset elements from a vector.
 \end{itemize}
 <<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# Select the second member of the vector
-myVec1[2]
+# Select the second element of the vector
+myVec2[2]
 # Subset a range from the vector
-myVec1[2:4]
+myVec2[2:4]
 # Subset specified elements
-myVec1[c(4,2,3)]
+myVec2[c(4,2,3)]
+# Subset named element of a vector
+myVec4["New York"]
 @
 \end{frame}
 
@@ -177,47 +196,6 @@ log(myVec1)
 @
 \end{frame}
 
-\begin{frame}[fragile, shrink]{Looping}
-\begin{itemize}
-  \item Looping can be slow.
-  \item Always try to vectorise your code.
-\end{itemize}
-<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', cache=TRUE>>=
-# Vectorised operation is fast
-system.time({
-  myResult <- 1:100000 * 2
-})
-# Looping is quite slow
-system.time({
-  myResult <- sapply(1:100000, function(x){ x * 2 })
-})
-# Appending to vector is much slower
-system.time({
-  myResult <- c()
-  for(i in 1:100000){
-    myResult <- c(myResult, i * 2)
-  }
-})
-@
-\end{frame}
-
-\begin{frame}[fragile, shrink]{Functions}
-\begin{itemize}
-  \item Functions are vectorised.
-\end{itemize}
-<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# Defines a custom function
-myFunc <- function(x) {
-  x * 2
-}
-# Execute the function with one input
-myFunc(5)
-# Execute the function with an integer vector
-myFunc(1:10)
-@
-\end{frame}
-
-
 \begin{frame}[fragile, shrink]{Character Vectors}
 \begin{itemize}
   \item Vector can also contain character objects.
@@ -235,24 +213,77 @@ month.abb
 \end{frame}
 
 
-\begin{frame}[fragile, shrink]{Vectors - Other Data Types}
+\begin{frame}[fragile, shrink]{Date and Date/Time Vectors}
 \begin{itemize}
-  \item Vector can contain objects of any data type.
+  \item \verb|Date| is a data type in base \verb|R|.
+  \item The package \verb|lubridate| extends date/time functionalities.
+  \item Enables easier date/time manipulation.
 \end{itemize}
 <<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# This is a vector of character objects
-myVec5 <- c("2017-07-13",
-            "2017-10-11",
-            "2017-11-21",
-            "2018-01-16", 
-            "2018-03-27")
-# This is a vector of date objects
-myVec6 <- as.Date(myVec5)
+# This is a vector of Date objects
+myVec5 <- as.Date(c("2017-07-13",
+                    "2017-10-11",
+                    "2017-11-21",
+                    "2018-01-16", 
+                    "2018-03-27"))
+# Load the lubridate package
+# Use the function ymd_hms() to parse date/time with timezone
+# Returns a vector of POSIXct (date/time) object
+library(lubridate)
+myVec6 <- ymd_hms(c("2017-07-13 09:30:00",
+                    "2017-10-11 08:00:00",
+                    "2017-11-21 10:00:00",
+                    "2018-01-16 11:30:00", 
+                    "2018-03-27 12:00:00"),
+                  tz = "Europe/London")
+# Date/time manipulation applied to a vector
+myVec7 <- myVec6 + hours(1) + minutes(30)
 # Compute the day of week - returns a vector of characters
-# Notice that these are all vectorised functions
-weekdays(myVec6)
+weekdays(myVec7)
 @
 \end{frame}
+
+
+
+
+\begin{frame}[fragile, shrink]{Logical Operators}
+\begin{itemize}
+  \item Apply logical operators on vector objects.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Find all values greater than 5 - returns a vector of logical values 
+myVec1 > 5
+# Find all values equal to 7
+myVec1 == 7
+# Find all values matching 2,4,6 and 8
+myVec1 %in% c(2,4,6,8)
+# Find all values between 2 and 7
+myVec1 >= 2 & myVec1 <= 7
+# Find all values equal to 7 or equal to 8
+myVec1 == 7 | myVec1 == 8
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Special Numbers in R}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Pi is constant 3.14159...
+pi
+# One divided by zero is infinity
+1/0
+# Negative number divided by zero is negative infinity
+-1/0
+# Infinity divided by infinity is Not-a-Number (NaN)
+Inf/Inf
+# Not available (NA) plus one is still NA
+NA + 1
+# Effects of different special numbers
+c(5, 10, 15, NA, 25, 30, NaN, 35, 40, Inf, 50, -Inf, 60) / 5
+@
+\end{frame}
+
+
+
 
 \begin{frame}[fragile, shrink]{List}
 \begin{itemize}
@@ -276,32 +307,18 @@ myFavBook
   \item You can subset a particular member from a list
 \end{itemize}
 <<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# Select a named member of a list
-# Using the dollar sign, followed by name without bracket
+# Select a named element of a list
+# Use the dollar sign, followed by name without bracket
 myFavBook$title
-# Using double squared brackets with member's name as string
+# Use double squared brackets with element's name as character
 myFavBook[["authors"]]
-# Select the fourth member in the list
+# Select the fourth element in the list
 myFavBook[[4]]
 @
 \end{frame}
 
-\begin{frame}[fragile, shrink]{Special Numbers in R}
-<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# Pi is constant 3.14159...
-pi
-# One divided by zero is infinity
-1/0
-# Negative number divided by zero is negative infinity
--1/0
-# Infinity divided by infinity is Not-a-Number (NaN)
-Inf/Inf
-# Not available (NA) plus one is still NA
-NA + 1
-# Effects of different special numbers
-c(5, 10, 15, NA, 25, 30, NaN, 35, 40, Inf, 50, -Inf, 60) / 5
-@
-\end{frame}
+
+
 
 
 \begin{frame}[fragile, shrink]{Data Frame}
@@ -343,7 +360,7 @@ myFavMovies1
   \item \verb|tibble| is the modern standard in R.
 \end{itemize}
 <<fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-library(dplyr)
+library(tibble)
 myFavMovies2 <- tibble(title = c("Dr. No",
                                  "Goldfinger",
                                  "Diamonds are Forever",
@@ -362,6 +379,11 @@ myFavMovies2 <- tibble(title = c("Dr. No",
                                      "Timothy Dalton",
                                      "Pierce Brosnan",
                                      "Daniel Craig"))
+# Append an extra row at the end of the tibble
+# Rewrite the original tibble object
+myFavMovies2 <- add_row(myFavMovies2, 
+        title = "Spectre", year = 2015, box = 880.7,
+        bondActor = "Daniel Craig")
 @
 \end{frame}
 
@@ -388,7 +410,196 @@ myFavMovies2[4:7, c("title","year")]
 @
 \end{frame}
 
-\begin{frame} [shrink] {UK User Communities}
+\begin{frame}[fragile, shrink]{Functions}
+\begin{itemize}
+  \item Functions are vectorised.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+is.odd <- function(x) {
+  # The modulo operator %% returns the remainder
+  # If a number divide by 2 gives remainder 1, then it is an odd number
+  remainder <- x %% 2
+  equalToOne <- remainder == 1
+  return(equalToOne)
+}
+# Execute the function with one input
+is.odd(5)
+# Execute the function with an integer vector
+is.odd(1:10)
+# Define another function
+is.even <- function(x) {
+  !is.odd(x)
+}
+# Return true for even numbers
+is.even(1:10)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile, shrink]{If-Else}
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+library(lubridate)
+# Find out what day is today
+myWeekday <- weekdays(today())
+# Check whether today is Saturday or Sunday
+if (myWeekday %in% c("Saturday","Sunday")) {
+  myGreeting <- "Have a nice weekend"
+} else {
+  myGreeting <- "Go back to work"
+}
+# Prints the message
+myGreeting
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{If-Else}
+\begin{itemize}
+  \item Multiple conditions are allowed.
+\end{itemize}
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+library(lubridate)
+myWeekday <- weekdays(today())
+# Checks multiple conditions
+if (myWeekday %in% c("Saturday","Sunday")) {
+  myGreeting <- "Have a nice weekend"
+} else if(myWeekday == "Friday"){
+  myGreeting <- "It's Friday!"
+} else if(myWeekday == "Monday"){
+  myGreeting <- "Oh no..."
+} else {
+  myGreeting <- "Go back to work"
+}
+myGreeting
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile, shrink]{While}
+\begin{itemize}
+  \item Loops as long the condition stays \verb|TRUE|.
+\end{itemize}
+<<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myCounter <- 100
+while (myCounter > 0) {
+  myCounter <- myCounter - 5
+  print(myCounter)
+}
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{While}
+\begin{itemize}
+  \item Skip an iteration using \verb|next|
+  \item Early exit using \verb|break|
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myCounter <- 100
+while (myCounter > 0) {
+  myCounter <- myCounter - 5
+  if (myCounter > 50) {
+    # Skips all iterations if the counter value is greater than 50
+    next
+  }
+  if (myCounter == 10) {
+    # Early stop if the counter value matches 10
+    break
+  }
+  print(myCounter)
+}
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{For}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myResult <- 0
+for (i in 1:100) {
+  myResult <- myResult + i ^ 2
+}
+myResult
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile, shrink]{Apply}
+\begin{itemize}
+  \item \verb|apply()| takes a 'grid' input: \verb|data frame|, \verb|tibble|, or \verb|matrix|
+  \item Margin 1 = apply over rows
+  \item Margin 2 = apply over columns
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# The second argument 1 inidicates iterate over rows
+myMessages1 <- apply(myFavMovies2, 1, function(row){ 
+  sprintf("%s was released in %s.", row["title"], row["year"])
+})
+myMessages1
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{lapply}
+\begin{itemize}
+  \item \verb|lapply()| always returns a list
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# The second argument 1 inidicates iterate over rows
+myMessages2 <- lapply(myFavMovies2$title, 
+                      function(x){ sprintf("%s is a great movie!", x) })
+# Checks the data type of the result
+typeof(myMessages2)
+# Check whether it is a list
+is.list(myMessages2)
+# Select the 6th element of the list
+myMessages2[[6]]
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{sapply}
+\begin{itemize}
+  \item \verb|sapply()| always returns a vector
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+myMessages3 <- sapply(myFavMovies2$title, 
+                      function(x){ sprintf("%s is a great movie!", x) })
+# Check whether it is a list
+is.list(myMessages3)
+myMessages3
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Looping}
+\begin{itemize}
+  \item Looping can be slow.
+  \item Always try to vectorise your code.
+\end{itemize}
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', cache=TRUE>>=
+# Vectorised operation is fast
+system.time({
+  myResult <- 1:10000 * 2
+})
+# Looping is quite slow
+system.time({
+  myResult <- sapply(1:10000, function(x){ x * 2 })
+})
+# Appending to vector is much slower
+system.time({
+  myResult <- c()
+  for(i in 1:10000){
+    myResult <- c(myResult, i * 2)
+  }
+})
+@
+\end{frame}
+
+
+\begin{frame} [fragile, shrink] {UK User Communities}
 \begin{itemize}
   \item LondonR - \includegraphics[width=0.2\textwidth]{img/londonr.PNG}
   \item ManchesterR - \includegraphics[width=0.2\textwidth]{img/manchesterr.png}
@@ -418,8 +629,13 @@ myFavMovies2[4:7, c("title","year")]
   \end{itemize}
 \end{frame}
 
-\section{Introduction to Data Analysis}
-\subsection{Data Transformation}
+\section{Data Transformation}
+
+
+\begin{frame}{The Tidyverse}
+\end{frame}
+
+
 
 \section{Regression Models}
 \subsection{Linear Regression}
@@ -834,7 +1050,7 @@ myNN1 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
                    hidden = c(4,3),
                    linear.output = TRUE,
                    lifesign = "full")
-plot(myNN1,rep = "best")
+plot(myNN1, rep = "best")
 @
 \end{frame}
 
@@ -859,7 +1075,7 @@ plot(myNN1,rep = "best")
 \end{frame}
 
 \begin{frame} [fragile] {ACF and PACF Correlograms}
-<<fig.show='asis', eval=TRUE, results='hide',echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',cache=TRUE,fig.width=10,fig.height=8>>=
+<<fig.show='hide', eval=TRUE, results='hide', echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', cache=TRUE>>=
 amprion <- read.csv("amprion.csv",
                     colClasses = c("character",
                                    "numeric",
@@ -904,6 +1120,8 @@ myTable <- amprion_daily %>%
 TEST_SET_BEGIN <- "2017-01-01"
 myTrainingSet <- myTable %>% filter(date < TEST_SET_BEGIN)
 myTestingSet <- myTable %>% filter(date >= TEST_SET_BEGIN)
+@
+<<fig.show='asis', eval=TRUE, results='hide', echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', cache=TRUE, fig.width=10, fig.height=8>>=
 library(forecast)
 tsdisplay(myTrainingSet$total_demand,
           points = FALSE)
