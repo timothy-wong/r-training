@@ -739,8 +739,9 @@ In example \ref{ex:tidyfilter}, We will learn how to use \verb|tidyverse| using 
 library(dplyr)
 library(nycflights13)
 # Inspect the data, noting the type of each variable
-# You also can use View(flights) to open the dataset
 flights
+# View the flights dataset interactively
+View(flights)
 # Select all flights on January 1st
 # Assigning them to a new variable jan1
 jan1 <- filter(flights, month == 1, day == 1)
@@ -860,34 +861,34 @@ In example \ref{ex:tidymutate}, we will start by creating a narrower dataset so 
 
 <<ex:tidymutate, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Select several columns only
-flights_sml <- select(flights,  
- 		year:day,  
- 		ends_with("delay"), 
- 		distance, 
- 		air_time)
+flights_sml <- select(flights,
+                      year:day,
+                      ends_with("delay"),
+                      distance,
+                      air_time)
 # Use these the smaller data frame derive new columns
-mutate(flights_sml,  
-  	gain = arr_delay - dep_delay,  
- 	speed = distance / air_time * 60)
-# You can refer to columns that you have just created
 mutate(flights_sml,
   	gain = arr_delay - dep_delay,
-  	hours = air_time / 60,
-  	gain_per_hour = gain / hours)
+  	speed = distance / air_time * 60)
+# You can refer to columns that you have just created
+mutate(flights_sml,
+       gain = arr_delay - dep_delay,
+       hours = air_time / 60,
+       gain_per_hour = gain / hours)
 # Keep only the new variables using transmute()
 transmute(flights,
- 	gain = arr_delay - dep_delay,
- 	hours = air_time / 60,
- 	gain_per_hour = gain / hour)
+          gain = arr_delay - dep_delay,
+          hours = air_time / 60,
+          gain_per_hour = gain / hour)
 # Modular arithmetic: modulo
 7 %% 2
 # Modular arithmetic: integer division
 7 %/% 2
 # Compute hour and minute from dep_time
 transmute(flights,
- 	dep_time,
- 	hour = dep_time %/% 100,
- 	minute = dep_time %% 100)
+          dep_time,
+          hour = dep_time %/% 100,
+          minute = dep_time %% 100)
 # Example of ranking
 y <- c(1, 2, 2, NA, 3, 4)
 min_rank(y)
@@ -907,7 +908,7 @@ min_rank(desc(y))
 \section{Summarising}
 
 
-The last key function is \verb|summarise()| or \verb|summarize()|. It collapses a data frame into a single row. This function is particularly useful when used in conjunction with \verb|group_by()|. This changes the unit of analysis from the whole dataset to individual groups. Then you can use functions on the grouped \verb|data frame| in order to obtain grouped summaries. These summary functions can be used in the \verb|summarise()| function:
+The last key function is \verb|summarise()| or \verb|summarize()|. It collapses a set of values into one. This function is particularly useful when used in conjunction with \verb|group_by()|. This changes the unit of analysis from the whole dataset to individual groups. Then you can use functions on the grouped \verb|data frame| in order to obtain grouped summaries. These summary functions can be used in the \verb|summarise()| function:
 
 \begin{description}
 \item [Measures of location] Arithmetic average \verb|mean()| and median \verb|median()|.
