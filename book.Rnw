@@ -2867,8 +2867,109 @@ plot(myPhylo,
 
 \end{Exercise}
 
+\chapter{Extending R}
+
+There are many ways to extend \verb|R| functionalities. We will introduce some of them in this chapter.
+
+\section{R Markdown}
+
+\verb|R| Markdown is a way to produce documents dynamically. It supports various output formats such as HTML, PDF, LaTeX and Beamer. The document is self-contained and fully reproducible which makes it easy to share. RStudio is integrated with \verb|R| Markdown so that users can manipulate the documents very easily.
+
+User can launch a \verb|R| Markdown template by navigating to \textbf{File > New File > R Markdown}. This creates a \verb|.Rmd| template, it contains three types of content:
+
+\begin{description}
+  \item[YAML header] Surrounded by \verb|---| at the top of the document. Users can specify key parameters here, such as output format, 
+  \item[Text] Standard Markdown format.
+  \item[Code chunk] Surrounded by \verb|```|, optional arguments can be provided in the trailing curly bracket \verb|{}|.
+\end{description}
+
+A standard YAML header can render basic properties such as document title and author names in the HTML output file. Additional properties can be supplied to modify style and enable advanced features.
+
+The text body is written in standard markdown format. Markdown is a lightweight markup language with plain text formatting syntax. Small pieces of inline \verb|R| code is surrounded by the \verb|`r| mark. This will print the \verb|R| output in the compiled output.
+
+Large chunk of multi-line \verb|R| code is embraced by the \verb|```{r}| symbol. Additional arguments can be passed to each code chunk. For example, \verb|message=FALSE| would supress package loading message. On the other hand, \verb|echo=FALSE| would hide the \verb|R| code while still executing the chunk.
+
+\begin{Exercise}[title={Dynamically Generating a Report}]
+
+This example shows how to dynamically generate HTML docuemnt using \verb|R| Markdown. In RStudio, user can compile a \verb|.Rmd| file by clicking the \textbf{Knit} button or pressing \verb|Ctrl + Shift + K|. This would send the document to the \verb|knitr| engine for compilation. The compiled output is shown in Figure \ref{fig:rmarkdown}.
+
+\begin{verbatim}
+---
+title: "Car Assessment Report"
+author: "James Bond"
+output: html_document
+---
+Vehicle Analysis
+=======
+
+I have analysed `r nrow(mtcars)` cars systematically. The 
+following vehicles have the largest `horsepower`:
+
+```{r, message=FALSE}
+library(dplyr)
+mtcars %>%
+  mutate(name = rownames(.)) %>%
+  arrange(desc(hp)) %>%
+  select(name, hp) %>%
+  head(2)
+```
+
+The following graph shows that these cars have impressive
+**horsepower** and **1/4 mile time**.
+
+```{r, echo=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+library(ggplot2)
+mtcars %>%
+  mutate(name = rownames(.),
+         hp_rank = dense_rank(desc(hp)),
+         top3 = hp_rank <= 2) %>%
+  ggplot(aes(x=qsec, y=hp)) +
+  stat_smooth(method = "lm") +
+  geom_point(aes(colour=top3)) +
+  geom_text(aes(label=ifelse(top3, name, NA))) +
+  labs(x="1/4 Mile Time (Seconds)",
+       y="Horsepower",
+       colour="Top 2 Horsepower")
+```
+
+## Selection Criteria
+
+Essential gadgets are required for Health and Safety reasons:
+
+* Rocket launchers (_front_ and _back_)
+* Ejectable seats
+* Bulletproof screen
+
+## Results
+
+Despite the vehicle have outstanding performance, they are not
+fitted with essential health and safety equipment. As a result,
+none of them pass the assessment. 
+\end{verbatim}
+
+\begin{figure}[H]
+\label{fig:rmarkdown}
+\centering
+\includegraphics[width=\textwidth]{img/rmarkdown.PNG}
+\caption{Compiled R Markdown output in HTML format}
+\end{figure}
+
+\end{Exercise}
+
+
+\subsection{R Notebook}
+
+\verb|R| Notebook is a special type of \verb|R| Markdown document with chunks that can be executed independently and interactively, with output visible immediately beneath the input. 
+
+Users can launch a \verb|R| Notebook template by navigating to \textbf{File > New File > R Notebook}. It has the same \verb|.Rmd| file extension and the Notebook is configured by the \verb|output: html_notebook| parameter in the YAML header.
+
+The \textbf{Preview} button shows the rendered copy of the Notebook. Unlike \textbf{Knit} for standard \verb|R| Markdown documents, the \textbf{Preview} button does not run any \verb|R| code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+\section{Shiny}
+\section{Writing Package}
+
+
 \bibliography{book}{}
 \bibliographystyle{plain}
-
 
 \end{document}
