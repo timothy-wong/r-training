@@ -22,19 +22,22 @@ mtcars %>%
 The following graph shows that these cars have impressive
 **horsepower** and **1/4 mile time**.
 
-```{r, echo=FALSE, warning=FALSE,fig.width=8, fig.height=4}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4}
+# Create a ggplot
 library(ggplot2)
-mtcars %>%
-  mutate(name = rownames(.),
+myPlot <- mtcars %>%
+  mutate(car_name = rownames(.),
          hp_rank = dense_rank(desc(hp)),
-         top3 = hp_rank <= 2) %>%
-  ggplot(aes(x=qsec, y=hp)) +
+         top2 = hp_rank <= 2) %>%
+  ggplot(aes(x=qsec, y=hp, name=car_name)) +
   stat_smooth(method = "lm") +
-  geom_point(aes(colour=top3)) +
-  geom_text(aes(label=ifelse(top3, name, NA))) +
+  geom_point(aes(colour=top2)) +
   labs(x="1/4 Mile Time (Seconds)",
        y="Horsepower",
        colour="Top 2 Horsepower")
+# Convert ggplot to plotly
+library(plotly)
+myPlot %>% ggplotly(tooltip = "name")
 ```
 
 ## Selection Criteria

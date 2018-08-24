@@ -2873,9 +2873,9 @@ There are many ways to extend \verb|R| functionalities. We will introduce some o
 
 \section{R Markdown}
 
-\verb|R| Markdown is a way to produce documents dynamically. It supports various output formats such as HTML, PDF, LaTeX and Beamer. The document is self-contained and fully reproducible which makes it easy to share. RStudio is integrated with \verb|R| Markdown so that users can manipulate the documents very easily.
+\verb|R| Markdown is a way to produce documents dynamically. It supports various output formats such as HTML, PDF, LaTeX and Beamer. The document is self-contained and fully reproducible which makes it easy to share. 
 
-User can launch a \verb|R| Markdown template by navigating to \textbf{File > New File > R Markdown}. This creates a \verb|.Rmd| template, it contains three types of content:
+RStudio is integrated with \verb|R| Markdown so that users can manipulate the documents very easily. User can launch a \verb|R| Markdown template by navigating to \textbf{File > New File > R Markdown}. This creates a \verb|.Rmd| template, it contains three types of content:
 
 \begin{description}
   \item[YAML header] Surrounded by \verb|---| at the top of the document. Users can specify key parameters here, such as output format, 
@@ -2917,19 +2917,22 @@ mtcars %>%
 The following graph shows that these cars have impressive
 **horsepower** and **1/4 mile time**.
 
-```{r, echo=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4}
+# Create a ggplot
 library(ggplot2)
-mtcars %>%
-  mutate(name = rownames(.),
+myPlot <- mtcars %>%
+  mutate(car_name = rownames(.),
          hp_rank = dense_rank(desc(hp)),
-         top3 = hp_rank <= 2) %>%
-  ggplot(aes(x=qsec, y=hp)) +
+         top2 = hp_rank <= 2) %>%
+  ggplot(aes(x=qsec, y=hp, name=car_name)) +
   stat_smooth(method = "lm") +
-  geom_point(aes(colour=top3)) +
-  geom_text(aes(label=ifelse(top3, name, NA))) +
+  geom_point(aes(colour=top2)) +
   labs(x="1/4 Mile Time (Seconds)",
        y="Horsepower",
        colour="Top 2 Horsepower")
+# Convert ggplot to plotly
+library(plotly)
+myPlot %>% ggplotly(tooltip = "name")
 ```
 
 ## Selection Criteria
@@ -2956,16 +2959,123 @@ none of them pass the assessment.
 
 \end{Exercise}
 
-
 \subsection{R Notebook}
 
 \verb|R| Notebook is a special type of \verb|R| Markdown document with chunks that can be executed independently and interactively, with output visible immediately beneath the input. 
 
 Users can launch a \verb|R| Notebook template by navigating to \textbf{File > New File > R Notebook}. It has the same \verb|.Rmd| file extension and the Notebook is configured by the \verb|output: html_notebook| parameter in the YAML header.
 
-The \textbf{Preview} button shows the rendered copy of the Notebook. Unlike \textbf{Knit} for standard \verb|R| Markdown documents, the \textbf{Preview} button does not run any \verb|R| code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+The \textbf{Preview} button shows the rendered copy of the Notebook. Unlike \textbf{Knit} for standard \verb|R| Markdown documents, \textbf{Preview} does not run any \verb|R| code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
 
-\section{Shiny}
+\section{Shiny Web Application}
+
+\verb|shiny| is a package for creating interactive web applications. Users can use it to integrate statistical models in \verb|R| with dashboard elements such as chart, drop down menu, checkbox, etc. It is a commonly used to disseminate analytical output to non-technical users.
+
+In a \verb|shiny| application, the web page layout is coded in \verb|R| and automatically rendered. There is no need to write any HTML, CSS or JavaScript anymore. This enables users to focus more on analytical elements and develop dashboards rapidly.
+
+User can launch a template for \verb|shiny| web application in RStudio by navigating to \textbf{File > New File > Shiny Web App}. This creates a new \verb|app.R| file\footnote{Do not change the file name, otherwise the system would not recognise it as a shiny web application.}\footnote{User can also create two files ui.R and server.R seperately. This is suitable for more complex application with longer code.}, there are two main components inside the file:
+
+\begin{description}
+  \item [ui] This defines the user interface (UI) for the \verb|shiny| application, e.g. the page layout, location of control widgets, page title, etc.
+  \item [server] The server-side application which contains the logic. The analytical code is located in this part.
+\end{description}
+
+The \verb|ui| of the default \verb|shiny| template is shown in example \ref{ex:shinyui}. The page layout is defined by the \verb|fluidPage()| function. In this example, the \verb|titlePanel()| function defines the page title which is located at the top. The \verb|sidebarLayout()| function divides the screen layout into two unequal parts. The smaller part is defined by \verb|sidebarPanel()| which contains input controls. On the other hand, the larger part is defined by \verb|mainPanel()| which contains the output. 
+
+Many types of control widgets are supported in \verb|shiny|. They are shown in figure \ref{fig:shinyinput}. A detailed description can be found at \url{https://shiny.rstudio.com/tutorial/written-tutorial/lesson3/}.
+
+<<ex:shinyui, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Define UI for application that draws a histogram
+ui <- fluidPage(
+   # Application title
+   titlePanel("Old Faithful Geyser Data"),
+   # Sidebar with a slider input for number of bins 
+   sidebarLayout(
+      sidebarPanel(
+         sliderInput("bins",
+                     "Number of bins:",
+                     min = 1,
+                     max = 50,
+                     value = 30)),
+      # Show a plot of the generated distribution
+      mainPanel(
+         plotOutput("distPlot")
+      )
+   )
+)
+@
+
+\begin{figure}[H]
+\label{fig:shinyinput}
+\centering
+\includegraphics[width=\textwidth]{img/shiny-inputs.PNG}
+\caption{Control widgets in shiny}
+\end{figure}
+
+Example \ref{ex:shinyserver} shows the \verb|server| component in the default \verb|shiny| template. It is defined as a simple function which accepts two arguments \verb|input| and \verb|output|. In the function, named elements can be added to the \verb|output| and visualised through the \verb|ui|. In this case, the function retrieves variable \verb|input$bins| and renders a histogram, which is eventually returned as a graph as the \verb|output$distPlot| element.
+
+<<ex:shinyserver, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Define server logic required to draw a histogram
+server <- function(input, output) {
+   output$distPlot <- renderPlot({
+      # generate bins based on input$bins from ui.R
+      x    <- faithful[, 2] 
+      bins <- seq(min(x), max(x), length.out = input$bins + 1)
+      # draw the histogram with the specified number of bins
+      hist(x, breaks = bins, col = 'darkgray', border = 'white')
+   })
+}
+@
+
+To run a \verb|shiny| application, user can click on the \textbf|Run App| button in RStudio. This will render the application. Figure \ref{fig:shiny} shows the \verb|shiny| application rendered from the default template.
+
+\begin{figure}[H]
+\label{fig:shiny}
+\centering
+\includegraphics[width=\textwidth]{img/shiny.PNG}
+\caption{Default shiny template}
+\end{figure}
+
+\begin{Exercise}[title={Design an Analytics Dashboard}]
+
+In this exercise, the objective is to design a simple analytics dashboard which displays flight statistics. Please load the package \verb|nycflights13| and use the \verb|flights| dataset. Steps are indicated in example \ref{ex:shinyloaddata}. 
+
+<<ex:shinyloaddata, fig.show='hide', results='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Load the package
+library(nycflights13)
+# Browse the flights dataset
+# Aii flights departing from New York airports in 2013.
+flights
+# Browse the airlines dataset 
+# This is a small reference table containing full names of airlines
+airlines
+@
+
+This is an open-ended creative exercise, the dashboard has to meet the following criteria:
+
+\begin{itemize}
+  \item Answers a business questio (user has to define)
+  \item Has \textit{at least} two interactive inputs.
+  \item Graphically displays \textit{at least} two types of descriptive statistics (e.g. scatterplot, boxplot, bar chart... etc.)
+  \item Has a statistical element.
+\end{itemize}
+\end{Exercise}
+
+To begin with, user can modify the code chunk in example \ref{ex:shinyplotexample}.
+
+<<ex:shinyplotexample, fig.show='asis', results='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+library(dplyr)
+library(ggplot2)
+library(forcats)
+myFlightsPlot <- flights %>%
+  mutate(gain = (arr_delay - dep_delay)) %>%
+  left_join(airlines, by="carrier") %>% 
+  ggplot(aes(x=fct_reorder(name, gain, fun=median, na.rm=TRUE), y=gain)) +
+  geom_boxplot() +
+  labs(x="Airline", y="Time Gain (Minutes)") +
+  coord_flip()
+@
+
 \section{Writing Package}
 
 
