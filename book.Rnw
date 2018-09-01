@@ -3054,20 +3054,19 @@ airlines
 This is an open-ended creative exercise, the dashboard has to meet the following criteria:
 
 \begin{itemize}
-  \item Answers a business questio (user has to define)
+  \item Answers a business question (user has to define).
   \item Has \textit{at least} two interactive inputs.
-  \item Graphically displays \textit{at least} two types of descriptive statistics (e.g. scatterplot, boxplot, bar chart... etc.)
-  \item Has a statistical element.
+  \item Graphically displays \textit{at least} two types of descriptive statistics (e.g. scatterplot, boxplot, bar chart... etc).
 \end{itemize}
 \end{Exercise}
 
-To begin with, user can modify the code chunk in example \ref{ex:shinyplotexample}.
+To begin with, user can modify the code chunk in example \ref{ex:shinyplotexample}. The code creates a boxplot showing time gain for each carrier.
 
-<<ex:shinyplotexample, fig.show='asis', results='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+<<ex:shinyplotexample, fig.show='asis', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 library(dplyr)
 library(ggplot2)
 library(forcats)
-myFlightsPlot <- flights %>%
+flights %>%
   mutate(gain = (arr_delay - dep_delay)) %>%
   left_join(airlines, by="carrier") %>% 
   ggplot(aes(x=fct_reorder(name, gain, fun=median, na.rm=TRUE), y=gain)) +
@@ -3076,7 +3075,49 @@ myFlightsPlot <- flights %>%
   coord_flip()
 @
 
+<<>>=
+library(lubridate)
+library(rpart.plot)
+# Build a simple model to predict flight departure delay
+myFlightModel <- rpart(dep_delay ~
+                         months(date) + weekdays(date) + 
+                         hour + origin + dest + carrier,
+                       data = flights %>% mutate(date = make_date(year, month, day)),
+                       na.action = na.omit,
+                       control = rpart.control(cp = 0.001))
+# Plot the model
+rpart.plot(myFlightModel)
+# Predict the departure delay of a new flight
+# Use shiny control widgets to capture user input
+myNewFlight <- tibble(date = make_date(2019,5,10),
+                      hour= 0:23,
+                      origin="JFK",
+                      dest = "SFO", 
+                      carrier="AA")
+# Run the prediction - Visualise this number
+myNewFlightDelay <- predict(myFlightModel, myNewFlight)
+
+tibble(hour=0:23, dep_delay = myNewFlightDelay) %>%
+  ggplot(aes(x=hour, y=dep_delay)) +
+  geom_col()+
+  
+
+plot(myNewFlightDelay, type="b")
+@
+
 \section{Writing Package}
+
+\section{Reproducible Results}
+
+\chapter{Efficient Programming}
+
+\section{Memory Profile}
+\section{Multicore Processing}
+
+\chapter{Distributed Computing}
+
+\section{Apache Spark}
+\section{Microsoft Machine Learning Server}
 
 
 \bibliography{book}{}
