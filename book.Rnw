@@ -1120,7 +1120,7 @@ avPlots(myModel2)
   avPlots(myModel2)
   par(mfrow = c(1,1))
   @
-	\caption{Partial Regression plots}
+	\caption{Partial regression plots}
 \end{figure}
 
 As the input predictor variables usually have different scale, the model coefficient are not directly comparable. To fairly compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a function \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. You can follow example \ref{ex:betanorm} for coefficient standardisation.
@@ -2917,7 +2917,7 @@ mtcars %>%
 The following graph shows that these cars have impressive
 **horsepower** and **1/4 mile time**.
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Create a ggplot
 library(ggplot2)
 myPlot <- mtcars %>%
@@ -2973,7 +2973,7 @@ The \textbf{Preview} button shows the rendered copy of the Notebook. Unlike \tex
 
 In a \verb|shiny| application, the web page layout is coded in \verb|R| and automatically rendered. There is no need to write any HTML, CSS or JavaScript anymore. This enables users to focus more on analytical elements and develop dashboards rapidly.
 
-User can launch a template for \verb|shiny| web application in RStudio by navigating to \textbf{File > New File > Shiny Web App}. This creates a new \verb|app.R| file\footnote{Do not change the file name, otherwise the system would not recognise it as a shiny web application.}\footnote{User can also create two files ui.R and server.R seperately. This is suitable for more complex application with longer code.}, there are two main components inside the file:
+User can launch a template for \verb|shiny| web application in RStudio by navigating to \textbf{File > New Project > Shiny Web App}. This creates a new project containing an \verb|app.R| file\footnote{Do not change the file name, otherwise the system would not recognise it as a shiny web application.}\footnote{User can also create two files ui.R and server.R seperately. This is suitable for more complex application with longer code.}, there are two main components inside the file:
 
 \begin{description}
   \item [ui] This defines the user interface (UI) for the \verb|shiny| application, e.g. the page layout, location of control widgets, page title, etc.
@@ -3027,7 +3027,7 @@ server <- function(input, output) {
 }
 @
 
-To run a \verb|shiny| application, user can click on the \textbf|Run App| button in RStudio. This will render the application. Figure \ref{fig:shiny} shows the \verb|shiny| application rendered from the default template.
+To run a \verb|shiny| application, user can click on the \textbf{Run App} button in RStudio. This will render the application. Figure \ref{fig:shiny} shows the \verb|shiny| application rendered from the default template.
 
 \begin{figure}[H]
 \label{fig:shiny}
@@ -3038,9 +3038,18 @@ To run a \verb|shiny| application, user can click on the \textbf|Run App| button
 
 \begin{Exercise}[title={Design an Analytics Dashboard}]
 
-In this exercise, the objective is to design a simple analytics dashboard which displays flight statistics. Please load the package \verb|nycflights13| and use the \verb|flights| dataset. Steps are indicated in example \ref{ex:shinyloaddata}. 
+In this exercise, the objective is to design a simple analytics dashboard which displays predicted flight departure delay. Users can use shiny to make predictions in real-time. The app includes serveral basic widgets such as date picker, drop-down menu and radio button. A sample screenshot is displayed in figure \ref{fig:shiny-flight}
 
-<<ex:shinyloaddata, fig.show='hide', results='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+\begin{figure}[H]
+\label{fig:shiny-flight}
+\centering
+\includegraphics[width=\textwidth]{img/shiny-flights.PNG}
+\caption{Interactive application displaying predicted flight departure delay.}
+\end{figure}
+
+Please load the package \verb|nycflights13| and use the \verb|flights| dataset. Steps are indicated in example \ref{ex:shinyloaddata}.
+
+<<ex:shinyloaddata, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Load the package
 library(nycflights13)
 # Browse the flights dataset
@@ -3051,42 +3060,19 @@ flights
 airlines
 @
 
-This is an open-ended creative exercise, the dashboard has to meet the following criteria:
-
-\begin{itemize}
-  \item Answers a business question (user has to define).
-  \item Has \textit{at least} two interactive inputs.
-  \item Graphically displays \textit{at least} two types of descriptive statistics (e.g. scatterplot, boxplot, bar chart... etc).
-\end{itemize}
-\end{Exercise}
-
-To begin with, user can modify the code chunk in example \ref{ex:shinyplotexample}. The code creates a boxplot showing time gain for each carrier.
+To begin with, user can launch the default \verb|shiny| template and start editing. The code chunk in example \ref{ex:shinyplotexample} shows how the underlying model works. This is the main logic of the application and therefore should be placed in the \verb|server| component of the application.
 
 <<ex:shinyplotexample, fig.show='asis', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 library(dplyr)
-library(ggplot2)
-library(forcats)
-flights %>%
-  mutate(gain = (arr_delay - dep_delay)) %>%
-  left_join(airlines, by="carrier") %>% 
-  ggplot(aes(x=fct_reorder(name, gain, fun=median, na.rm=TRUE), y=gain)) +
-  geom_boxplot() +
-  labs(x="Airline", y="Time Gain (Minutes)") +
-  coord_flip()
-@
-
-<<>>=
 library(lubridate)
-library(rpart.plot)
+library(ggplot2)
 # Build a simple model to predict flight departure delay
 myFlightModel <- rpart(dep_delay ~
                          months(date) + weekdays(date) + 
                          hour + origin + dest + carrier,
                        data = flights %>% mutate(date = make_date(year, month, day)),
                        na.action = na.omit,
-                       control = rpart.control(cp = 0.001))
-# Plot the model
-rpart.plot(myFlightModel)
+                       control = rpart.control(cp = 0.0005))
 # Predict the departure delay of a new flight
 # Use shiny control widgets to capture user input
 myNewFlight <- tibble(date = make_date(2019,5,10),
@@ -3094,25 +3080,246 @@ myNewFlight <- tibble(date = make_date(2019,5,10),
                       origin="JFK",
                       dest = "SFO", 
                       carrier="AA")
-# Run the prediction - Visualise this number
+# Run the prediction
 myNewFlightDelay <- predict(myFlightModel, myNewFlight)
-
+# Visualise the prediction
 tibble(hour=0:23, dep_delay = myNewFlightDelay) %>%
   ggplot(aes(x=hour, y=dep_delay)) +
-  geom_col()+
-  
-
-plot(myNewFlightDelay, type="b")
+  geom_col() +
+  labs(x="Hours", y="Departure Delay (Minutes)")
 @
+
+\end{Exercise}
 
 \section{Writing Package}
 
-\section{Reproducible Results}
+In \verb|R|, functions are wrapped in packages so that they can be re-used and transported. All functions are documented in a standard way and usually include working examples.
+
+\begin{Exercise}[title={Create a Package}]
+
+The objective of this exercise is to create a simple R package. To launch a package template, navigate to \textbf{File > New Project > New Directory > R Package}. Enter a package name such as \verb|mypackage| then click \textbf{Create Project} as shown in figure \ref{fig:package-create}. This should launch a package template.
+
+\begin{figure}[H]
+\label{fig:package-create}
+\centering
+\includegraphics[width=\textwidth]{img/package-create.png}
+\caption{Launching an empty package template.}
+\end{figure}
+
+All functions in a package should be documented in a standard way. This can be done through the \verb|roxygen2| package. To make sure \verb|roxygen2| is enabled, navigate to \textbf{Build > Configure Build Tools} and check the box \textbf{Generate documentation with Roxygen}. Afterwards, click on \textbf{Configure} and check all boxes, this will ensure documentation is generated at all places. This is illustrated in figure \ref{fig:roxygen}.
+
+\begin{figure}[H]
+\label{fig:roxygen}
+\centering
+\includegraphics[width=\textwidth]{img/package-roxygen.png}
+\caption{Enabling roxygen2 to generate documentation}
+\end{figure}
+
+Functions are located in under the \verb|R| directory. We will create a simple function called \verb|is_even()| to check whether a given interger is even or not. Users can begin by nagivating to this directory and create a new file named \verb|is_even.R| and enter the code chunk in example \ref{ex:createfunction}.
+
+<<ex:createfunction, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+#' Checks even number
+#'
+#' \code{is_even()} returns \code{TRUE} if the input is an even number.
+#'
+#' @author James Bond \email{jbond@@universialexports.com}
+#'
+#' @param x Input integer vector.
+#' @return Logical vector
+#'
+#' @examples
+#' myNumbers <- 1:20
+#' is_even(myNumbers)
+#'
+#' @export
+is_even <- function(x) {
+  if(!is.integer(x)){
+    stop("Input is not integer")
+  }
+  return (x %% 2) == 0
+}
+@
+
+The \verb|roxygen2| package picks up tags such as \verb|@param| and turns them into standard R documentation. It is particularly important to include \verb|@export| at the end, as this will ensure the function is exported so that users can access it.
+
+Before moving on, users can open up the \verb|DESCRIPTION| file and modify the package details. It is crucial that the details are up-to-date after every code change, especially the version number.
+
+\begin{verbatim}
+Package: mypackage
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+\end{verbatim}
+
+Once user has finished editing everything, the source code is ready to be wrapped as a package. To do this, user can navigate to \textbf{Build > Check Package}. This will check the source code and ensure the code is ready for build. Afterwards, user can click on \textbf{Build > Build Source Package}, which will wrap all the code into a \verb|.tar.gz| package file. The resulting file is a standard R package which can be transported to any user on any platform.
+
+Another way to wrap the package is to click on \textbf{Build > Install and Restart}. This build the package and installs it directly into the user's library. In this case, the user can simply call the library and start using the custom functions rigth away.
+
+<<ex:buildpackage, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(mypackage)
+# This will return a logical vector
+is_even(1:20)
+# This will error
+is_even(3.141)
+# Lookup the documentation
+?is_even
+@
+
+\end{Exercise}
+
+\section{Reproducibility}
+
+The principle of reproducibility suggests that a process should always produce same results if the input remains identical. Reproducible results are crucially important for business analytics for various kind of reasons, such as compliance, quality assurance, KPI measurement... etc. The open source nature of \verb|R| and many of its packages means they get very frequent updates. There can be substantial difference between versions of the same package. 
+
+A dependency management system called \verb|packrat| can be used to ensure reproducibility. It creates a private library for the project and searches for packages only in this location. Shared library would not be used in a \verb|packrat|-enabled project, this means the project is totally isolated and updating packages in shared library would not break the project.
+
+Users can enable \verb|packrat| by navigating to \textbf{Tools > Project Options > Packages} and enable the option \textbf{Use packrat with this project}. The system will then scan for packages and put them in a private library.
+
+\begin{figure}[H]
+\label{fig:packrat}
+\centering
+\includegraphics[width=\textwidth]{img/packrat.png}
+\caption{Enabling packrat dependency management system}
+\end{figure}
 
 \chapter{Efficient Programming}
 
-\section{Memory Profile}
-\section{Multicore Processing}
+Computational power is a scarce resource, especially when most base \verb|R| functions run in memory. This chapter dives deeper into memory and CPU management. 
+
+\section{Memory Usage}
+
+All integer and numeric values in \verb|R| are stored as double-precision values. This means each number consumes \(64\) bits of system memory. Users should notice that significant figures has no effect on the object size. In other words, the values \(3.14\) and \(3.14159265359\) have identical object size. 
+
+The package \verb|pryr| can be used to track memory usage, as shown in example \ref{ex:pryrobjectsize}.
+
+<<ex:pryrobjectsize, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(pryr)
+# Displays the size of an integer value 
+# Note the trailing 'L' character, this forces the number to become an integer
+object_size(3L)
+# Significant figure of a numeric valule has no effect on object size
+# Therefore these two values have the same object size
+object_size(3.14)
+object_size(3.14159265359)
+# Creates an integer vector
+# This contains 1 million integers
+# Consumes 4 MB memory
+myBigVec <- 1:1e6
+object_size(myBigVec)
+@
+
+In general, object size grows proportionally with the length of the object. However, memory is allocated to \verb|R| objects in large blocks in exchange for faster processing. Example \ref{ex:pryrcharactersize} shows two character objects with different length having the same object size.
+
+<<ex:pryrcharactersize, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Both character objects have identical object size.
+# Each consume 120 bytes.
+object_size("My name is Bond.")
+object_size("My name is Bond, James Bond.")
+@
+
+It is important to use data type correctly in order to conserve memory. Example \ref{ex:pryrlogicalsize} compares the object size of character vector versus logical vector.
+
+<<ex:pryrlogicalsize, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Object size of logical value is much smaller than character value
+# In this case, the character vector is three time larger
+object_size(c("Yes", "No", "No", "Yes"))
+object_size(c(TRUE, FALSE, FALSE, TRUE))
+@
+
+The \verb|mem_used()| function in the \verb|pryr| package identifies the total memory used by all objects. This does not include memory used by the \verb|R| interpreter itself, the \verb|bash| shell wrapping R, nor memory used by RStudio IDE. Example \ref{ex:pryrmemused} shows how the function is used.
+
+<<ex:pryrmemused, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Returns the total memory used by all R objects
+mem_used()
+@
+
+Useful function such as \verb|mem_change()| can be used to measure how much memory was changed from an operation. This is shown in example \ref{ex:pryrmemchange}.
+
+<<ex:pryrmemchange, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Assign a large vector
+# This will consume memory (+4 MB)
+mem_change({ myBigVec <- 1:1e6 })
+# Remove a large vector
+# This releases memory (-4 MB)
+mem_change({ rm(myBigVec) })
+@
+
+\section{Profiling}
+
+\verb|R| code can be profiled to identify the memory and execution time bottleneck. The package \verb|profvis| works with RStudio IDE to offer an interactive interface for visualising profile data. 
+
+The \verb|profvis()| function wraps an \verb|R| operation inside a set of curly brackets \verb|{}|, as shown in example \ref{ex:profvis}. This example generates some random numbers, runs a simple linear regression model and view the model summary.
+
+<<ex:profvis, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(profvis)
+profvis({
+  # Generate some random numbers from normal distribution
+  myDataX <- rnorm(1e6)
+  myDataY <- rnorm(1e6)
+  # Run a linear model
+  myModel <- lm(myDataY ~ myDataX)
+  # View the model summary
+  summary(myModel)
+})
+@
+
+This produces an interactive output with two parts, shown in figure \ref{ex:profvis}. The top part is the code with the profiled memory and time. It shows how much memory was allocated (positive) and deallocated (negative) by the function call. The bottom part is a flame graph which shows the call stack. The time spent in each call stack is indicated by the width of the block. 
+
+\begin{figure}[H]
+\label{fig:profvis}
+\centering
+\includegraphics[width=\textwidth]{img/profvis.png}
+\caption{Flame graph of profiling output}
+\end{figure}
+
+\section{Multithreaded Processing}
+
+Base \verb|R|\footnote{GNU-R} was historically designed to run in a single thread. Today, many computers have multiple cores or even multiple sockets. To make use of the computational power, many functions in \verb|R| can be parallelised on a multi-core system for faster processing. 
+
+Microsoft R Open (MRO)\footnote{\url{https://mran.microsoft.com/open}} is a popular distribution of \verb|R| which offers multithreaded processing. It uses Intel Math Kernel Library (MKL) which provides BLAS and LAPACK subroutines. This allows key mathematical operations to be performed on all threads.
+
+Example \ref{ex:mklthreads} shows how to detect and change MKL threads in MRO. There is no need to modify the MKL thread number under normal circumstances.
+
+<<ex:mklthreads, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Detects how many threads are in use
+getMKLthreads()
+# Change to 4 threads
+setMKLthreads(4)
+@
+
+Multithreading can also be used to optimise \verb|apply()| family functions and \verb|for| loops. Examples \ref{ex:parallel1} and \ref{ex:parallel2} show a simple \verb|sapply()| function can be executed using the \verb|parSapply()| function in the \verb|parallel| package. It sets up a cluster of workers which runs simuteanously, where code is executed in parallel. The cluster is stopped to release resources once the work has finished.
+
+<<ex:parallel1, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+system.time({
+  sapply(1:10, function(x) {Sys.sleep(0.25)})
+})
+@
+
+
+<<ex:parallel2, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(parallel)
+system.time({
+  # Detect how many cores are available on the system
+  myCores <- detectCores()
+  # Create a parallel cluster
+  # Use 25% of the cores
+  myCluster <- makeCluster(floor(myCores * 1/4))
+  # Run the same process on multicore
+  parSapply(myCluster, 1:10, function(x) {Sys.sleep(0.25)})
+  # Stop the cluster
+  stopCluster(myCluster)
+})
+@
+
+Multithreaded processes may cause serious issue on multi-user systems, as users may compete for computational resources at the same time. Besides, using many threads simultaneously for long-running code may block other processes. This should always be used with great care.
 
 \chapter{Distributed Computing}
 
