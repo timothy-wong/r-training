@@ -3323,7 +3323,21 @@ Multithreaded processes may cause serious issue on multi-user systems, as users 
 
 \chapter{Distributed Computing}
 
+Very large datasets which cannot fit in memory need to be processed differently. There are several big data tools which supports large-scale processing. The simpliest way is to carve up the large dataset into smaller chunks and process them seperately. Once completed, the overall results can be reconstructed. 
+
+A slightly more advanced way is to process natively in a Hadoop cluster which hosts the large dataset. There are plenty of algorithms which can be executed on Hadoop, these are mainly provided by Microsoft Machine Learning Server and Apache Spark MLlib.
+
 \section{Apache Spark}
+
+Apache Spark can be accessed in \verb|R| via the \verb|sparklyr| package, which supports the full \verb|dplyr| pipeline. Ideally, Spark can run on a YARN cluster to maximise the benefits of distributed computing. It also supports local mode which runs on a single host.
+
+In Spark, source data can accessed through different ways. Local data in CSV format can be accessed directly. Alternatively, CSV files can be uploaded to HDFS and read from there.
+
+The script in example \ref{} launches a Spark connection in local mode. 
+
+It points to a user-specified database using the function tbl_change_db(). It then points to a specific table with the function tbl(). The returned object is compatible with the dplyr framework.
+
+
 \section{Microsoft Machine Learning Server}
 
 
