@@ -45,11 +45,5 @@ myPlot %>% ggplotly(tooltip = "name")
 Essential gadgets are required for Health and Safety reasons:
 
 * Rocket launchers (_front_ and _back_)
-* Ejectable seats
+* **Ejectable** seats
 * Bulletproof screen
-
-## Results
-
-Despite the vehicle have outstanding performance, they are not
-fitted with essential health and safety equipment. As a result,
-none of them pass the assessment. 
