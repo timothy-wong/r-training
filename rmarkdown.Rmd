@@ -1,7 +1,6 @@
 ---
 title: "Car Assessment Report"
 author: "James Bond"
-date: "31 December, 2017"
 output: html_document
 ---
 Vehicle Analysis
@@ -22,7 +21,7 @@ mtcars %>%
 The following graph shows that these cars have impressive
 **horsepower** and **1/4 mile time**.
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Create a ggplot
 library(ggplot2)
 myPlot <- mtcars %>%
@@ -45,5 +44,5 @@ myPlot %>% ggplotly(tooltip = "name")
 Essential gadgets are required for Health and Safety reasons:
 
 * Rocket launchers (_front_ and _back_)
-* **Ejectable** seats
+* Ejectable seats
 * Bulletproof screen

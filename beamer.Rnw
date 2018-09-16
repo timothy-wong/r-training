@@ -32,12 +32,14 @@
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
 \title{
+  \textbf{Business Analytics in R} \\
   Introduction to Statistical Programming
 }
-\author{
-  Timothy Wong\thanks{\url{timothy.wong@hotmail.co.uk}} \\
-  James Gammerman\thanks{\url{jgammerman@gmail.com}}
-}
+% \author{
+%   Timothy Wong\thanks{\url{timothy.wong@hotmail.co.uk}} \\
+%   James Gammerman\thanks{\url{jgammerman@gmail.com}}
+% }
+
 <<setup, include=FALSE>>=
 library(checkpoint)
 checkpoint(snapshotDate = '2018-08-01', 
@@ -112,7 +114,7 @@ checkpoint(snapshotDate = '2018-08-01',
 installed.packages()
 # Install a new package and all its dependencies from CRAN
 # This will install to the default library location
-install.packages("ggplot2", dependencies = TRUE)
+install.packages("ggplot2")
 # Load an installed package 
 # (both lines are identical)
 library(ggplot2)
@@ -142,6 +144,10 @@ myVarY <- 20
 myVarX * myVarY
 # Look at the reserved words
 ?Reserved
+# Different variable naming conventions
+myCamalCaseVar <- "this is camal case"
+my.dot.case.var <- "this is dot case"
+my_snake_case_var <- "this is snake case"
 @
 \end{frame}
 
@@ -590,16 +596,16 @@ myMessages3
 <<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', cache=TRUE>>=
 # Vectorised operation is fast
 system.time({
-  myResult <- 1:10000 * 2
+  myResult <- 1:100000 * 2
 })
 # Looping is quite slow
 system.time({
-  myResult <- sapply(1:10000, function(x){ x * 2 })
+  myResult <- sapply(1:100000, function(x){ x * 2 })
 })
 # Appending to vector is much slower
 system.time({
   myResult <- c()
-  for(i in 1:10000){
+  for(i in 1:100000){
     myResult <- c(myResult, i * 2)
   }
 })
@@ -634,6 +640,20 @@ system.time({
     \item European R User Meeting (ERUM) \\
     \includegraphics[width=0.2\textwidth]{img/erumconf.JPG}
 
+  \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[shrink]{Domain-specific Communities}
+  \begin{itemize}
+    \item R in Insurance - \includegraphics[width=0.2\textwidth]{img/rinsurance.PNG}
+    \item Applied Finance with R - \includegraphics[width=0.2\textwidth]{img/rfinance.PNG}
+    \item R/Pharma - \includegraphics[width=0.2\textwidth]{img/rpharma.PNG}
+    \item R/Medicine - \includegraphics[width=0.2\textwidth]{img/rmedicine.PNG}
+    \item NHS-R - \includegraphics[width=0.2\textwidth]{img/nhsr.PNG}
+    \item R-ladies - \includegraphics[width=0.1\textwidth]{img/rladies.PNG}
+    
   \end{itemize}
 \end{frame}
 
@@ -1729,6 +1749,324 @@ multiplot(plotlist = plt, cols = 8)
 @
 \end{frame}
 
+\section{Extending R}
 
+\begin{frame}[fragile]{R Markdown}
+  \begin{itemize}
+    \item Generate documents and reports easily
+    \item Has special file extension \verb|.Rmd| 
+    \item Contains three types of content:
+    \item
+    \begin{description}
+      \item[YAML header] Surrounded by \verb|---| at the top of the document. Users can specify key parameters here, such as output format, 
+      \item[Text] Standard Markdown format.
+      \item[Code chunk] Surrounded by \verb|```|, optional arguments can be provided in the trailing curly bracket \verb|{}|.
+    \end{description}
+    \item Can be converted to output through \textbf{Knit}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{R Notebook}
+  \begin{itemize}
+    \item Similar to R Markdown.
+    \item Only difference is \verb|output: html_notebook|.
+    \item Conde chunks can execute independently and interactively.
+    \item It renders through \textbf{Preview} rather than \textbf{Knit}.
+    \item Good way to document workflow.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Shiny Web Application}
+  \begin{itemize}
+    \item Interactive web applications
+    \item Non-technical users can access analytics in real-time
+    \item All written in \verb|R| - no \verb|HTML|, \verb|CSS|, \verb|JavaScript|.
+    \item Shiny has two main components:
+    \item
+    \begin{description}
+      \item [ui] This defines the user interface (UI) for the \verb|shiny| application, e.g. the page layout, location of control widgets, page title, etc.
+      \item [server] The server-side application which contains the logic. The analytical code is located in this part.
+    \end{description}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Shiny App Example}
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{img/shiny.PNG}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Control Widgets}
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{img/shiny-inputs.PNG}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Writing Package}
+  \begin{itemize}
+    \item Functions are wrapped in packages.
+    \item Can be reused and transported.
+    \item Standardised \verb|R| documentation.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Create a New Package}
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{img/package-create.png}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[shrink, fragile]{Roxygen2-style documentation}
+<<eval=FALSE, size='scriptsize', rexample=TRUE>>=
+#' Checks even number
+#'
+#' \code{is_even()} returns \code{TRUE} if the input is an even number.
+#'
+#' @author James Bond \email{jbond@@universialexports.com}
+#'
+#' @param x Input integer vector.
+#' @return Logical vector
+#'
+#' @examples
+#' myNumbers <- 1:20
+#' is_even(myNumbers)
+#'
+#' @export
+is_even <- function(x) {
+if(!is.integer(x)){
+stop("Input is not integer")
+}
+return (x %% 2) == 0
+}
+@
+\end{frame}
+
+\section{Efficient Programming}
+
+\begin{frame}[fragile]{Memory Usage}
+  \begin{itemize}
+    \item All real numbers are stored as double-precision values.
+    \item Size of object grows \textit{almost} proportionally with vector length.
+    \item The package \verb|pryr| can be used to track memory usage.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Object Size}
+<<eval=TRUE,message=FALSE,warning=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
+library(pryr)
+# Displays the size of an integer value 
+# Note the trailing 'L' character, this forces the number to become an integer
+object_size(3L)
+# Significant figure of a numeric valule has no effect on object size
+# Therefore these two values have the same object size
+object_size(3.14)
+object_size(3.14159265359)
+# Creates an integer vector
+# This contains 1 million integers
+# Consumes 4 MB memory
+myBigVec1 <- 1:1e6
+object_size(myBigVec1)
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Object Size}
+<<eval=TRUE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
+# Both character objects have identical object size.
+# Each consume 120 bytes.
+object_size("My name is Bond.")
+object_size("My name is Bond, James Bond.")
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Memory Use}
+  \begin{itemize}
+    \item Using the correct data type can save memory.
+    \item Object size of logical value is much smaller than character value.
+    \item In this case, the character vector is three time larger.
+  \end{itemize}
+<<eval=TRUE, message=FALSE, error=FALSE>>=
+object_size(c("Yes", "No", "No", "Yes"))
+object_size(c(TRUE, FALSE, FALSE, TRUE))
+@
+\end{frame}
+
+
+\begin{frame}[fragile, shrink]{Tracking Memory Change}
+  \begin{itemize}
+    \item Track memory used by objects using \verb|mem_used()|
+  \end{itemize}
+<<eval=TRUE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
+# Returns the total memory used by all R objects
+mem_used()
+# Assign a large vector
+# This will consume memory (+4 MB)
+mem_change({ myBigVec2 <- 1:1e6 })
+# Remove a large vector
+# This releases memory (-4 MB)
+mem_change({ rm(myBigVec2) })
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Memory Profiling}
+  \begin{itemize}
+    \item Memory profile can be used to identify process bottleneck.
+    \item Package \verb|profvis| can help.
+  \end{itemize}
+<<eval=FALSE,message=FALSE,warning=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
+library(profvis)
+profvis({
+# Generate some random numbers from normal distribution
+myDataX <- rnorm(1e6)
+myDataY <- rnorm(1e6)
+# Run a linear model
+myModel <- lm(myDataY ~ myDataX)
+# View the model summary
+summary(myModel)
+})
+@
+\end{frame}
+
+\begin{frame}[shrink]{Flame Graph}
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{img/profvis.png}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Multithreaded Processing}
+  \begin{itemize}
+    \item \verb|R| was historically designed to run in a single thread.
+    \item Parallelism has to be explicitly called.
+    \item Microsoft R Open (MRO) extends \verb|R| by using Intel Math Kernel Library (MKL) for BLAS/LAPACK operations. This enables multithreaded math operations.
+    \item For custom \verb|R| code, users can access CPU cores using the package \verb|parallel|.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Setting MKL Threads}
+<<eval=FALSE,message=FALSE,warning=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
+# Detects how many threads are in use
+getMKLthreads()
+# Change to 4 threads
+setMKLthreads(4)
+# Reset to system default value
+setMKLthreads()
+@
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Multithreaded R Code}
+  <<eval=TRUE,message=FALSE,warning=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
+# Standard apply family
+system.time({
+  sapply(1:10, function(x) {Sys.sleep(0.25)})
+})
+
+# Parallel apply
+library(parallel)
+system.time({
+  # Detect how many cores are available on the system
+  myCores <- detectCores()
+  # Create a parallel cluster
+  # Use 25% of system cores
+  myCluster <- makeCluster(floor(myCores * 1/4))
+  # Run the same process on multicore
+  parSapply(myCluster, 1:10, function(x) {Sys.sleep(0.25)})
+  # Stop the cluster
+  stopCluster(myCluster)
+})
+@
+\end{frame}
+
+\section{Distributed Computing}
+
+\begin{frame}{Big Data Processing}
+  \begin{itemize}
+    \item Large datasets cannot fit in memory
+    \item There are several solutions:
+    \begin{itemize}
+      \item Store the dataset on hard drive instead, and process by smaller chunk (Only load the smaller chunks into memory).
+      \item Distribute the workload on a large cluster.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Apache Spark}
+\begin{description}
+
+  \item [Standalone] This is also known as local mode. The driver and executors run on the client machine. Although there is no distribution of computing process, prototyping and debugging in local mode is more convinient.
+  
+  <<eval=FALSE, size='scriptsize',rexample=TRUE>>=
+  library(sparklyr)
+  library(dplyr)
+  # Opens the Spark connection through sparklyr
+  # Using standalone mode (local master)
+  mySparkConn <- spark_connect(master = "local")
+  # Checks whether the connection is opened
+  mySparkConn %>% connection_is_open()
+  # Checks Spark version
+  mySparkConn %>% spark_version()
+  @
+
+  \item [YARN Client]
+  Spark driver is launched in the same process as the client that submits the application. Resource allocation is done by YARN Resource Manager (RM) based on data locality. Driver program on client machine controls the executors on YARN cluster.
+  
+  \item [YARN Cluster] The Spark client submits an application to the YARN cluster. Both the driver and executors run on the YARN cluster.
+  
+\end{description}
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Spark MLlib in R}
+<<ex:sparkdplyr, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(sparklyr)
+library(dplyr)
+library(nycflights13)
+mySparkConn <- spark_connect(master = "local")
+# Converts an R object into Spark DataFrame
+flights_tbl <- mySparkConn %>% copy_to(flights)
+# Runs dplyr pipeline on Spark
+# It returns a Spark DataFrame
+myFlightsSummary <- flights_tbl %>%
+  group_by(year, month) %>%
+  summarise(avg_dep_delay = mean(dep_delay, na.rm = TRUE)) %>%
+  arrange(year, month)
+  # Print it out on the console
+myFlightsSummary
+@
+\end{frame}
+
+\begin{frame}[fragile]{Microsoft Machine Learning Server (MLS)}
+  \begin{itemize}
+    \item Data is stored on file system
+    \item Runs on multiple compute context
+    \item Uses \verb|XDF| file format: compressed small chunks
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, shrink]{Loading Data into MLS}
+<<eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(nycflights13)
+# Configure the compute context
+# It works parallel
+rxOptions(numCoresToUse = 4)
+rxSetComputeContext(RxLocalParallel())
+# Creates a pointer to a local XDF file
+myFlightsClean <- RxXdfData("flight_clean.xdf")
+# Clean the dataset by removing NA values
+# Also chop it into smaller chunks
+rxDataStep(inData = flights,
+           outFile = myFlightsClean,
+           overwrite = TRUE,
+           rowsPerRead = 50000,
+           removeMissings = TRUE)
+# Run a simple histogram
+rxHistogram(~ dep_delay_log | origin,
+            myFlightsClean,
+            transforms = list(dep_delay_log = log(dep_delay),
+                              origin = factor(origin)))
+@
+\end{frame}
 
 \end{document}

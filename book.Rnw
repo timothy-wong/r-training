@@ -180,7 +180,7 @@ The function \verb|install.packages()| can be used to install new packages from 
 installed.packages()
 # Install a new package and all its dependencies from CRAN
 # This will install to the default library location
-install.packages("ggplot2", dependencies = TRUE)
+install.packages("ggplot2")
 # Load an installed package 
 # (both lines are identical)
 library(ggplot2)
@@ -204,6 +204,11 @@ myVarY <- 20
 myVarX * myVarY
 # Look at the reserved words
 ?Reserved
+# Different variable naming conventions
+myCamalCaseVar <- "this is camal case"
+my.dot.case.var <- "this is dot case"
+my_snake_case_var <- "this is snake case"
+
 @
 
 \section{Vector}
@@ -580,13 +585,9 @@ There are other useful members in the apply family, such as \verb|vapply()|,  \v
 \label{tab:applyfunctions}
 \end{table}
 
-\section{Efficient Looping}
-
 Vectorisation can speed up code very significantly, therefore it is always a good idea to vectorise code for maximum performance.
 
-In \verb|R|, looping can sometimes be slow. This is because loops and standard \verb|apply| functions are executed in serial. Parallelism can be used to solve this problem.
-
-Moreover, \verb|R| objects are stored in memory. If the operation in the loop is altering the size of object, it will force \verb|R| to reallocate the object to a new memory address. For this reason, avoid modifying object size in loops can always speed up the code.
+In \verb|R|, looping can be slow because they are not vectorised. Moreover, \verb|R| objects are stored in memory. If the operation in the loop is altering the size of object, it will force \verb|R| to reallocate the object to a new memory address. For this reason, avoid modifying object size in loops can always speed up the code.
 
 In example \ref{ex:looping}, the \verb|system.time()| function is used to capture the total time used to execute the code. The curly brackets \verb|{}| wraps multi-line code as one single expression. 
 
@@ -3206,8 +3207,8 @@ object_size(3.14159265359)
 # Creates an integer vector
 # This contains 1 million integers
 # Consumes 4 MB memory
-myBigVec <- 1:1e6
-object_size(myBigVec)
+myBigVec1 <- 1:1e6
+object_size(myBigVec1)
 @
 
 In general, object size grows proportionally with the length of the object. However, memory is allocated to \verb|R| objects in large blocks in exchange for faster processing. Example \ref{ex:pryrcharactersize} shows two character objects with different length having the same object size.
@@ -3240,10 +3241,10 @@ Useful function such as \verb|mem_change()| can be used to measure how much memo
 <<ex:pryrmemchange, eval=FALSE, size='scriptsize',rexample=TRUE>>=
 # Assign a large vector
 # This will consume memory (+4 MB)
-mem_change({ myBigVec <- 1:1e6 })
+mem_change({ myBigVec2 <- 1:1e6 })
 # Remove a large vector
 # This releases memory (-4 MB)
-mem_change({ rm(myBigVec) })
+mem_change({ rm(myBigVec2) })
 @
 
 \section{Profiling}
@@ -3287,6 +3288,8 @@ Example \ref{ex:mklthreads} shows how to detect and change MKL threads in MRO. T
 getMKLthreads()
 # Change to 4 threads
 setMKLthreads(4)
+# Reset to system default value
+setMKLthreads()
 @
 
 Multithreading can also be used to optimise \verb|apply()| family functions and \verb|for| loops. Examples \ref{ex:parallel1} and \ref{ex:parallel2} show a simple \verb|sapply()| function can be executed using the \verb|parSapply()| function in the \verb|parallel| package. It sets up a cluster of workers which runs simuteanously, where code is executed in parallel. The cluster is stopped to release resources once the work has finished.
@@ -3304,7 +3307,7 @@ system.time({
   # Detect how many cores are available on the system
   myCores <- detectCores()
   # Create a parallel cluster
-  # Use 25% of the cores
+  # Use 25% of system cores
   myCluster <- makeCluster(floor(myCores * 1/4))
   # Run the same process on multicore
   parSapply(myCluster, 1:10, function(x) {Sys.sleep(0.25)})
@@ -3313,7 +3316,8 @@ system.time({
 })
 @
 
-Multithreaded processes may cause serious issue on multi-user systems, as users may compete for computational resources at the same time. Besides, using many threads simultaneously for long-running code may block other processes. This should always be used with great care.
+Multithreading does not always guarentee top speed. This is because it has very significant overhead due to starting and closing the threads. In addition, multithreaded processes may cause serious issue on multi-user systems, as users may compete for computational resources at the same time. Besides, using many threads simultaneously for long-running code may block other processes. This should always be used with great care.
+
 
 \chapter{Distributed Computing}
 
