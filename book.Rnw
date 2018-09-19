@@ -82,6 +82,7 @@ knit_hooks$set(rexample = function(before, options, envir) {
 }
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 % \SweaveOpts{concordance=TRUE}
 \frontmatter
 \maketitle
@@ -766,7 +767,7 @@ Find all flights in the \verb|flights| dataset that:
 \item Were operated by United (\verb|UA|), American (\verb|AA|) or Delta (\verb|DL|).
 \item Departed in summer (July, August and September)
 \item Arrived more than two hours late, but did not leave late.
-\item Were delayed by at least an hour, but made up over \(30\) minutes in flight.
+\item Had a departure delay of least an hour, but made up over \(30\) minutes in flight.
 \item How many flights have a missing \verb|dep_time|? What other variables are missing?
 \end{enumerate}
 
