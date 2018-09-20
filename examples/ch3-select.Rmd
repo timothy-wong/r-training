@@ -1,0 +1,123 @@
+---
+title: "Ch3 - Data Transformation - Select()"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## SELECT ()
+
+### Examples
+
+
+```{r}
+# load the required packages
+library(dplyr)
+library(nycflights13)
+
+# Select columns by name
+select(flights, year, month, day)
+
+# Select all columns between ‘year’ and ‘day’ (inclusive)
+select(flights, year:day)
+
+# Select all columns except those from year to day (inclusive)
+select(flights, -(year:day))
+
+# Rename a variable using rename()
+rename(flights, tail_num = tailnum)
+
+# Reorder columns using the everything() helper
+select(flights, time_hour, air_time, everything())
+
+```
+
+### Exercises
+
+1) Can you find two ways to select dep_time, dep_delay, arr_time and arr_delay from the flights dataset in one line of code?
+
+
+
+i) Specifying all the variables with unquoted variable names:
+```{r}
+select(flights, dep_time, dep_delay, arr_time, arr_delay)
+
+```
+
+
+ii) Specifying all the variables as strings.
+
+```{r}
+select(flights, "dep_time", "dep_delay", "arr_time", "arr_delay")
+```
+
+
+iii) Specifying the column numbers of the variables (not good - what if they change?!).
+
+
+```{r}
+select(flights, 4, 5, 6, 9)
+```
+
+
+iv) Specifying the names of the variables with character vector and one_of()
+
+```{r}
+select(flights, one_of(c("dep_time", "dep_delay", "arr_time", "arr_delay")))
+
+```
+
+v) Selecting the variables by matching the start of their names using starts_with().
+
+```{r}
+select(flights, starts_with("dep_"), starts_with("arr_"))
+```
+
+
+vi) Selecting the variables using matches() and regular expressions
+
+```{r}
+select(flights, matches("^(dep|arr)_(time|delay)$"))
+```
+
+
+##################################################################################
+##################################################################################
+
+2. What happens if you include the name of a variable multiple times in a select() call?
+
+
+
+The select() call ignores the duplication. Any duplicated variables are only included once, in the first location they appear. The select() function does not raise an error or warning or print any message if there are duplicated variables
+```{r}
+select(flights, year, month, day, year, year)
+
+```
+
+This behavior is useful because it means that we can use select() with everything() in order to easily change the order of columns without having to specify the names of all the columns.
+
+```{r}
+select(flights, arr_delay, everything())
+```
+
+##################################################################################
+##################################################################################
+
+3) Run the following code: select(flights, contains("TIME")). Note the result. What happens when you add the argument ignore.case = TRUE in the contains() function? What does this tell you about this helper function?
+
+Let's compare the output from the two:
+
+```{r}
+select(flights, contains("TIME"))
+
+```
+
+
+The default behavior for contains() is to ignore case. Compare with the below:
+
+```{r}
+select(flights, contains("TIME", ignore.case = FALSE))
+```
+
