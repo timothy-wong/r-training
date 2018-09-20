@@ -144,10 +144,13 @@ myVarY <- 20
 myVarX * myVarY
 # Look at the reserved words
 ?Reserved
-# Different variable naming conventions
+# Camal case
 myCamalCaseVar <- "this is camal case"
+# Other less commonly-used styles
+my_snake_case_var <- "this is lower snake case"
+MY_UPPER_SNAKE_CASE_VAR <- "this is upper snake case"
 my.dot.case.var <- "this is dot case"
-my_snake_case_var <- "this is snake case"
+MyPascalCaseVar <- "this is pascal case"
 @
 \end{frame}
 
