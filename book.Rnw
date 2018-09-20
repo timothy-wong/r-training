@@ -82,7 +82,6 @@ knit_hooks$set(rexample = function(before, options, envir) {
 }
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 % \SweaveOpts{concordance=TRUE}
 \frontmatter
 \maketitle
@@ -121,6 +120,12 @@ The \LaTeX\xspace source code and the compiled PDF version of this book can be d
 \begin{itemize}
 \item A special word of thanks goes to the open source R community.
 \item Some of the examples in \autoref{ch:datatransformation} were adopted from Wickham and Grolemund's book~\cite{wickham}.
+\item Thanks to all contributors for reviewing this book:
+  \begin{itemize}
+    \item Artemis Maipa
+    \item Phuong Pham
+    \item Laura Shemilt
+  \end{itemize}
 \end{itemize}
 % \mbox{}\\
 % \mbox{}\\
@@ -132,32 +137,32 @@ The \LaTeX\xspace source code and the compiled PDF version of this book can be d
 
 \chapter{R Ecosystem}
 
-\verb|R| is a language for statistical programming. The language is open source and free for personal, academic and commerical use. It is available on multiple platforms including Windows, Linux and MacOS. In recent years, \verb|R| has gained popularity and became one of the fastest growing programming languages in the world\footnote{\url{https://stackoverflow.blog/2017/10/10/impressive-growth-r/}}. In this chapter, we will go through the basics of \verb|R|.
+\verb|R| is a language for statistical programming. The language is open source and free for personal, academic and commerical use. It is available on multiple platforms including Windows, Linux and MacOS. In recent years, \verb|R| has gained popularity and become one of the fastest growing programming languages in the world\footnote{\url{https://stackoverflow.blog/2017/10/10/impressive-growth-r/}}. In this chapter, we will go through the basics of \verb|R|.
 
 \section{Programming Enviornment}
 
 RStudio\footnote{\url{https://www.rstudio.com}} is a popular Integrated Development Environment (IDE) for the \verb|R| language. It is a very powerful editor which enables programmers to interact with the \verb|R| language. RStudio is open-sourced and the desktop version is free for personal use. 
 
-Inside RStudio, the display is divided into different tabs which user can customise. The following ones are particularly important:
+Inside RStudio, the display is divided into different tabs which users can customise. The following ones are particularly important:
 
 \begin{description}
   \item [Source Editor]
-  Inside RStudio, users can access the source editor for \verb|R| code. This can be treated as a powerful text editor for various forms of R code, such as standard \verb|R| Script, \verb|R| Markdown, \verb|R| Notebook, \verb|R| Sweave and \verb|shiny| etc. The source editor does not execute any code, it purely helps user edit it efficiently.
+  Inside RStudio, users can access the source editor for \verb|R| code. This can be treated as a powerful text editor for the various forms of R code, such as standard \verb|R| Script, \verb|R| Markdown, \verb|R| Notebook, \verb|R| Sweave and \verb|shiny| etc. The source editor does not execute any code, it purely helps users edit it efficiently.
   
   \item [Console]
-  The \verb|R| interpreter is shown in the Console window. This is the place where \verb|R| code is processed. User can highlight a segment of \verb|R| code in the main text editor and press \verb|Ctrl + Enter| to send it to execution. Once the code is sent, it will execute in the \verb|R| interpreter and the results will be displayed. Alternatively, user can just place the blinking cursor on a line and press the same keys. This sends the entire line to the interpreter for execution. User can press \verb|Ctrl + L| to clear existing screen output.
+  The \verb|R| interpreter is shown in the Console window. This is the place where \verb|R| code is processed. User can highlight a segment of \verb|R| code in the main text editor and press \verb|Ctrl + Enter| to send it to execution. Once the code is sent, it will be executed in the \verb|R| interpreter and the results will be displayed. Alternatively, users can just place the blinking cursor on a line and press the same keys. This sends the entire line to the interpreter for execution. Users can press \verb|Ctrl + L| to clear existing screen output.
   
   \item [Environment]
-  User can access all the variables created in the current \verb|R| session. The workspace which includes all variables can be exported as \verb|.RData| file in the environment window. User can also import workspace from an existing \verb|.RData| file.
+  Users can access all the variables created in the current \verb|R| session. The workspace which includes all variables can be exported as \verb|.RData| file in the environment window. Users can also import workspace from an existing \verb|.RData| file.
   
   \item [Files]
-  It allows users to browse files on the local storage system. User can navigate to their own home directory using the \verb|~| path.
+  It allows users to browse files on the local storage system. Users can navigate to their own home directory using the \verb|~| path.
   
   \item [Plots]
   All graphical outputs produced by the \verb|R| interpreter are displayed in the plots tab. Users can export the graph as file in this tab.
   
   \item [Packages]
-  User can view the installed packages in this tab and load them manually.
+  Users can view the installed packages in this tab and load them manually.
   
   \item [Help]
   Documentation can be searched and viewed in this tab. Users can open documentation of a particular function using \verb|?| character in the interpreter. For instance, \verb|?sum| will open up the documentation for the \verb|sum()| function. 
@@ -193,9 +198,11 @@ The number of packages on CRAN has grown exponentially in the past few years. To
 \chapter{Programming Concepts}
 
 
-In \verb|R|, everything begins with variables. User can assign value to variable using the \verb|<-| symbol. The \verb|#| character is used for commenting. 
+In \verb|R|, everything begins with variables. Users can assign value to variable using the \verb|<-| symbol. The \verb|#| character is used for commenting. 
 
-To name a variable, it is very common to name variables in \verb|R| using the 'camel case' convention. Sometimes 'snake case' and 'dot case' are also used. When create a new variable, it is important to avoid using reserved words. Reserved words can be checked by running the command \verb|?Reserved|.
+To name a variable, it is very common to name variables in \verb|R| using the 'camel case' convention. Sometimes 'snake case' and 'dot case' are also used. There is a detailed journal article~\cite{baaaath2012state} explaining the rationale behind each naming style.
+
+When creating a new variable, it is important to avoid using reserved words. Reserved words can be checked by running the command \verb|?Reserved|.
 
 <<ex:assignvariable, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Assign variables
@@ -205,16 +212,18 @@ myVarY <- 20
 myVarX * myVarY
 # Look at the reserved words
 ?Reserved
-# Different variable naming conventions
+# Camal case
 myCamalCaseVar <- "this is camal case"
+# Other less commonly-used styles
+my_snake_case_var <- "this is lower snake case"
+MY_UPPER_SNAKE_CASE_VAR <- "this is upper snake case"
 my.dot.case.var <- "this is dot case"
-my_snake_case_var <- "this is snake case"
-
+MyPascalCaseVar <- "this is pascal case"
 @
 
 \section{Vector}
 
-\verb|R| is a vectorised programming language. Vector of consecutive integers can be created using the \verb|:| character. Alternatively, vector of discrete values can be created using the function \verb|c()|. All elements of a vector must have the same data type.
+\verb|R| is a vectorised programming language. A vector of consecutive integers can be created using the \verb|:| character. Alternatively, a vector of discrete values can be created using the function \verb|c()|. All elements of a vector must have the same data type.
 
 <<ex:createvectors, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Create a vector of integers one to ten
@@ -234,7 +243,7 @@ myVec4 <- c(`New York` = 8.5,
             `Moscow` = 11.9)
 @
 
-Users can select elements of a vector by subsetting using index number. In \verb|R|, index number starts from \(1,2,3,...\). For example, \verb|myVec2[2]| will return the second element of the vector.
+Users can select elements of a vector by subsetting using index number. In \verb|R|, index numbers start from \(1,2,3,...\). For example, \verb|myVec2[2]| will return the second element of the vector.
 
 <<ex:subsetting, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Select the second element of the vector
@@ -258,9 +267,9 @@ myVec1 ^ 2
 log(myVec1)
 @
 
-\section{Data Types}
+\section{Character and Datetime}
 
-Users can create vectors of other data types easily in \verb|R|. Example \ref{ex:arithmetic} shows how to create character vector, date vector and \verb|POSIXct|(date/time) vector.
+Users can create vectors of other data types easily in \verb|R|. Example \ref{ex:arithmetic} shows how to create a character vector, a date vector and a \verb|POSIXct|(date/time) vector.
 
 <<ex:datatypevector, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Vector can contain character objects
@@ -292,9 +301,32 @@ myVec7 <- myVec6 + hours(1) + minutes(30)
 weekdays(myVec7)
 @
 
-\section{Logical operators}
+\section{Factor}
 
-Logical operators can be applied on vector objects. It always returns a vector of logical values with the same length of the input vector. Examples \ref{ex:logical} 
+Categorical data can be represented in \verb|R| using \verb|factor|. This is an efficient to store repetitive values. 
+
+Factors can either be ordered or unordered. Ordered factors can be compared using logical operators.
+
+<<ex:factor, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Create an ordered  factor variable
+myFactor <- factor(c(1, 3, 3, 2, 2, 1, 2, 3),
+                   levels = c(1, 2, 3),
+                   labels = c("Low", "Medium", "High"),
+                   ordered = TRUE)
+# Print the factor
+myFactor
+# Check the number of levels in the factor variable
+nlevels(myFactor)
+# Print the labels of the factors
+levels(myFactor)
+# Compare the levels of individual observations
+myFactor[1] > myFactor[2]
+myFactor[2] > myFactor[1]
+@
+
+\section{Logical Operator}
+
+Logical operators can be applied on vector objects. It always returns a vector of logical values with the same length as the input vector. Examples \ref{ex:logical} 
 
 <<ex:logical, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Find all values greater than 5 - returns a vector of logical values 
@@ -311,9 +343,9 @@ myVec1 == 7 | myVec1 == 8
 
 \section{Special Numbers}
 
-There are special numbers in \verb|R|, which are shown in Example \ref{ex:specialnumbers}. For instance, the variable \verb|pi| is a constant \(3.14159...\). In most cases, missing values are usually indicated as \verb|NA| (Not Available). All operations involving \verb|NA| input always produce \verb|NA| output.
+There are special numbers in \verb|R|, which are shown in Example \ref{ex:specialnumbers}. For instance, the variable \verb|pi| is a constant \(3.14159...\). In most cases, missing values are usually indicated as \verb|NA| (Not Available). All operations involving an \verb|NA| input always produce an \verb|NA| output.
 
-On the other hand, values returned by computational error are \verb|NaN| (Not-a-Number). Whereas mathematical infinities are indicated by \verb|Inf| and \verb|-Inf| respectively.
+On the other hand, values returned by computational error are \verb|NaN| (Not-a-Number). Mathematical infinities are indicated by \verb|Inf| and \verb|-Inf|.
 
 <<ex:specialnumbers, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Pi is constant 3.14159...
@@ -332,7 +364,7 @@ c(5, 10, 15, NA, 25, 30, NaN, 35, 40, Inf, 50, -Inf, 60) / 5
 
 \section{List}
 
-Objects with different data types can be held together by a \verb|list|. Example \ref{ex:list} illustrates a list containing objects of several data types. Elements of a \verb|list| can be optionally named for easier subsetting.
+Objects with different data types can be held together in a \verb|list|. Example \ref{ex:list} illustrates a list containing objects of several data types. Elements of a \verb|list| can be optionally named for easier subsetting.
 
 <<ex:list, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 myFavBook <- list(`title` = "R for Data Science",
@@ -353,7 +385,7 @@ myFavBook[[4]]
 
 \section{Data Frame and Tibble}
 
-A data frame is a list of variables of the same number of rows with unique row names. In many cases, dataset extracted from CSV file or SQL server are returned as a data frame object. Example \ref{ex:dataframe} demonstrates how to construct a data frame.
+A data frame is a list of variables of the same number of rows with unique row names. In many cases, datasets extracted from CSV file or SQL server are returned as a data frame object. Example \ref{ex:dataframe} demonstrates how to construct a data frame.
 
 <<ex:dataframe, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 myFavMovies1 <- data.frame(`title` = c("Dr. No",
@@ -376,7 +408,7 @@ myFavMovies1 <- data.frame(`title` = c("Dr. No",
                                            "Daniel Craig"))
 @
 
-In modern \verb|R|, \verb|tibble| is the enhanced version of traditional data frame. More functions are available for \verb|tibble| objects. Example \ref{ex:tibble} shows how to construct a \verb|tibble| and append an extra row at the end.
+In modern \verb|R|, \verb|tibble| is the enhanced version of the traditional data frame. More functions are available for \verb|tibble| objects. Example \ref{ex:tibble} shows how to construct a \verb|tibble| and append an extra row at the end.
 
 <<ex:tibble, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 library(tibble)
@@ -424,7 +456,7 @@ myFavMovies2[4:7, c("title","year")]
 
 \section{Function}
 
-User can create custom functions in \verb|R|. In example \ref{ex:function}, a new function \verb|is.odd()| is created. Result can be explicitly returned using \verb|return()|. Alternatively, the value of the function's last line is implicitly returned.
+User can create custom functions in \verb|R|. In example \ref{ex:function}, a new function \verb|is.odd()| is created. The result can be explicitly returned using \verb|return()|. Alternatively, the value of the function's last line is implicitly returned.
 
 <<ex:function, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Defines a custom function
@@ -451,7 +483,7 @@ is.even(1:10)
 
 \subsection{If-Else}
 
-An \verb|if-else| statement is controlled by the condition. The \verb|if| part executes if the contition is \verb|TRUE|. Alternatively, the \verb|else| part will be executed. Example \ref{ex:ifelse} shows a simple \verb|if-else| control statement.
+An \verb|if-else| statement is controlled by the condition. The \verb|if| part will be executed if the contition is \verb|TRUE|. Alternatively, the \verb|else| part will be executed. Example \ref{ex:ifelse} shows a simple \verb|if-else| control statement.
 
 <<ex:ifelse, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Loads the lubridate package for additional date/time functions
@@ -488,7 +520,7 @@ myGreeting
 
 \subsection{While}
 
-The \verb|while| statement loops as long as the condition stays \verb|TRUE|. Example \ref{ex:while} demonstrates how \verb|while| loop can be implemented.
+The \verb|while| statement loops as long as the condition stays \verb|TRUE|. Example \ref{ex:while} demonstrates how a \verb|while| loop can be implemented.
 
 <<ex:while, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 myCounter <- 100
@@ -498,7 +530,7 @@ while (myCounter > 0) {
 }
 @
 
-Example \ref{ex:while2} shows that early exit can be implemented in a \verb|while| statement using the \verb|break| operator. The \verb|next| operator can be used to skip one of the iterations.
+Example \ref{ex:while2} shows that an early exit can be implemented in a \verb|while| statement using the \verb|break| operator. The \verb|next| operator can be used to skip one of the iterations.
 
 <<ex:while2, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 myCounter <- 100
@@ -530,7 +562,7 @@ myResult
 
 \section{Apply}
 
-Functions in the apply family can be used to run operations over multiple values. In example \ref{ex:apply}, the \verb|apply()| function receives a \verb|tibble| object and iterates over each row. Variables of each row is merged as a character message and returned. 
+Functions in the apply family can be used to run operations over multiple values. In example \ref{ex:apply}, the \verb|apply()| function receives a \verb|tibble| object and iterates over each row. Variables of each row are merged in a character message and returned. 
 
 <<ex:apply, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # The second argument 1 inidicates iterate over rows
@@ -588,9 +620,9 @@ There are other useful members in the apply family, such as \verb|vapply()|,  \v
 
 Vectorisation can speed up code very significantly, therefore it is always a good idea to vectorise code for maximum performance.
 
-In \verb|R|, looping can be slow because they are not vectorised. Moreover, \verb|R| objects are stored in memory. If the operation in the loop is altering the size of object, it will force \verb|R| to reallocate the object to a new memory address. For this reason, avoid modifying object size in loops can always speed up the code.
+In \verb|R|, looping can be slow because they are not vectorised. Moreover, \verb|R| objects are stored in memory. If the operation in the loop is altering the size of an object, it will force \verb|R| to reallocate the object to a new memory address. For this reason, avoiding to modify object size in loops can always speed up the code.
 
-In example \ref{ex:looping}, the \verb|system.time()| function is used to capture the total time used to execute the code. The curly brackets \verb|{}| wraps multi-line code as one single expression. 
+In example \ref{ex:looping}, the \verb|system.time()| function is used to capture the total time used to execute the code. The curly brackets \verb|{}| wrap multi-line code in a single expression. 
 
 <<ex:looping, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Vectorised operation is fast
@@ -616,7 +648,7 @@ system.time({
 
 The \verb|tidyverse| is a coherent system of packages for data manipulation, exploration and visualisation that share a common design philosophy. These were mostly developed by the prolific R developer Hadley Wickham\footnote{\url{http://hadley.nz}}, but they are now being expanded by several contributors. The \verb|tidyverse| packages are intended to make data scientists and statisticians more productive by guiding them through the workflow of a typical project. This is illustrated in figure \ref{tidyverseworkflow}.
 
-You may being analysis by importing data into R. This typically means that you take data stored in a file, database, or web API and load it into R as an object known as a \verb|data frame| or a \verb|tibble|.
+You may begin the analysis by importing data into R. This typically means that you take data stored in a file, database, or web API and load it into R as an object known as a \verb|data frame| or a \verb|tibble|.
 
 Once the data is imported, it is a good idea to tidy it. In brief, when your data is tidy, each column is a variable and each row is an observation. This is important because a consistent structure lets you focus your struggle on questions about the data, not fighting to get the data into the right form for different functions.
 
@@ -624,11 +656,11 @@ Once you have tidy data, the usual next step is to transform it. This includes n
 
 There are two main engines of knowledge generation: \begin{inparaenum}[1)] \item visualisation and \item modelling \end{inparaenum}. These have complementary strengths and weaknesses so a good analysis will iterate between them many times.
 
-Data visualisation is a fundamentally human activity. A good visualisation will show you things that you did not expect, or raise new questions about the data. It might also cast doubt on the research hypothesis or hint that you need to collect different data. Visualisation does not scale particularly well because it requires human interpretation.
+Data visualisation is fundamentally a human activity. A good visualisation will show you things that you did not expect, or raise new questions about the data. It might also cast doubt on the research hypothesis or hint that you need to collect different data. Visualisation does not scale particularly well because it requires human interpretation.
 
 Models are complementary tools to visualisation. Once the research hypotheses are sufficiently precise, you can use a model to address them. Models are fundamentally mathematical or computational tools, so they generally scale well. 
 
-The last step of data science is communication, which is a critical part of any data analysis project. It does not matter how well your models and visualisation have led you to understand the data unless you can also communicate your results to others.
+The last step of data science is communication, which is a critical part of any data analysis project. It does not matter how well your models and visualisation have led you to understand the data, unless you can also communicate your results to others.
 
 Surrounding all these tools is programming. This is a tool that you use in every part of the analysis.
 
@@ -778,7 +810,7 @@ Find all flights in the \verb|flights| dataset that:
 
 The function \verb|arrange()| changes the order of observations in a dataset. It sorts the observations by a specified set of variable names\footnote{More complicated expressions can also be used for ordering.} in ascending order. 
 
-If you provide more than one variable name, each additional variable will be used to break ties in the values of preceding variable. Use \verb|desc()| to reorder variable in descending order. Missing values are always sorted at the end. Example \ref{ex:tidyarrange} shows how the \verb|arrange()| function can be used.
+If you provide more than one variable name, each additional variable will be used to break ties in the values of the preceding variable. Use \verb|desc()| to reorder a variable in descending order. Missing values are always sorted at the end. Example \ref{ex:tidyarrange} shows how the \verb|arrange()| function can be used.
 
 <<ex:tidyarrange, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Arrange flights by year, then month, then day
@@ -901,7 +933,7 @@ min_rank(desc(y))
 
 \begin{enumerate}
   \item Currently \verb|dep_time| and \verb|sched_dep_time| are convenient to look at but hard to compute with because they’re not really continuous numbers. Convert them to a more convenient representation of number of minutes since midnight.
-  \item Compare new variable \verb|air_time| as \verb|arr_time - dep_time|. What do you expect to see? What problem do you see? What do you need to do to fix it?
+  \item Compare a new variable \verb|air_time| as \verb|arr_time - dep_time|. What do you expect to see? What problem do you see? What do you need to do to fix it?
   \item What does \verb|1:3 + 1:10| return and why? How about \verb|1:3 + 1:9|?
 \end{enumerate}
 
@@ -921,7 +953,7 @@ The last key function is \verb|summarise()| or \verb|summarize()|. It collapses 
 
 Whenever doing any aggregation, it is always a good idea to include either the total count \verb|n()| or the count of non-missing values \verb|sum(!is.na(x))|. To count the number of unique values, use \verb|n_distinct()|. By including count statistics, you can make sure that you are not drawing conclusions based on small amount of data. 
 
-When combining several operations it is usually better to join them together using the pipe operator \verb|%>%| rather than repeatedly making new variables. This is illustrated in example \ref{ex:tidysummarise}.
+When combining several operations, it is usually better to join them together using the pipe operator \verb|%>%| rather than repeatedly making new variables. This is illustrated in example \ref{ex:tidysummarise}.
 
 <<ex:tidysummarise, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Example of summarise() function alone
@@ -970,23 +1002,23 @@ flights %>%
 
 \chapter{Regression Models}
 
-Regression model is one of the most widely used statistical techniques in the realm of supervised learning. It quantifies the relationship between dependent variable \(Y\) and independent variable \(X\), where \(Y	\subseteq \mathbb{R} \) and \(X = \{ x_1, x_2,...x_M \}\).
+The regression model is one of the most widely used statistical techniques in the realm of supervised learning. It quantifies the relationship between a dependent variable \(Y\) and an independent variable \(X\), where \(Y	\subseteq \mathbb{R} \) and \(X = \{ x_1, x_2,...x_M \}\).
 
 \section{Linear Regression}
 
-Linear regression\footnote{Also called ordinary least square (OLS) regression.} is a very popular parametric statistical technique. It can quantify the effects of each input variable, it also informs users whether the effects are statistically significant or not.
+Linear regression\footnote{Also called ordinary least square (OLS) regression.} is a very popular parametric statistical technique. It can quantify the effects of each input variable. It also informs users whether the effects are statistically significant or not.
 
-In a univariate scenario where \(x\) is the only input, it provides the best fit for the model equation \(\hat{y}_i=\beta_0+\beta_1 x_i \). The parameter \(\beta_0\) is normally referred as the intercept, while the \(\beta_1\) value is called the slope.
+In a univariate scenario where \(x\) is the only input, it provides the best fit for the model equation \(\hat{y}_i=\beta_0+\beta_1 x_i \). The parameter \(\beta_0\) is normally referred to as the intercept, while the \(\beta_1\) value is called the slope.
 
-Simple linear model can be extended to include a high-order polynomial term  of variable \(x\). It provides higher model flexibility so that linear model fits the data better. For example, an \(M\)\textsuperscript{th} order polynomial term has been fitted to the dataset on the next chart. The choice of \(M\) is subjective but usually a small value of \(M\) is desirable because it helps avoid overfitting.
+The simple linear model can be extended to include a high-order polynomial term  of a variable \(x\). It provides higher model flexibility so that the linear model fits the data better. For example, an \(M\)\textsuperscript{th} order polynomial term has been fitted to the dataset on the next chart. The choice of \(M\) is subjective but usually a small value of \(M\) is desirable because it helps avoid overfitting.
 
-The model assumes model residuals \( \epsilon_i = y_i-\hat{y}_i\) are drawn from Gaussian distribution (i.e. having a bell-shaped curve). The goal of linear regression is to minimise the sum of squared residual. 
+The model assumes that the model residuals \( \epsilon_i = y_i-\hat{y}_i\) are drawn from Gaussian distribution (i.e. having a bell-shaped curve). The goal of linear regression is to minimise the sum of squared residuals. 
 
-In the R language you can call the function \verb|lm()| to perform linear regression. It requires at least two arguments (\verb|data| and \verb|formula|). For example, \verb|lm(y ~ x , myData)| will perform a simple univariate linear model using independent variable \(x\) to predict dependent variable \(y\) in the data frame object \verb|myData|.
+In the R language you can call the function \verb|lm()| to perform linear regression. It requires at least two arguments (\verb|data| and \verb|formula|). For example, \verb|lm(y ~ x , myData)| will perform a simple univariate linear model using the independent variable \(x\) to predict the dependent variable \(y\) in the data frame object \verb|myData|.
 
-Dummy variable can be easily created from categorical labels. Users can simply use the syntax \verb|lm(y ~ x1 + x2, myData)| where \verb|x1| is a numeric variable and \verb|x2| either a factor or a character variable The \verb|lm| function will automatically create dummy variables on-the-fly. Normally the first category in the column will be used as reference level.
+Dummy variables can be easily created from categorical labels. Users can simply use the syntax \verb|lm(y ~ x1 + x2, myData)| where \verb|x1| is a numeric variable and \verb|x2| either a factor or a character variable The \verb|lm| function will automatically create dummy variables on-the-fly. Normally the first category in the column will be used as reference level.
 
-Simple linear model are often not flexible enough to model complex variable effects. In light of this, linear models can be made more flexible by including polynomial terms. It can be expressed as \verb|lm(y~poly(x1,3)+x2,myData)|. In this case, we are defining a cubic relationship with variable \verb|x1| and a linear relationship with variable \verb|x2| (Five coefficients in total will be estimated, four from the regression terms plus one from the intercept). Such model can be expressed as equation \eqref{linearexample}. 
+Simple linear models are often not flexible enough to model complex variable effects. In light of this, linear models can be made more flexible by including polynomial terms. This can be expressed as \verb|lm(y~poly(x1,3)+x2,myData)|. In this case, we are defining a cubic relationship with variable \verb|x1| and a linear relationship with variable \verb|x2| (Five coefficients in total will be estimated, four from the regression terms plus one from the intercept). Such a model can be expressed as equation \eqref{linearexample}. 
 
 \begin{equation}
 \label{linearexample}
@@ -995,7 +1027,7 @@ Simple linear model are often not flexible enough to model complex variable effe
 \underbrace{\beta_4 x_{2,i}}_\text{Linear term}
 \end{equation}
 
-Interaction refers to the combined effect\footnote{Also known as synergy effect.} of more than one independent variables. For example, independent variable \verb|x1| and \verb|x2| might have no effect on dependent variable \(y\) alone. However, the effect on \(y\) can become prominent when these two variables are combined. In R language you can use the syntax \verb|lm(y ~ x1*x2)| to represent the relationship. The function \verb|I(x1*x2)| can be used to supress interaction term and the arguments will be treated as simple arithmetic operations.
+Interaction refers to the combined effect\footnote{Also known as synergy effect.} of more than one independent variables. For example, the independent variables \verb|x1| and \verb|x2| might have no effect on the dependent variable \(y\) alone. However, the effect on \(y\) can become prominent when these two variables are combined. In R language you can use the syntax \verb|lm(y ~ x1*x2)| to represent the relationship. The function \verb|I(x1*x2)| can be used to supress the interaction term and the arguments will be treated as simple arithmetic operations.
 
 \begin{Exercise}[title={Simple Linear Regression}]
 In this exercise, we are going to predict car efficiency using the \verb|mtcars| teaching dataset. The dataset is embedded in open source R and can be called directly by \verb|mtcars|. In example \ref{ex:mtcars_head},you can peek at the dataset by executing \verb|head(mtcars)| or \verb|tail(mtcars)|. You can also read the dataset definition by executing the command \verb|?mtcars|.
@@ -1060,7 +1092,7 @@ library(GGally)
 ggpairs(mtcars)
 @
 
-Now let us try to analyse car efficiency using the \verb|mpg| column as dependent variable. The hypothesis is that heavier cars have lower miles-per-gallon. We can investigate this by building a univariate linear model using the \verb|lm()| function and analyse the results. The following code fits an univariate regression model. The function \verb|summary(myModel1)| would print out all the key results of the model. This is demonstrated in example \ref{ex:linearmodel}.
+Now let us try to analyse car efficiency using the \verb|mpg| column as dependent variable. The hypothesis is that heavier cars have lower miles-per-gallon. We can investigate this by building a univariate linear model using the \verb|lm()| function and analyse the results. The following code fits a univariate regression model. The function \verb|summary(myModel1)| prints out all the key results of the model. This is demonstrated in example \ref{ex:linearmodel}.
 
 <<ex:linearmodel, fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Build a univariate linear model
@@ -1092,7 +1124,7 @@ Adjusted \(R^2\)    & Adjusted version of \(R^2\).\\
 \label{tab:linearsummary}
 \end{table}
 
-You can also build more complex multivariate models using the same \verb|lm()| function Example \ref{ex:linearmodelpoly} shows how the function deals with nominal and ordinal variables. You can either force the variable to become categorical by explicitly state \verb|factor(myVar)| in the formula. Alternatively, if the variable already belongs \verb|factor| data type, the \verb|lm()| regression function would handle it automatically without having to state it in the formula.
+You can also build more complex multivariate models using the same \verb|lm()| function Example \ref{ex:linearmodelpoly} shows how the function deals with nominal and ordinal variables. You can either force the variable to become categorical by explicitly state \verb|factor(myVar)| in the formula. Alternatively, if the variable already belongs to the \verb|factor| data type, the \verb|lm()| regression function would handle it automatically without having to state it in the formula.
 
 <<ex:linearmodelpoly, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Dummy variables are automatically created on-the-fly.
@@ -1107,7 +1139,7 @@ myModel3 <- lm(mpg ~ wt + qsec + factor(am) +
 summary(myModel3)
 @
 
-To further analyse the effects of individual variables, wou can load the \verb|car| package and use the function \verb|avPlots()| to view the partial regression plot\footnote{It is also called the added-variable plot.}. This would graphically display the effect of individual variables while keeping others in control. This is shown in example \ref{ex:avplots}.
+To further analyse the effects of individual variables, wou can load the \verb|car| package and use the function \verb|avPlots()| to view the partial regression plots\footnote{It is also called the added-variable plot.}. This would graphically display the effect of individual variables while keeping others in control. This is shown in example \ref{ex:avplots}.
 
 <<ex:avplots,fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
 library(car)
@@ -1125,7 +1157,7 @@ avPlots(myModel2)
 	\caption{Partial regression plots}
 \end{figure}
 
-As the input predictor variables usually have different scale, the model coefficient are not directly comparable. To fairly compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a function \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. You can follow example \ref{ex:betanorm} for coefficient standardisation.
+As the input predictor variables usually have different scale, the model coefficients are not directly comparable. To fairly compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a function \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. You can follow example \ref{ex:betanorm} for coefficient standardisation.
 
 <<ex:betanorm, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
 library(QuantPsyc)
@@ -1134,7 +1166,7 @@ lm.beta(myModel2)
 lm.beta(myModel3)
 @
 
-You can also compare nested models\footnote{Refers to models having additional predictor terms. For example, \(\hat{y}=x_1+x_2+x_3\) and \(\hat{y}=x_1+x_2+x_3+x_4\) are both nested models of \(\hat{y}=x_1+x_2\).} using ANOVA technique. Example \ref{ex:linearanova} compares three nested models by applying Chi-square test on the model residuals to check for statistically significant differences. In most cases, the simpler model is prefereable if the candidate models are not significantly different.
+You can also compare nested models\footnote{Refers to models having additional predictor terms. For example, \(\hat{y}=x_1+x_2+x_3\) and \(\hat{y}=x_1+x_2+x_3+x_4\) are both nested models of \(\hat{y}=x_1+x_2\).} using ANOVA technique. Example \ref{ex:linearanova} compares three nested models by applying the Chi-square test on the model residuals to check for statistically significant differences. In most cases, the simplest model is prefereable if the candidate models are not significantly different.
 
 <<ex:linearanova, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Compare linear regression models using Chi-square test
@@ -1165,13 +1197,13 @@ plot(myModel3)
 
 \begin{description}
   \item [Residuals vs Fitted]
-  Checks for non-linear relationship. For a good linear fit, residuals are normally distributed along a straight line centred at zero (i.e. a horizontal line). Contrarily, curvy line indicate poor model fit with possible non-linear effects.
+  Checks for non-linear relationship. For a good linear fit, residuals are normally distributed along a straight line centred at zero (i.e. a horizontal line). Contrarily, curvy lines indicate poor model fit with possible non-linear effects.
 
   \item [Normal Quantile-Quantile]
-  One the of main assumptions of linear regression is that the residual is drawn from zero-centred Gaussian distribution \(\epsilon_i\sim\mathcal{N}(0,\sigma^2)\). To verify whether the proposed model satisfies this assumption, we can use a normal quantile-quantile plot (Q-Q plot) to perform a quick check. It aligns model residuals against a theoretical normal distribution. If the residuals spread along a straight line on the Q-Q plot, it suggests that the residuals are normally distributed. Alternatively, if the data points deviate from the line it indicates vice versa. In this case, parametric model assumption does not hold and you might have to consider improving your model.
+  One of the main assumptions of linear regression is that the residual is drawn from a zero-centred Gaussian distribution \(\epsilon_i\sim\mathcal{N}(0,\sigma^2)\). To verify whether the proposed model satisfies this assumption, we can use a normal quantile-quantile plot (Q-Q plot) to perform a quick check. It aligns the model residuals against a theoretical normal distribution. If the residuals spread along a straight line on the Q-Q plot, it suggests that the residuals are normally distributed. Alternatively, if the data points deviate from the line it indicates vice versa. In this case, the parametric model assumption does not hold and you might have to consider improving your model.
 		
   \item [Scale-Location]
-  Shows the distribution of the standardised residuals along the range of fitted values. As standard linear model is assumed to be homoscedastic, the residual variance should not vary along the range of fitted values (i.e. expects a near-horizontal line). If the standardised residual forms a distinguishable patten (e.g. fanning out or curvy), then the model may be heteroscedastic and hence violates the underlying assumption.
+  Shows the distribution of the standardised residuals along the range of fitted values. As the standard linear model is assumed to be homoscedastic, the residual variance should not vary along the range of fitted values (i.e. expect a near-horizontal line). If the standardised residuals form a distinguishable pattern (e.g. fanning out or curvy), then the model may be heteroscedastic and hence violate the underlying assumption.
   
   \item [Residual vs Leverage (Cook's Distance)]
   Observations having high leverage pose greater influence to the model. This means that the model estimates are strongly affected by these cases. If such obserations have high residuals (i.e. large Cook's distance), they can sometimes be considered as outliers. On the other hand, most observations would have low leverage and short Cook's distance. This means that the model estimates would not have varied a lot if few such observations were to be added or discarded.
@@ -1181,7 +1213,7 @@ plot(myModel3)
 
 \begin{Exercise}[title={Model Overfitting}]
 
-Linear regression can be made more flexible by increasing the order of the polynomial terms. This allows linear model to capture non-linear effects. However, a flexible model also risks overfitting the data. This means that the model might appear to have very good fit during training, but it may fit poorly when it is tested on new data. In general, overfitted models have very little inference and are ungeneralisable. The code snippet in example \ref{ex:overfitting} runs a linear model with variable level of flexibility. 
+Linear regression can be made more flexible by increasing the order of the polynomial terms. This allows the linear model to capture non-linear effects. However, a flexible model also risks overfitting the data. This means that the model might appear to have very good fit during training, but it may fit poorly when it is tested on new data. In general, overfitted models have very little inferential power and are ungeneralisable. The code snippet in example \ref{ex:overfitting} runs a linear model with variable level of flexibility. 
 
 <<ex:overfitting, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Bivariate linear model with polynomial terms
@@ -1263,14 +1295,14 @@ points(myPoints, col="red")
 
 \section{Poisson Regression}
 
-In the previous section, simple linear regression model assumes the dependent variable \(y\) follows a Gaussian distribution which spans the range \((-\infty, +\infty)\). Yet sometimes we would like to estimate the number of discrete events where it is often a positive integer (\(\mathbb{N}=\{0,1,2,3,...\}\)). In this case, Poisson regression can be used. It is based on Poisson distribution\footnote{A Poisson distribution is defined by a single parameter \(y \sim Poisson(\lambda)\), where the mean \(\mu\) and variance \(\sigma^2\) are equal. i.e. \(\lambda=\mu\) and \(\lambda=\sigma^2\)} which can be found in everyday life, the following are typical examples:
+In the previous section, the simple linear regression model assumes that the dependent variable \(y\) follows a Gaussian distribution which spans the range \((-\infty, +\infty)\). Yet sometimes we would like to estimate the number of discrete events which often a positive integer (\(\mathbb{N}=\{0,1,2,3,...\}\)). In this case, Poisson regression can be used. It is based on the Poisson distribution\footnote{A Poisson distribution is defined by a single parameter \(y \sim Poisson(\lambda)\), where the mean \(\mu\) and variance \(\sigma^2\) are equal. i.e. \(\lambda=\mu\) and \(\lambda=\sigma^2\)} which can be found in everyday life. The following are typical examples:
 
 \begin{itemize}
   \item Number of children in a household.
   \item Number of bank notes in a wallet.
 \end{itemize}
 
-Poisson regression model can take into account multiple predictor variables. Equation \eqref{poisson} shows a Poisson regression model with \(\hat{y}\) as dependent variable and \(M\) predictor variables.
+The Poisson regression model can take into account multiple predictor variables. Equation \eqref{poisson} shows a Poisson regression model with \(\hat{y}\) as the dependent variable and \(M\) predictor variables.
 
 \begin{equation}
 \label{poisson}
@@ -1316,7 +1348,7 @@ mean(mtcars$carb)
 var(mtcars$carb)
 @
 
-To robustly check whether a variable is truly drawn from a Poisson distribution, you can perform a Chi-squared goodness-of-fit test. It fits the input data against a theoretical Poisson distribution. Example \ref{ex:goodfit} visualises the results. The vertical bars would fill the positive space if the input data fits well against the Poisson distribution. This can be statistically examined by analysing the \(p\)-value of the Chi-square test. If the \(p\)-value is small enough, we can then accept the hypothesis that the variable is drawn from a Poisson distribution. 
+To robustly check whether a variable is truly drawn from a Poisson distribution, you can perform a Chi-squared goodness-of-fit test. It fits the input data against a theoretical Poisson distribution. Example \ref{ex:goodfit} visualises the results. The vertical bars would fill the positive space if the input data fitted well against the Poisson distribution. This can be statistically examined by analysing the \(p\)-value of the Chi-square test. If the \(p\)-value is small enough, we can then accept the hypothesis that the variable is drawn from a Poisson distribution. 
 
 <<ex:goodfit, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=8, fig.height=4, rexample=TRUE>>=
 # Performs the Chi-squared goodness-of-fit test.
@@ -1344,7 +1376,7 @@ plot(gf)
 
 \begin{Exercise}[title={Building a Poisson Model}]
 
-Example \ref{ex:poissonreg} trains a Poisson regression model using the \verb|mtcars| dataset. The variable \verb|carb| is used as dependent variable while \verb|hp|, \verb|wt| and \verb|am| are used as independent predictor variables. The regression output can be interpreted in a similar way as the ones from linear model.
+Example \ref{ex:poissonreg} trains a Poisson regression model using the \verb|mtcars| dataset. The variable \verb|carb| is used as the dependent variable while \verb|hp|, \verb|wt| and \verb|am| are used as independent predictor variables. The regression output can be interpreted in a similar way as the ones from the linear model.
 
 <<ex:poissonreg, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Build a Poisson model to predict the number of carburetors in a car.
@@ -1363,7 +1395,7 @@ tibble(observed = mtcars$carb,
 
 \section{Logistic Regression}
 
-Logistic regression can be used if the dependent variable is binary. This refers to when the outcome can either be \(Y\) or \(\neg Y\). The model estimates outcome likelihood using the logistic function as outlined in equation \eqref{logisticsreg}. Logistic function transforms a real-valued number \(X\) into the range \((0,1)\) which represents the outcome probability \(P(Y)\in(0,1)\).
+Logistic regression can be used if the dependent variable is binary. This refers to when the outcome can either be \(Y\) or \(\neg Y\). The model estimates outcome likelihood using the logistic function as outlined in equation \eqref{logisticsreg}. The logistic function transforms a real-valued number \(X\) into the range \((0,1)\) which represents the outcome probability \(P(Y)\in(0,1)\).
 
 \begin{equation}
 \label{logisticsreg}
@@ -1386,27 +1418,27 @@ ggplot(mapping = aes(x=logistic,
 \caption{Graph showing the range of a logistic function}
 \end{figure}
 
-In a univariate scenario, the logistic function can be expressed as equation \eqref{logisticprob}, where \(\beta_0\) represents the intercept while \(\beta_1, \beta_2, \beta_3, ..., \beta_M\) refers to the regression coefficient of variables \(x_1, x_2, x_3,...,x_M\). The output \(P(Y)\) indicates the likelihood of true outcome.
+In a univariate scenario, the logistic function can be expressed as an equation \eqref{logisticprob}, where \(\beta_0\) represents the intercept while \(\beta_1, \beta_2, \beta_3, ..., \beta_M\) refer to the regression coefficients of the variables \(x_1, x_2, x_3,...,x_M\). The output \(P(Y)\) indicates the likelihood of true outcome.
 
 \begin{equation}
 \label{logisticprob}
 P(Y)=\frac{1}{1+e^{-(\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M)}}
 \end{equation}
 
-One of the most powerful features of logistic regression is the odds ratio. It quantifies the effects of each independent variable. It is a value indicating the change of likelihood of the event when an independent predictor variable is increased by \(1\) unit. Odds ratio is defined in equation \eqref{oddsratio}.
+One of the most powerful features of logistic regression is the odds ratio. It quantifies the effects of each independent variable. It is a value indicating the change of likelihood of the event when an independent predictor variable is increased by \(1\) unit. The odds ratio is defined in equation \eqref{oddsratio}.
 
 \begin{equation}
 \label{oddsratio}
 {OR}(x_1) = \frac{odds(x_1+1)}{odds(x_1)} = \frac{e^{\beta_0+\beta_1 (x_1+1)+\beta_2 x_2+...+\beta_M x_M}}{e^{\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M}} = e^{\beta_1}
 \end{equation}
 
-Logistic regression can only handle binary problem. If the dependent variable \(Y\) has more than two outcomes, we can use another algorithm called multinomial logistic regression\footnote{\url{http://www.ats.ucla.edu/stat/r/dae/mlogit.htm}}. Such problem can also be analysed using artificial neural networks in a much more sophisticated way which we will cover in a later section.
+Logistic regression can only handle binary classification problems. If the dependent variable \(Y\) has more than two outcomes, we can use another algorithm called multinomial logistic regression\footnote{\url{http://www.ats.ucla.edu/stat/r/dae/mlogit.htm}}. Such problem can also be analysed using artificial neural networks in a much more sophisticated way which we will cover in a later section.
 
 \begin{Exercise}[title={Building a Logistic Model}]
 
-In this exercise, we would continue to use the \verb|mtcars| dataset. We will build a logistic regression model to predict whether the vehicle has automatic or manual transmission system (using the \verb|am| variable as dependent variable). 
+In this exercise, we will continue to use the \verb|mtcars| dataset. We will build a logistic regression model to predict whether the vehicle has automatic or manual transmission system (using the \verb|am| variable as dependent variable). 
 
-In the example \ref{ex:logistic}, the model has three independent variables \verb|mpg|, \verb|hp| and \verb|disp|. You may run the example code to build the logistic regression model. You may also calculate the odds ratio and analyse the effects of each variable. The last part of the code is to calculate the model accuracy. 
+In the example \ref{ex:logistic}, the model has three independent variables \verb|mpg|, \verb|hp| and \verb|disp|. You may run the example code to build the logistic regression model. You may also calculate the odds ratios and analyse the effects of each variable. The last part of the code is to calculate the model accuracy. 
 
 <<ex:logistic, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Build a logistic regression model to predict the dependent variable am
