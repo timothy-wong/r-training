@@ -1,0 +1,48 @@
+---
+title: "Car Assessment Report"
+author: "James Bond"
+output: html_document
+---
+Vehicle Analysis
+=======
+
+I have analysed `r nrow(mtcars)` cars systematically. The 
+following vehicles have the largest `horsepower`:
+
+```{r, message=FALSE}
+library(dplyr)
+mtcars %>%
+  mutate(name = rownames(.)) %>%
+  arrange(desc(hp)) %>%
+  select(name, hp) %>%
+  head(2)
+```
+
+The following graph shows that these cars have impressive
+**horsepower** and **1/4 mile time**.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Create a ggplot
+library(ggplot2)
+myPlot <- mtcars %>%
+  mutate(car_name = rownames(.),
+         hp_rank = dense_rank(desc(hp)),
+         top2 = hp_rank <= 2) %>%
+  ggplot(aes(x=qsec, y=hp, name=car_name)) +
+  stat_smooth(method = "lm") +
+  geom_point(aes(colour=top2)) +
+  labs(x="1/4 Mile Time (Seconds)",
+       y="Horsepower",
+       colour="Top 2 Horsepower")
+# Convert ggplot to plotly
+library(plotly)
+myPlot %>% ggplotly(tooltip = "name")
+```
+
+## Selection Criteria
+
+Essential gadgets are required for Health and Safety reasons:
+
+* Rocket launchers (_front_ and _back_)
+* Ejectable seats
+* Bulletproof screen

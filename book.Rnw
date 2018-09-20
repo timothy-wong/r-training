@@ -120,6 +120,12 @@ The \LaTeX\xspace source code and the compiled PDF version of this book can be d
 \begin{itemize}
 \item A special word of thanks goes to the open source R community.
 \item Some of the examples in \autoref{ch:datatransformation} were adopted from Wickham and Grolemund's book~\cite{wickham}.
+\item Thanks to all contributors for reviewing this book:
+  \begin{itemize}
+    \item Artemis Maipa
+    \item Phuong Pham
+    \item Laura Shemilt
+  \end{itemize}
 \end{itemize}
 % \mbox{}\\
 % \mbox{}\\
@@ -131,32 +137,32 @@ The \LaTeX\xspace source code and the compiled PDF version of this book can be d
 
 \chapter{R Ecosystem}
 
-\verb|R| is a language for statistical programming. The language is open source and free for personal, academic and commerical use. It is available on multiple platforms including Windows, Linux and MacOS. In recent years, \verb|R| has gained popularity and became one of the fastest growing programming languages in the world\footnote{\url{https://stackoverflow.blog/2017/10/10/impressive-growth-r/}}. In this chapter, we will go through the basics of \verb|R|.
+\verb|R| is a language for statistical programming. The language is open source and free for personal, academic and commerical use. It is available on multiple platforms including Windows, Linux and MacOS. In recent years, \verb|R| has gained popularity and become one of the fastest growing programming languages in the world\footnote{\url{https://stackoverflow.blog/2017/10/10/impressive-growth-r/}}. In this chapter, we will go through the basics of \verb|R|.
 
 \section{Programming Enviornment}
 
 RStudio\footnote{\url{https://www.rstudio.com}} is a popular Integrated Development Environment (IDE) for the \verb|R| language. It is a very powerful editor which enables programmers to interact with the \verb|R| language. RStudio is open-sourced and the desktop version is free for personal use. 
 
-Inside RStudio, the display is divided into different tabs which user can customise. The following ones are particularly important:
+Inside RStudio, the display is divided into different tabs which users can customise. The following ones are particularly important:
 
 \begin{description}
   \item [Source Editor]
-  Inside RStudio, users can access the source editor for \verb|R| code. This can be treated as a powerful text editor for various forms of R code, such as standard \verb|R| Script, \verb|R| Markdown, \verb|R| Notebook, \verb|R| Sweave and \verb|shiny| etc. The source editor does not execute any code, it purely helps user edit it efficiently.
+  Inside RStudio, users can access the source editor for \verb|R| code. This can be treated as a powerful text editor for the various forms of R code, such as standard \verb|R| Script, \verb|R| Markdown, \verb|R| Notebook, \verb|R| Sweave and \verb|shiny| etc. The source editor does not execute any code, it purely helps users edit it efficiently.
   
   \item [Console]
-  The \verb|R| interpreter is shown in the Console window. This is the place where \verb|R| code is processed. User can highlight a segment of \verb|R| code in the main text editor and press \verb|Ctrl + Enter| to send it to execution. Once the code is sent, it will execute in the \verb|R| interpreter and the results will be displayed. Alternatively, user can just place the blinking cursor on a line and press the same keys. This sends the entire line to the interpreter for execution. User can press \verb|Ctrl + L| to clear existing screen output.
+  The \verb|R| interpreter is shown in the Console window. This is the place where \verb|R| code is processed. User can highlight a segment of \verb|R| code in the main text editor and press \verb|Ctrl + Enter| to send it to execution. Once the code is sent, it will be executed in the \verb|R| interpreter and the results will be displayed. Alternatively, users can just place the blinking cursor on a line and press the same keys. This sends the entire line to the interpreter for execution. Users can press \verb|Ctrl + L| to clear existing screen output.
   
   \item [Environment]
-  User can access all the variables created in the current \verb|R| session. The workspace which includes all variables can be exported as \verb|.RData| file in the environment window. User can also import workspace from an existing \verb|.RData| file.
+  Users can access all the variables created in the current \verb|R| session. The workspace which includes all variables can be exported as \verb|.RData| file in the environment window. Users can also import workspace from an existing \verb|.RData| file.
   
   \item [Files]
-  It allows users to browse files on the local storage system. User can navigate to their own home directory using the \verb|~| path.
+  It allows users to browse files on the local storage system. Users can navigate to their own home directory using the \verb|~| path.
   
   \item [Plots]
   All graphical outputs produced by the \verb|R| interpreter are displayed in the plots tab. Users can export the graph as file in this tab.
   
   \item [Packages]
-  User can view the installed packages in this tab and load them manually.
+  Users can view the installed packages in this tab and load them manually.
   
   \item [Help]
   Documentation can be searched and viewed in this tab. Users can open documentation of a particular function using \verb|?| character in the interpreter. For instance, \verb|?sum| will open up the documentation for the \verb|sum()| function. 
@@ -180,7 +186,7 @@ The function \verb|install.packages()| can be used to install new packages from 
 installed.packages()
 # Install a new package and all its dependencies from CRAN
 # This will install to the default library location
-install.packages("ggplot2", dependencies = TRUE)
+install.packages("ggplot2")
 # Load an installed package 
 # (both lines are identical)
 library(ggplot2)
@@ -192,9 +198,11 @@ The number of packages on CRAN has grown exponentially in the past few years. To
 \chapter{Programming Concepts}
 
 
-In \verb|R|, everything begins with variables. User can assign value to variable using the \verb|<-| symbol. The \verb|#| character is used for commenting. 
+In \verb|R|, everything begins with variables. Users can assign value to variable using the \verb|<-| symbol. The \verb|#| character is used for commenting. 
 
-To name a variable, it is very common to name variables in \verb|R| using the 'camel case' convention. Sometimes 'snake case' and 'dot case' are also used. When create a new variable, it is important to avoid using reserved words. Reserved words can be checked by running the command \verb|?Reserved|.
+To name a variable, it is very common to name variables in \verb|R| using the 'camel case' convention. Sometimes 'snake case' and 'dot case' are also used. There is a detailed journal article~\cite{baaaath2012state} explaining the rationale behind each naming style.
+
+When creating a new variable, it is important to avoid using reserved words. Reserved words can be checked by running the command \verb|?Reserved|.
 
 <<ex:assignvariable, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Assign variables
@@ -204,11 +212,18 @@ myVarY <- 20
 myVarX * myVarY
 # Look at the reserved words
 ?Reserved
+# Camal case
+myCamalCaseVar <- "this is camal case"
+# Other less commonly-used styles
+my_snake_case_var <- "this is lower snake case"
+MY_UPPER_SNAKE_CASE_VAR <- "this is upper snake case"
+my.dot.case.var <- "this is dot case"
+MyPascalCaseVar <- "this is pascal case"
 @
 
 \section{Vector}
 
-\verb|R| is a vectorised programming language. Vector of consecutive integers can be created using the \verb|:| character. Alternatively, vector of discrete values can be created using the function \verb|c()|. All elements of a vector must have the same data type.
+\verb|R| is a vectorised programming language. A vector of consecutive integers can be created using the \verb|:| character. Alternatively, a vector of discrete values can be created using the function \verb|c()|. All elements of a vector must have the same data type.
 
 <<ex:createvectors, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Create a vector of integers one to ten
@@ -228,7 +243,7 @@ myVec4 <- c(`New York` = 8.5,
             `Moscow` = 11.9)
 @
 
-Users can select elements of a vector by subsetting using index number. In \verb|R|, index number starts from \(1,2,3,...\). For example, \verb|myVec2[2]| will return the second element of the vector.
+Users can select elements of a vector by subsetting using index number. In \verb|R|, index numbers start from \(1,2,3,...\). For example, \verb|myVec2[2]| will return the second element of the vector.
 
 <<ex:subsetting, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Select the second element of the vector
@@ -252,9 +267,9 @@ myVec1 ^ 2
 log(myVec1)
 @
 
-\section{Data Types}
+\section{Character and Datetime}
 
-Users can create vectors of other data types easily in \verb|R|. Example \ref{ex:arithmetic} shows how to create character vector, date vector and \verb|POSIXct|(date/time) vector.
+Users can create vectors of other data types easily in \verb|R|. Example \ref{ex:arithmetic} shows how to create a character vector, a date vector and a \verb|POSIXct|(date/time) vector.
 
 <<ex:datatypevector, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Vector can contain character objects
@@ -286,9 +301,34 @@ myVec7 <- myVec6 + hours(1) + minutes(30)
 weekdays(myVec7)
 @
 
-\section{Logical operators}
+\section{Factor}
 
-Logical operators can be applied on vector objects. It always returns a vector of logical values with the same length of the input vector. Examples \ref{ex:logical} 
+Categorical data can be represented in \verb|R| using \verb|factor|. This is an efficient to store repetitive values. 
+
+Factors can either be ordered or unordered. Ordered factors can be compared using logical operators.
+
+<<ex:factor, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Create an ordered factor variable
+myValues <- c("Low", "High", "High", "Medium", "Medium")
+myOrder <- c("Low", "Medium", "High")
+myFactor <- factor(myValues, 
+                   levels = myOrder, 
+                   ordered = TRUE)
+# Print the factor
+myFactor
+# Check the number of levels in the factor variable
+nlevels(myFactor)
+# Print the labels of the factors
+levels(myFactor)
+# Compare the levels of individual observations
+myFactor[1] > myFactor[2]
+myFactor[2] > myFactor[1]
+myFactor[2] == myFactor[3]
+@
+
+\section{Logical Operator}
+
+Logical operators can be applied on vector objects. It always returns a vector of logical values with the same length as the input vector. Examples \ref{ex:logical} 
 
 <<ex:logical, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Find all values greater than 5 - returns a vector of logical values 
@@ -305,9 +345,9 @@ myVec1 == 7 | myVec1 == 8
 
 \section{Special Numbers}
 
-There are special numbers in \verb|R|, which are shown in Example \ref{ex:specialnumbers}. For instance, the variable \verb|pi| is a constant \(3.14159...\). In most cases, missing values are usually indicated as \verb|NA| (Not Available). All operations involving \verb|NA| input always produce \verb|NA| output.
+There are special numbers in \verb|R|, which are shown in Example \ref{ex:specialnumbers}. For instance, the variable \verb|pi| is a constant \(3.14159...\). In most cases, missing values are usually indicated as \verb|NA| (Not Available). All operations involving an \verb|NA| input always produce an \verb|NA| output.
 
-On the other hand, values returned by computational error are \verb|NaN| (Not-a-Number). Whereas mathematical infinities are indicated by \verb|Inf| and \verb|-Inf| respectively.
+On the other hand, values returned by computational error are \verb|NaN| (Not-a-Number). Mathematical infinities are indicated by \verb|Inf| and \verb|-Inf|.
 
 <<ex:specialnumbers, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Pi is constant 3.14159...
@@ -326,7 +366,7 @@ c(5, 10, 15, NA, 25, 30, NaN, 35, 40, Inf, 50, -Inf, 60) / 5
 
 \section{List}
 
-Objects with different data types can be held together by a \verb|list|. Example \ref{ex:list} illustrates a list containing objects of several data types. Elements of a \verb|list| can be optionally named for easier subsetting.
+Objects with different data types can be held together in a \verb|list|. Example \ref{ex:list} illustrates a list containing objects of several data types. Elements of a \verb|list| can be optionally named for easier subsetting.
 
 <<ex:list, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 myFavBook <- list(`title` = "R for Data Science",
@@ -347,7 +387,7 @@ myFavBook[[4]]
 
 \section{Data Frame and Tibble}
 
-A data frame is a list of variables of the same number of rows with unique row names. In many cases, dataset extracted from CSV file or SQL server are returned as a data frame object. Example \ref{ex:dataframe} demonstrates how to construct a data frame.
+A data frame is a list of variables of the same number of rows with unique row names. In many cases, datasets extracted from CSV file or SQL server are returned as a data frame object. Example \ref{ex:dataframe} demonstrates how to construct a data frame.
 
 <<ex:dataframe, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 myFavMovies1 <- data.frame(`title` = c("Dr. No",
@@ -370,7 +410,7 @@ myFavMovies1 <- data.frame(`title` = c("Dr. No",
                                            "Daniel Craig"))
 @
 
-In modern \verb|R|, \verb|tibble| is the enhanced version of traditional data frame. More functions are available for \verb|tibble| objects. Example \ref{ex:tibble} shows how to construct a \verb|tibble| and append an extra row at the end.
+In modern \verb|R|, \verb|tibble| is the enhanced version of the traditional data frame. More functions are available for \verb|tibble| objects. Example \ref{ex:tibble} shows how to construct a \verb|tibble| and append an extra row at the end.
 
 <<ex:tibble, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 library(tibble)
@@ -418,7 +458,7 @@ myFavMovies2[4:7, c("title","year")]
 
 \section{Function}
 
-User can create custom functions in \verb|R|. In example \ref{ex:function}, a new function \verb|is.odd()| is created. Result can be explicitly returned using \verb|return()|. Alternatively, the value of the function's last line is implicitly returned.
+User can create custom functions in \verb|R|. In example \ref{ex:function}, a new function \verb|is.odd()| is created. The result can be explicitly returned using \verb|return()|. Alternatively, the value of the function's last line is implicitly returned.
 
 <<ex:function, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Defines a custom function
@@ -445,7 +485,7 @@ is.even(1:10)
 
 \subsection{If-Else}
 
-An \verb|if-else| statement is controlled by the condition. The \verb|if| part executes if the contition is \verb|TRUE|. Alternatively, the \verb|else| part will be executed. Example \ref{ex:ifelse} shows a simple \verb|if-else| control statement.
+An \verb|if-else| statement is controlled by the condition. The \verb|if| part will be executed if the contition is \verb|TRUE|. Alternatively, the \verb|else| part will be executed. Example \ref{ex:ifelse} shows a simple \verb|if-else| control statement.
 
 <<ex:ifelse, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Loads the lubridate package for additional date/time functions
@@ -482,7 +522,7 @@ myGreeting
 
 \subsection{While}
 
-The \verb|while| statement loops as long as the condition stays \verb|TRUE|. Example \ref{ex:while} demonstrates how \verb|while| loop can be implemented.
+The \verb|while| statement loops as long as the condition stays \verb|TRUE|. Example \ref{ex:while} demonstrates how a \verb|while| loop can be implemented.
 
 <<ex:while, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 myCounter <- 100
@@ -492,7 +532,7 @@ while (myCounter > 0) {
 }
 @
 
-Example \ref{ex:while2} shows that early exit can be implemented in a \verb|while| statement using the \verb|break| operator. The \verb|next| operator can be used to skip one of the iterations.
+Example \ref{ex:while2} shows that an early exit can be implemented in a \verb|while| statement using the \verb|break| operator. The \verb|next| operator can be used to skip one of the iterations.
 
 <<ex:while2, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 myCounter <- 100
@@ -524,7 +564,7 @@ myResult
 
 \section{Apply}
 
-Functions in the apply family can be used to run operations over multiple values. In example \ref{ex:apply}, the \verb|apply()| function receives a \verb|tibble| object and iterates over each row. Variables of each row is merged as a character message and returned. 
+Functions in the apply family can be used to run operations over multiple values. In example \ref{ex:apply}, the \verb|apply()| function receives a \verb|tibble| object and iterates over each row. Variables of each row are merged in a character message and returned. 
 
 <<ex:apply, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # The second argument 1 inidicates iterate over rows
@@ -580,15 +620,11 @@ There are other useful members in the apply family, such as \verb|vapply()|,  \v
 \label{tab:applyfunctions}
 \end{table}
 
-\section{Efficient Looping}
-
 Vectorisation can speed up code very significantly, therefore it is always a good idea to vectorise code for maximum performance.
 
-In \verb|R|, looping can sometimes be slow. This is because loops and standard \verb|apply| functions are executed in serial. Parallelism can be used to solve this problem.
+In \verb|R|, looping can be slow because they are not vectorised. Moreover, \verb|R| objects are stored in memory. If the operation in the loop is altering the size of an object, it will force \verb|R| to reallocate the object to a new memory address. For this reason, avoiding to modify object size in loops can always speed up the code.
 
-Moreover, \verb|R| objects are stored in memory. If the operation in the loop is altering the size of object, it will force \verb|R| to reallocate the object to a new memory address. For this reason, avoid modifying object size in loops can always speed up the code.
-
-In example \ref{ex:looping}, the \verb|system.time()| function is used to capture the total time used to execute the code. The curly brackets \verb|{}| wraps multi-line code as one single expression. 
+In example \ref{ex:looping}, the \verb|system.time()| function is used to capture the total time used to execute the code. The curly brackets \verb|{}| wrap multi-line code in a single expression. 
 
 <<ex:looping, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Vectorised operation is fast
@@ -614,7 +650,7 @@ system.time({
 
 The \verb|tidyverse| is a coherent system of packages for data manipulation, exploration and visualisation that share a common design philosophy. These were mostly developed by the prolific R developer Hadley Wickham\footnote{\url{http://hadley.nz}}, but they are now being expanded by several contributors. The \verb|tidyverse| packages are intended to make data scientists and statisticians more productive by guiding them through the workflow of a typical project. This is illustrated in figure \ref{tidyverseworkflow}.
 
-You may being analysis by importing data into R. This typically means that you take data stored in a file, database, or web API and load it into R as an object known as a \verb|data frame| or a \verb|tibble|.
+You may begin the analysis by importing data into R. This typically means that you take data stored in a file, database, or web API and load it into R as an object known as a \verb|data frame| or a \verb|tibble|.
 
 Once the data is imported, it is a good idea to tidy it. In brief, when your data is tidy, each column is a variable and each row is an observation. This is important because a consistent structure lets you focus your struggle on questions about the data, not fighting to get the data into the right form for different functions.
 
@@ -622,11 +658,11 @@ Once you have tidy data, the usual next step is to transform it. This includes n
 
 There are two main engines of knowledge generation: \begin{inparaenum}[1)] \item visualisation and \item modelling \end{inparaenum}. These have complementary strengths and weaknesses so a good analysis will iterate between them many times.
 
-Data visualisation is a fundamentally human activity. A good visualisation will show you things that you did not expect, or raise new questions about the data. It might also cast doubt on the research hypothesis or hint that you need to collect different data. Visualisation does not scale particularly well because it requires human interpretation.
+Data visualisation is fundamentally a human activity. A good visualisation will show you things that you did not expect, or raise new questions about the data. It might also cast doubt on the research hypothesis or hint that you need to collect different data. Visualisation does not scale particularly well because it requires human interpretation.
 
 Models are complementary tools to visualisation. Once the research hypotheses are sufficiently precise, you can use a model to address them. Models are fundamentally mathematical or computational tools, so they generally scale well. 
 
-The last step of data science is communication, which is a critical part of any data analysis project. It does not matter how well your models and visualisation have led you to understand the data unless you can also communicate your results to others.
+The last step of data science is communication, which is a critical part of any data analysis project. It does not matter how well your models and visualisation have led you to understand the data, unless you can also communicate your results to others.
 
 Surrounding all these tools is programming. This is a tool that you use in every part of the analysis.
 
@@ -765,7 +801,7 @@ Find all flights in the \verb|flights| dataset that:
 \item Were operated by United (\verb|UA|), American (\verb|AA|) or Delta (\verb|DL|).
 \item Departed in summer (July, August and September)
 \item Arrived more than two hours late, but did not leave late.
-\item Were delayed by at least an hour, but made up over \(30\) minutes in flight.
+\item Had a departure delay of least an hour, but made up over \(30\) minutes in flight.
 \item How many flights have a missing \verb|dep_time|? What other variables are missing?
 \end{enumerate}
 
@@ -776,7 +812,7 @@ Find all flights in the \verb|flights| dataset that:
 
 The function \verb|arrange()| changes the order of observations in a dataset. It sorts the observations by a specified set of variable names\footnote{More complicated expressions can also be used for ordering.} in ascending order. 
 
-If you provide more than one variable name, each additional variable will be used to break ties in the values of preceding variable. Use \verb|desc()| to reorder variable in descending order. Missing values are always sorted at the end. Example \ref{ex:tidyarrange} shows how the \verb|arrange()| function can be used.
+If you provide more than one variable name, each additional variable will be used to break ties in the values of the preceding variable. Use \verb|desc()| to reorder a variable in descending order. Missing values are always sorted at the end. Example \ref{ex:tidyarrange} shows how the \verb|arrange()| function can be used.
 
 <<ex:tidyarrange, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Arrange flights by year, then month, then day
@@ -899,7 +935,7 @@ min_rank(desc(y))
 
 \begin{enumerate}
   \item Currently \verb|dep_time| and \verb|sched_dep_time| are convenient to look at but hard to compute with because they’re not really continuous numbers. Convert them to a more convenient representation of number of minutes since midnight.
-  \item Compare new variable \verb|air_time| as \verb|arr_time - dep_time|. What do you expect to see? What problem do you see? What do you need to do to fix it?
+  \item Compare a new variable \verb|air_time| as \verb|arr_time - dep_time|. What do you expect to see? What problem do you see? What do you need to do to fix it?
   \item What does \verb|1:3 + 1:10| return and why? How about \verb|1:3 + 1:9|?
 \end{enumerate}
 
@@ -919,7 +955,7 @@ The last key function is \verb|summarise()| or \verb|summarize()|. It collapses 
 
 Whenever doing any aggregation, it is always a good idea to include either the total count \verb|n()| or the count of non-missing values \verb|sum(!is.na(x))|. To count the number of unique values, use \verb|n_distinct()|. By including count statistics, you can make sure that you are not drawing conclusions based on small amount of data. 
 
-When combining several operations it is usually better to join them together using the pipe operator \verb|%>%| rather than repeatedly making new variables. This is illustrated in example \ref{ex:tidysummarise}.
+When combining several operations, it is usually better to join them together using the pipe operator \verb|%>%| rather than repeatedly making new variables. This is illustrated in example \ref{ex:tidysummarise}.
 
 <<ex:tidysummarise, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Example of summarise() function alone
@@ -968,23 +1004,23 @@ flights %>%
 
 \chapter{Regression Models}
 
-Regression model is one of the most widely used statistical techniques in the realm of supervised learning. It quantifies the relationship between dependent variable \(Y\) and independent variable \(X\), where \(Y	\subseteq \mathbb{R} \) and \(X = \{ x_1, x_2,...x_M \}\).
+The regression model is one of the most widely used statistical techniques in the realm of supervised learning. It quantifies the relationship between a dependent variable \(Y\) and an independent variable \(X\), where \(Y	\subseteq \mathbb{R} \) and \(X = \{ x_1, x_2,...x_M \}\).
 
 \section{Linear Regression}
 
-Linear regression\footnote{Also called ordinary least square (OLS) regression.} is a very popular parametric statistical technique. It can quantify the effects of each input variable, it also informs users whether the effects are statistically significant or not.
+Linear regression\footnote{Also called ordinary least square (OLS) regression.} is a very popular parametric statistical technique. It can quantify the effects of each input variable. It also informs users whether the effects are statistically significant or not.
 
-In a univariate scenario where \(x\) is the only input, it provides the best fit for the model equation \(\hat{y}_i=\beta_0+\beta_1 x_i \). The parameter \(\beta_0\) is normally referred as the intercept, while the \(\beta_1\) value is called the slope.
+In a univariate scenario where \(x\) is the only input, it provides the best fit for the model equation \(\hat{y}_i=\beta_0+\beta_1 x_i \). The parameter \(\beta_0\) is normally referred to as the intercept, while the \(\beta_1\) value is called the slope.
 
-Simple linear model can be extended to include a high-order polynomial term  of variable \(x\). It provides higher model flexibility so that linear model fits the data better. For example, an \(M\)\textsuperscript{th} order polynomial term has been fitted to the dataset on the next chart. The choice of \(M\) is subjective but usually a small value of \(M\) is desirable because it helps avoid overfitting.
+The simple linear model can be extended to include a high-order polynomial term  of a variable \(x\). It provides higher model flexibility so that the linear model fits the data better. For example, an \(M\)\textsuperscript{th} order polynomial term has been fitted to the dataset on the next chart. The choice of \(M\) is subjective but usually a small value of \(M\) is desirable because it helps avoid overfitting.
 
-The model assumes model residuals \( \epsilon_i = y_i-\hat{y}_i\) are drawn from Gaussian distribution (i.e. having a bell-shaped curve). The goal of linear regression is to minimise the sum of squared residual. 
+The model assumes that the model residuals \( \epsilon_i = y_i-\hat{y}_i\) are drawn from Gaussian distribution (i.e. having a bell-shaped curve). The goal of linear regression is to minimise the sum of squared residuals. 
 
-In the R language you can call the function \verb|lm()| to perform linear regression. It requires at least two arguments (\verb|data| and \verb|formula|). For example, \verb|lm(y ~ x , myData)| will perform a simple univariate linear model using independent variable \(x\) to predict dependent variable \(y\) in the data frame object \verb|myData|.
+In the R language you can call the function \verb|lm()| to perform linear regression. It requires at least two arguments (\verb|data| and \verb|formula|). For example, \verb|lm(y ~ x , myData)| will perform a simple univariate linear model using the independent variable \(x\) to predict the dependent variable \(y\) in the data frame object \verb|myData|.
 
-Dummy variable can be easily created from categorical labels. Users can simply use the syntax \verb|lm(y ~ x1 + x2, myData)| where \verb|x1| is a numeric variable and \verb|x2| either a factor or a character variable The \verb|lm| function will automatically create dummy variables on-the-fly. Normally the first category in the column will be used as reference level.
+Dummy variables can be easily created from categorical labels. Users can simply use the syntax \verb|lm(y ~ x1 + x2, myData)| where \verb|x1| is a numeric variable and \verb|x2| either a factor or a character variable The \verb|lm| function will automatically create dummy variables on-the-fly. Normally the first category in the column will be used as reference level.
 
-Simple linear model are often not flexible enough to model complex variable effects. In light of this, linear models can be made more flexible by including polynomial terms. It can be expressed as \verb|lm(y~poly(x1,3)+x2,myData)|. In this case, we are defining a cubic relationship with variable \verb|x1| and a linear relationship with variable \verb|x2| (Five coefficients in total will be estimated, four from the regression terms plus one from the intercept). Such model can be expressed as equation \eqref{linearexample}. 
+Simple linear models are often not flexible enough to model complex variable effects. In light of this, linear models can be made more flexible by including polynomial terms. This can be expressed as \verb|lm(y~poly(x1,3)+x2,myData)|. In this case, we are defining a cubic relationship with variable \verb|x1| and a linear relationship with variable \verb|x2| (Five coefficients in total will be estimated, four from the regression terms plus one from the intercept). Such a model can be expressed as equation \eqref{linearexample}. 
 
 \begin{equation}
 \label{linearexample}
@@ -993,7 +1029,7 @@ Simple linear model are often not flexible enough to model complex variable effe
 \underbrace{\beta_4 x_{2,i}}_\text{Linear term}
 \end{equation}
 
-Interaction refers to the combined effect\footnote{Also known as synergy effect.} of more than one independent variables. For example, independent variable \verb|x1| and \verb|x2| might have no effect on dependent variable \(y\) alone. However, the effect on \(y\) can become prominent when these two variables are combined. In R language you can use the syntax \verb|lm(y ~ x1*x2)| to represent the relationship. The function \verb|I(x1*x2)| can be used to supress interaction term and the arguments will be treated as simple arithmetic operations.
+Interaction refers to the combined effect\footnote{Also known as synergy effect.} of more than one independent variables. For example, the independent variables \verb|x1| and \verb|x2| might have no effect on the dependent variable \(y\) alone. However, the effect on \(y\) can become prominent when these two variables are combined. In R language you can use the syntax \verb|lm(y ~ x1*x2)| to represent the relationship. The function \verb|I(x1*x2)| can be used to supress the interaction term and the arguments will be treated as simple arithmetic operations.
 
 \begin{Exercise}[title={Simple Linear Regression}]
 In this exercise, we are going to predict car efficiency using the \verb|mtcars| teaching dataset. The dataset is embedded in open source R and can be called directly by \verb|mtcars|. In example \ref{ex:mtcars_head},you can peek at the dataset by executing \verb|head(mtcars)| or \verb|tail(mtcars)|. You can also read the dataset definition by executing the command \verb|?mtcars|.
@@ -1058,7 +1094,7 @@ library(GGally)
 ggpairs(mtcars)
 @
 
-Now let us try to analyse car efficiency using the \verb|mpg| column as dependent variable. The hypothesis is that heavier cars have lower miles-per-gallon. We can investigate this by building a univariate linear model using the \verb|lm()| function and analyse the results. The following code fits an univariate regression model. The function \verb|summary(myModel1)| would print out all the key results of the model. This is demonstrated in example \ref{ex:linearmodel}.
+Now let us try to analyse car efficiency using the \verb|mpg| column as dependent variable. The hypothesis is that heavier cars have lower miles-per-gallon. We can investigate this by building a univariate linear model using the \verb|lm()| function and analyse the results. The following code fits a univariate regression model. The function \verb|summary(myModel1)| prints out all the key results of the model. This is demonstrated in example \ref{ex:linearmodel}.
 
 <<ex:linearmodel, fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Build a univariate linear model
@@ -1090,7 +1126,7 @@ Adjusted \(R^2\)    & Adjusted version of \(R^2\).\\
 \label{tab:linearsummary}
 \end{table}
 
-You can also build more complex multivariate models using the same \verb|lm()| function Example \ref{ex:linearmodelpoly} shows how the function deals with nominal and ordinal variables. You can either force the variable to become categorical by explicitly state \verb|factor(myVar)| in the formula. Alternatively, if the variable already belongs \verb|factor| data type, the \verb|lm()| regression function would handle it automatically without having to state it in the formula.
+You can also build more complex multivariate models using the same \verb|lm()| function Example \ref{ex:linearmodelpoly} shows how the function deals with nominal and ordinal variables. You can either force the variable to become categorical by explicitly state \verb|factor(myVar)| in the formula. Alternatively, if the variable already belongs to the \verb|factor| data type, the \verb|lm()| regression function would handle it automatically without having to state it in the formula.
 
 <<ex:linearmodelpoly, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Dummy variables are automatically created on-the-fly.
@@ -1105,7 +1141,7 @@ myModel3 <- lm(mpg ~ wt + qsec + factor(am) +
 summary(myModel3)
 @
 
-To further analyse the effects of individual variables, wou can load the \verb|car| package and use the function \verb|avPlots()| to view the partial regression plot\footnote{It is also called the added-variable plot.}. This would graphically display the effect of individual variables while keeping others in control. This is shown in example \ref{ex:avplots}.
+To further analyse the effects of individual variables, wou can load the \verb|car| package and use the function \verb|avPlots()| to view the partial regression plots\footnote{It is also called the added-variable plot.}. This would graphically display the effect of individual variables while keeping others in control. This is shown in example \ref{ex:avplots}.
 
 <<ex:avplots,fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
 library(car)
@@ -1120,10 +1156,10 @@ avPlots(myModel2)
   avPlots(myModel2)
   par(mfrow = c(1,1))
   @
-	\caption{Partial Regression plots}
+	\caption{Partial regression plots}
 \end{figure}
 
-As the input predictor variables usually have different scale, the model coefficient are not directly comparable. To fairly compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a function \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. You can follow example \ref{ex:betanorm} for coefficient standardisation.
+As the input predictor variables usually have different scale, the model coefficients are not directly comparable. To fairly compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a function \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. You can follow example \ref{ex:betanorm} for coefficient standardisation.
 
 <<ex:betanorm, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
 library(QuantPsyc)
@@ -1132,7 +1168,7 @@ lm.beta(myModel2)
 lm.beta(myModel3)
 @
 
-You can also compare nested models\footnote{Refers to models having additional predictor terms. For example, \(\hat{y}=x_1+x_2+x_3\) and \(\hat{y}=x_1+x_2+x_3+x_4\) are both nested models of \(\hat{y}=x_1+x_2\).} using ANOVA technique. Example \ref{ex:linearanova} compares three nested models by applying Chi-square test on the model residuals to check for statistically significant differences. In most cases, the simpler model is prefereable if the candidate models are not significantly different.
+You can also compare nested models\footnote{Refers to models having additional predictor terms. For example, \(\hat{y}=x_1+x_2+x_3\) and \(\hat{y}=x_1+x_2+x_3+x_4\) are both nested models of \(\hat{y}=x_1+x_2\).} using ANOVA technique. Example \ref{ex:linearanova} compares three nested models by applying the Chi-square test on the model residuals to check for statistically significant differences. In most cases, the simplest model is prefereable if the candidate models are not significantly different.
 
 <<ex:linearanova, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Compare linear regression models using Chi-square test
@@ -1163,13 +1199,13 @@ plot(myModel3)
 
 \begin{description}
   \item [Residuals vs Fitted]
-  Checks for non-linear relationship. For a good linear fit, residuals are normally distributed along a straight line centred at zero (i.e. a horizontal line). Contrarily, curvy line indicate poor model fit with possible non-linear effects.
+  Checks for non-linear relationship. For a good linear fit, residuals are normally distributed along a straight line centred at zero (i.e. a horizontal line). Contrarily, curvy lines indicate poor model fit with possible non-linear effects.
 
   \item [Normal Quantile-Quantile]
-  One the of main assumptions of linear regression is that the residual is drawn from zero-centred Gaussian distribution \(\epsilon_i\sim\mathcal{N}(0,\sigma^2)\). To verify whether the proposed model satisfies this assumption, we can use a normal quantile-quantile plot (Q-Q plot) to perform a quick check. It aligns model residuals against a theoretical normal distribution. If the residuals spread along a straight line on the Q-Q plot, it suggests that the residuals are normally distributed. Alternatively, if the data points deviate from the line it indicates vice versa. In this case, parametric model assumption does not hold and you might have to consider improving your model.
+  One of the main assumptions of linear regression is that the residual is drawn from a zero-centred Gaussian distribution \(\epsilon_i\sim\mathcal{N}(0,\sigma^2)\). To verify whether the proposed model satisfies this assumption, we can use a normal quantile-quantile plot (Q-Q plot) to perform a quick check. It aligns the model residuals against a theoretical normal distribution. If the residuals spread along a straight line on the Q-Q plot, it suggests that the residuals are normally distributed. Alternatively, if the data points deviate from the line it indicates vice versa. In this case, the parametric model assumption does not hold and you might have to consider improving your model.
 		
   \item [Scale-Location]
-  Shows the distribution of the standardised residuals along the range of fitted values. As standard linear model is assumed to be homoscedastic, the residual variance should not vary along the range of fitted values (i.e. expects a near-horizontal line). If the standardised residual forms a distinguishable patten (e.g. fanning out or curvy), then the model may be heteroscedastic and hence violates the underlying assumption.
+  Shows the distribution of the standardised residuals along the range of fitted values. As the standard linear model is assumed to be homoscedastic, the residual variance should not vary along the range of fitted values (i.e. expect a near-horizontal line). If the standardised residuals form a distinguishable pattern (e.g. fanning out or curvy), then the model may be heteroscedastic and hence violate the underlying assumption.
   
   \item [Residual vs Leverage (Cook's Distance)]
   Observations having high leverage pose greater influence to the model. This means that the model estimates are strongly affected by these cases. If such obserations have high residuals (i.e. large Cook's distance), they can sometimes be considered as outliers. On the other hand, most observations would have low leverage and short Cook's distance. This means that the model estimates would not have varied a lot if few such observations were to be added or discarded.
@@ -1179,7 +1215,7 @@ plot(myModel3)
 
 \begin{Exercise}[title={Model Overfitting}]
 
-Linear regression can be made more flexible by increasing the order of the polynomial terms. This allows linear model to capture non-linear effects. However, a flexible model also risks overfitting the data. This means that the model might appear to have very good fit during training, but it may fit poorly when it is tested on new data. In general, overfitted models have very little inference and are ungeneralisable. The code snippet in example \ref{ex:overfitting} runs a linear model with variable level of flexibility. 
+Linear regression can be made more flexible by increasing the order of the polynomial terms. This allows the linear model to capture non-linear effects. However, a flexible model also risks overfitting the data. This means that the model might appear to have very good fit during training, but it may fit poorly when it is tested on new data. In general, overfitted models have very little inferential power and are ungeneralisable. The code snippet in example \ref{ex:overfitting} runs a linear model with variable level of flexibility. 
 
 <<ex:overfitting, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Bivariate linear model with polynomial terms
@@ -1261,14 +1297,14 @@ points(myPoints, col="red")
 
 \section{Poisson Regression}
 
-In the previous section, simple linear regression model assumes the dependent variable \(y\) follows a Gaussian distribution which spans the range \((-\infty, +\infty)\). Yet sometimes we would like to estimate the number of discrete events where it is often a positive integer (\(\mathbb{N}=\{0,1,2,3,...\}\)). In this case, Poisson regression can be used. It is based on Poisson distribution\footnote{A Poisson distribution is defined by a single parameter \(y \sim Poisson(\lambda)\), where the mean \(\mu\) and variance \(\sigma^2\) are equal. i.e. \(\lambda=\mu\) and \(\lambda=\sigma^2\)} which can be found in everyday life, the following are typical examples:
+In the previous section, the simple linear regression model assumes that the dependent variable \(y\) follows a Gaussian distribution which spans the range \((-\infty, +\infty)\). Yet sometimes we would like to estimate the number of discrete events which often a positive integer (\(\mathbb{N}=\{0,1,2,3,...\}\)). In this case, Poisson regression can be used. It is based on the Poisson distribution\footnote{A Poisson distribution is defined by a single parameter \(y \sim Poisson(\lambda)\), where the mean \(\mu\) and variance \(\sigma^2\) are equal. i.e. \(\lambda=\mu\) and \(\lambda=\sigma^2\)} which can be found in everyday life. The following are typical examples:
 
 \begin{itemize}
   \item Number of children in a household.
   \item Number of bank notes in a wallet.
 \end{itemize}
 
-Poisson regression model can take into account multiple predictor variables. Equation \eqref{poisson} shows a Poisson regression model with \(\hat{y}\) as dependent variable and \(M\) predictor variables.
+The Poisson regression model can take into account multiple predictor variables. Equation \eqref{poisson} shows a Poisson regression model with \(\hat{y}\) as the dependent variable and \(M\) predictor variables.
 
 \begin{equation}
 \label{poisson}
@@ -1314,7 +1350,7 @@ mean(mtcars$carb)
 var(mtcars$carb)
 @
 
-To robustly check whether a variable is truly drawn from a Poisson distribution, you can perform a Chi-squared goodness-of-fit test. It fits the input data against a theoretical Poisson distribution. Example \ref{ex:goodfit} visualises the results. The vertical bars would fill the positive space if the input data fits well against the Poisson distribution. This can be statistically examined by analysing the \(p\)-value of the Chi-square test. If the \(p\)-value is small enough, we can then accept the hypothesis that the variable is drawn from a Poisson distribution. 
+To robustly check whether a variable is truly drawn from a Poisson distribution, you can perform a Chi-squared goodness-of-fit test. It fits the input data against a theoretical Poisson distribution. Example \ref{ex:goodfit} visualises the results. The vertical bars would fill the positive space if the input data fitted well against the Poisson distribution. This can be statistically examined by analysing the \(p\)-value of the Chi-square test. If the \(p\)-value is small enough, we can then accept the hypothesis that the variable is drawn from a Poisson distribution. 
 
 <<ex:goodfit, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=8, fig.height=4, rexample=TRUE>>=
 # Performs the Chi-squared goodness-of-fit test.
@@ -1342,7 +1378,7 @@ plot(gf)
 
 \begin{Exercise}[title={Building a Poisson Model}]
 
-Example \ref{ex:poissonreg} trains a Poisson regression model using the \verb|mtcars| dataset. The variable \verb|carb| is used as dependent variable while \verb|hp|, \verb|wt| and \verb|am| are used as independent predictor variables. The regression output can be interpreted in a similar way as the ones from linear model.
+Example \ref{ex:poissonreg} trains a Poisson regression model using the \verb|mtcars| dataset. The variable \verb|carb| is used as the dependent variable while \verb|hp|, \verb|wt| and \verb|am| are used as independent predictor variables. The regression output can be interpreted in a similar way as the ones from the linear model.
 
 <<ex:poissonreg, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Build a Poisson model to predict the number of carburetors in a car.
@@ -1361,7 +1397,7 @@ tibble(observed = mtcars$carb,
 
 \section{Logistic Regression}
 
-Logistic regression can be used if the dependent variable is binary. This refers to when the outcome can either be \(Y\) or \(\neg Y\). The model estimates outcome likelihood using the logistic function as outlined in equation \eqref{logisticsreg}. Logistic function transforms a real-valued number \(X\) into the range \((0,1)\) which represents the outcome probability \(P(Y)\in(0,1)\).
+Logistic regression can be used if the dependent variable is binary. This refers to when the outcome can either be \(Y\) or \(\neg Y\). The model estimates outcome likelihood using the logistic function as outlined in equation \eqref{logisticsreg}. The logistic function transforms a real-valued number \(X\) into the range \((0,1)\) which represents the outcome probability \(P(Y)\in(0,1)\).
 
 \begin{equation}
 \label{logisticsreg}
@@ -1384,27 +1420,27 @@ ggplot(mapping = aes(x=logistic,
 \caption{Graph showing the range of a logistic function}
 \end{figure}
 
-In a univariate scenario, the logistic function can be expressed as equation \eqref{logisticprob}, where \(\beta_0\) represents the intercept while \(\beta_1, \beta_2, \beta_3, ..., \beta_M\) refers to the regression coefficient of variables \(x_1, x_2, x_3,...,x_M\). The output \(P(Y)\) indicates the likelihood of true outcome.
+In a univariate scenario, the logistic function can be expressed as an equation \eqref{logisticprob}, where \(\beta_0\) represents the intercept while \(\beta_1, \beta_2, \beta_3, ..., \beta_M\) refer to the regression coefficients of the variables \(x_1, x_2, x_3,...,x_M\). The output \(P(Y)\) indicates the likelihood of true outcome.
 
 \begin{equation}
 \label{logisticprob}
 P(Y)=\frac{1}{1+e^{-(\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M)}}
 \end{equation}
 
-One of the most powerful features of logistic regression is the odds ratio. It quantifies the effects of each independent variable. It is a value indicating the change of likelihood of the event when an independent predictor variable is increased by \(1\) unit. Odds ratio is defined in equation \eqref{oddsratio}.
+One of the most powerful features of logistic regression is the odds ratio. It quantifies the effects of each independent variable. It is a value indicating the change of likelihood of the event when an independent predictor variable is increased by \(1\) unit. The odds ratio is defined in equation \eqref{oddsratio}.
 
 \begin{equation}
 \label{oddsratio}
 {OR}(x_1) = \frac{odds(x_1+1)}{odds(x_1)} = \frac{e^{\beta_0+\beta_1 (x_1+1)+\beta_2 x_2+...+\beta_M x_M}}{e^{\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M}} = e^{\beta_1}
 \end{equation}
 
-Logistic regression can only handle binary problem. If the dependent variable \(Y\) has more than two outcomes, we can use another algorithm called multinomial logistic regression\footnote{\url{http://www.ats.ucla.edu/stat/r/dae/mlogit.htm}}. Such problem can also be analysed using artificial neural networks in a much more sophisticated way which we will cover in a later section.
+Logistic regression can only handle binary classification problems. If the dependent variable \(Y\) has more than two outcomes, we can use another algorithm called multinomial logistic regression\footnote{\url{http://www.ats.ucla.edu/stat/r/dae/mlogit.htm}}. Such problem can also be analysed using artificial neural networks in a much more sophisticated way which we will cover in a later section.
 
 \begin{Exercise}[title={Building a Logistic Model}]
 
-In this exercise, we would continue to use the \verb|mtcars| dataset. We will build a logistic regression model to predict whether the vehicle has automatic or manual transmission system (using the \verb|am| variable as dependent variable). 
+In this exercise, we will continue to use the \verb|mtcars| dataset. We will build a logistic regression model to predict whether the vehicle has automatic or manual transmission system (using the \verb|am| variable as dependent variable). 
 
-In the example \ref{ex:logistic}, the model has three independent variables \verb|mpg|, \verb|hp| and \verb|disp|. You may run the example code to build the logistic regression model. You may also calculate the odds ratio and analyse the effects of each variable. The last part of the code is to calculate the model accuracy. 
+In the example \ref{ex:logistic}, the model has three independent variables \verb|mpg|, \verb|hp| and \verb|disp|. You may run the example code to build the logistic regression model. You may also calculate the odds ratios and analyse the effects of each variable. The last part of the code is to calculate the model accuracy. 
 
 <<ex:logistic, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Build a logistic regression model to predict the dependent variable am
@@ -1456,13 +1492,13 @@ At the heart of tree-based method is a concept called binary recursive partition
 			
 \section{Decision Trees}
 
-Decision tree is the simplest form of any tree-based models. It uses standard recursive partitioning to produce prediction regions. Decision tree is a very generic algorithm which fits both regression and classification problem. This means it can predict both continuous real numbers and discrete categories depending on the type of problem. The region prediction for a classification tree is decided by the majority class, while the prediction for a regression tree is defined as the simple average of all members within the region. The tree-splitting structure is called the topology, which can be interpreted graphically in most cases.
+Decision tree is the simplest form of any tree-based model. It uses standard recursive partitioning to produce prediction regions. Decision tree is a very generic algorithm which fits both regression and classification problems. This means it can predict both continuous real numbers and discrete categories depending on the type of problem. The region prediction for a classification tree is decided by the majority class, while the prediction for a regression tree is defined as the simple average of all members within the region. The tree-splitting structure is called the topology, which can be interpreted graphically in most cases.
 
 On the downside, recursive partitioning tends to produces very complex trees which may overfit the data. Various control parameters can be used to mitigate the risk of overfitting. For example, recursion can terminate once all regions are small enough to contain less than \(5\) objects.
 
 \begin{Exercise}[title={Growing a Decision Tree}]
 
-In the R language, there are many packages which implement tree-based algorithm. In exercise \ref{ex:decisiontree}, we will use the \verb|rpart| function in the rpart package to build a simple decision trees for a regression problem. The aim of this exercise is to predict car efficiency (\verb|mpg| variable) using the \verb|mtcars| dataset.
+In the R language, there are many packages which implement tree-based algorithm. In exercise \ref{ex:decisiontree}, we will use the \verb|rpart| function in the rpart package to build a simple decision tree for a regression problem. The aim of this exercise is to predict car efficiency (\verb|mpg| variable) using the \verb|mtcars| dataset.
 
 <<ex:decisiontree,fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Load the rpart package for recursive partitioning
@@ -1500,7 +1536,7 @@ rpart.plot(myTree, fallen.leaves = FALSE)
 
 It is a common practice to grow a complex decision tree first, and then decide how to prune it afterwards. Removing weaker branches of the tree usually enhances the model's predictive power which eventually makes it more generalisable.
 
-In exercise \ref{ex:dtreeprune}, the command \verb|printcp(myTree)| returns the relative error of the tree at each and every node. It is defined as \(1-R^2\) and therefore always starts with \(1\) at the top level. As the tree grows, the \(R^2\) value increases and approachs \(1\) therefore the corresponding relative error will diminish towards zero. You can use the function \verb|prune()| to remove weak branches. The complexity parameter \verb|cp| refers to the amount of error reduced when a region is split. We can specify a threshold \verb|cp| value so that branches with weak predictive power can be pruned.
+In exercise \ref{ex:dtreeprune}, the command \verb|printcp(myTree)| returns the relative error of the tree at each and every node. It is defined as \(1-R^2\) and therefore always starts with \(1\) at the top level. As the tree grows, the \(R^2\) value increases and approaches \(1\) therefore the corresponding relative error will diminish towards zero. You can use the function \verb|prune()| to remove weak branches. The complexity parameter \verb|cp| refers to the amount of error reduced when a region is split. We can specify a threshold \verb|cp| value so that branches with weak predictive power can be pruned.
 
 <<ex:dtreeprune, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # View the cp values
@@ -1517,17 +1553,17 @@ rpart.plot(myNewTree, fallen.leaves = FALSE)
 
 \section{Random Forest}
 
-Random forest is a collection of many tiny decision trees. All trees in the forest are trained using the same dataset, but with randomly selected predictor variables. In a random forest with \(P\) independent variables, only \(p < P\) variables are randomly selected at each split. Such randomess causes variation among the trees. Some trees would have strong prediction power while some others would be weaker.
+Random forest is a collection of many tiny decision trees. All trees in the forest are trained using the same dataset, but with randomly selected predictor variables. In a random forest with \(P\) independent variables, only \(p < P\) variables are randomly selected at each split. Such randomess causes variation among the trees. Some trees will have strong prediction power while some others will be weaker.
 
 Once all the trees are grown, the random forest algorithm combines the output of all trees and uses the simple average as prediction value if it is regression problem. Alternatively if it is a classification problem, the majority label of the region becomes the prediction value.
 
-It is widely recognised that prediction accuracy of random forest is far better than an individual decision tree. However as a trade-off, random forest is often harder to interpret manually as the decision rule becomes more complicated.
+It is widely recognised that the prediction accuracy of random forest is far better than that of an individual decision tree. However, as a trade-off, random forest is often harder to interpret manually as the decision rule becomes more complicated.
 
 \begin{Exercise}[title={Planting a Random Forest}]
 
 Example \ref{ex:randomforest} demonstrates how to train a random forest model. Each tree in the forest would randomly select a few variables for assessment. You can use the \verb|randomForest| package to build random forest rapidly.
 
-The importance of each predictor variable is indicated by the decrease of node impurity. A powerful predictor would substantially decrease node impurity. For regression, it is measured by residual sum of squares. For classification, the node impurity is measured by the Gini index. You can use the function \verb|importance(myForest)| or \verb|varImpPlot(myForest)| to calculate the importance measurement.
+The importance of each predictor variable is indicated by the decrease of node impurity. A powerful predictor would substantially decrease node impurity. For regression, it is measured by the residual sum of squares. For classification, the node impurity is measured by the Gini index. You can use the function \verb|importance(myForest)| or \verb|varImpPlot(myForest)| to calculate the importance measurement.
 
 <<ex:randomforest, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 library(randomForest)
@@ -1555,13 +1591,13 @@ varImpPlot(myForest)
 
 \chapter{Neural Networks}
 
-Artificial neural networks (ANN) are mathematical algorithms inspired by the structure of the biological brains. It process incoming information through non-linear mechanism in a neuron and pass on the output to another neuron. When this process repeats many times via multiple layers of neurons, it becomes an artificial neural network. Neural networks having complex structure are usually trained iteratively using backpropagation techniques over long period of time with massive computational power. Nowadays, many modern applications are based on state-of-the-art neural networks, such as video analysis, speech recognition, chatbots and machine translation.
+Artificial neural networks (ANN) are mathematical algorithms inspired by the structure of the biological brains. It processes incoming information through a non-linear mechanism in a neuron and passes on the output to another neuron. When this process repeats many times via multiple layers of neurons, it becomes an artificial neural network. Neural networks having a complex structure are usually trained iteratively using backpropagation techniques over a long period of time with massive computational power. Nowadays, many modern applications are based on state-of-the-art neural networks, such as video analysis, speech recognition, chatbots and machine translation.
 
-In an ANN, each hidden neuron carries a non-linear activation function \(f(x)\). Sigmoid function is a traditional choice of activation function for ANNs\eqref{sigmoid}. It takes the weighted sum of input plus the bias unit and squashes everything into the range \((0,1)\) with a characteristic sigmoidal 'S' shape. As the sigmoid function is differentiable and easy to compute, it soon becomes a popular choice for ANN activation function. However, it suffers from weak gradient when the input is far away from zero (i.e. the neuron saturates), which makes the ANN learn very slow. 
+In an ANN, each hidden neuron carries a non-linear activation function \(f(x)\). The sigmoid function is a traditional choice of activation function for ANNs\eqref{sigmoid}. It takes the weighted sum of input plus the bias unit and squashes everything into the range \((0,1)\) with a characteristic sigmoidal `S' shape. As the sigmoid function is differentiable and easy to compute, it soon became a popular choice for the ANN activation function. However, it suffers from a weak gradient when the input is far away from zero (i.e. the neuron saturates), which makes the ANN learn very slow. 
 
-To address the problem of weak gradient, alternative activation functions have been proposed. For instance, the hyperbolic tangent function can be used\eqref{tanh}. It shares the same sigmoidal shape but further stretches the output to the range \((-1,1)\) therefore provides stronger gradient. Yet, the gradient still suffers from saturation when the input is too small or too large.
+To address the problem of weak gradient, alternative activation functions have been proposed. For instance, the hyperbolic tangent function can be used\eqref{tanh}. It shares the same sigmoidal shape but further stretches the output to the range \((-1,1)\), therefore providing stronger gradient. Yet, the gradient still suffers from saturation when the input is too small or too large.
 
-Different activation functions can provide stronger gradients while maintaining non-linearity. For instance, the softplus function has strong gradient (i.e. unsaturable) for any positive input \eqref{softplus}. However, it has been considered computationally costly as it contains logarithm and exponential terms. In light of this, a simplified version call rectified linear unit (ReLU) is usually used instead \eqref{relu}. The shape of ReLU is very similar to softplus with the exception that it has a threshold at zero. This means only positive input can lead to activation. However, the weighted sum input can change to negative value during training therefore causing the ReLU neuron to cease training. This is called the dying ReLU problem. To avoid this, more advanced activation functions incorporate a very small gradient in the negative range to allow the neuron to recover. The output of common activation functions are visualised in figure \ref{fig:activation}.
+Different activation functions can provide stronger gradients while maintaining non-linearity. For instance, the softplus function has a strong gradient (i.e. unsaturable) for any positive input \eqref{softplus}. However, it has been considered computationally costly as it contains logarithmic and exponential terms. In light of this, a simplified version call rectified linear unit (ReLU) is usually used instead \eqref{relu}. The shape of ReLU is very similar to softplus with the exception that it has a threshold at zero. This means only positive input can lead to activation. However, the weighted sum input can change to a negative value during training, therefore causing the ReLU neuron to cease training. This is called the dying ReLU problem. To avoid this, more advanced activation functions incorporate a very small gradient in the negative range to allow the neuron to recover. The output of common activation functions are visualised in figure \ref{fig:activation}.
 	
 \begin{subequations}
 	Sigmoid activation
@@ -1617,7 +1653,7 @@ tibble(func="Sigmoid", value= func_sigmoid, range = range) %>%
 \label{fig:activation}
 \end{figure}
 
-The output prediction is made at the network's final layer. Each neuron at this layer combines the hidden neuron's activation though weighted sum and a bias adjustment unit \eqref{weightedhidden}. For regression problems, a linear activation layer is usually used to map the output vector back into unbounded real value range \eqref{linear}. For classification problem, softmax function is used as the final output layer. It maps the hidden layer's activations into the range \((0,1)\) where the sum of the entire output vector is restricted to\(1\) in order to represent class probabilities \eqref{softmax}.
+The output prediction is made at the network's final layer. Each neuron at this layer combines the hidden neurons' activation though a weighted sum and adds a bias adjustment term \eqref{weightedhidden}. For regression problems, a linear activation layer is usually used to map the output vector back into an unbounded real value range \eqref{linear}. For classification problems, the softmax function is used at the final output layer. It maps the hidden layers' activations into the range \((0,1)\) where the sum of the entire output vector is restricted to \(1\) in order to represent class probabilities \eqref{softmax}.
 
 \begin{subequations}
 	Weighted sum of hidden vector with bias adjustment
@@ -1641,9 +1677,9 @@ The output prediction is made at the network's final layer. Each neuron at this 
 
 \section{Multilayer Perceptron}
 
-A multilayer perceptron (MLP) is the simplest form of all neural network. It consists of several stacked hidden layers, where every neurons in the hidden layers are fully interconnected.
+A multilayer perceptron (MLP) is the simplest form of all neural networks. It consists of several stacked hidden layers, where all neurons in the hidden layers are fully interconnected.
 
-It is common practice to use zero-centred values for neural network training\footnote{Zero-centred values have stronger gradient, thus speed up optimisation through gradient descent.}. To achieve this, you can normalise variables into \(z\)-score \eqref{zscore} so that they have similar range. For any individual value \(x_i\), the \(z\)-score can be calculated as the distance from the arithmetic mean \(\bar{x}\) divided by standard deviation \(\sigma\) of the variable.
+It is common practice to use zero-centred values for neural network training\footnote{Zero-centred values have a stronger gradient, thus speed up optimisation through gradient descent.}. To achieve this, you can normalise variables into \(z\)-scores \eqref{zscore} so that they have similar range. For any individual value \(x_i\), the \(z\)-score can be calculated as the distance from the arithmetic mean \(\bar{x}\) divided by the standard deviation \(\sigma\) of the variable.
 
 \begin{subequations}
 	\begin{equation}
@@ -1652,13 +1688,13 @@ It is common practice to use zero-centred values for neural network training\foo
 	\end{equation}
 \end{subequations}
 
-At the training phase, network weights are usually initialised randomly. They are then optimised through backpropagation to achieve gradent descent. The weights improves gradually according to a predefined learning rate until they ultimately converge at the minimum value. One of the drawbacks is that backpropagation does not guarantee reaching global minimum if there are multiple minima across the parameter space. Such problem is usually mitigated by using advanced optimisers with adaptive learning rate.
+At the training phase, the network weights are usually initialised randomly. They are then optimised through backpropagation to achieve gradient descent. The weights improve gradually according to a predefined learning rate until they ultimately converge to the minimum value. One of the drawbacks is that backpropagation does not guarantee reaching the global minimum if there are multiple minima across the parameter space. Such problem is usually mitigated by using advanced optimisers with adaptive learning rate.
 
 \begin{Exercise}[title={Training MLP for Regression Problem}]
 
-There are many packages which implements neural network in the R language. Traditional packages include \verb|neuralnets|, \verb|nnet|, \verb|RSNNS|, \verb|caret|... etc. Modern deep learning frameworks such as \verb|h2o|, \verb|MXNet| and \verb|kerasR| are also available in R, but they usually require premium hardware set-up. In general, all neural network packages implement the same underlying algorithm and the difference usually lies in syntax, execution speed and hardware compatibility.
+There are many packages which implement neural networks. Traditional packages include \verb|neuralnets|, \verb|nnet|, \verb|RSNNS|, \verb|caret|... etc. Modern deep learning frameworks such as \verb|h2o|, \verb|MXNet| and \verb|keras| are also available in R, but they usually require premium hardware set-up. In general, all neural network packages implement the same underlying algorithm and the differences usually lie in syntax, execution speed and hardware compatibility.
 
-We will continue to use the \verb|mtcars| dataset in this exercise. The objective of this exercise is to predict the \verb|mpg| value of each car given all other known attributes of it. We would use the \verb|neuralnet| package to create a simple multilayer perceptron (MLP) model. Code in example \ref{ex:neuralnet} trains a fully-connected multilayer perceptron with two hidden layers.
+We will continue to use the \verb|mtcars| dataset in this exercise. The objective of this exercise is to predict the \verb|mpg| value of each car given all other known attributes of it. We would use the \verb|neuralnet| package to create a simple multilayer perceptron (MLP) model. The code in example \ref{ex:neuralnet} trains a fully-connected multilayer perceptron with two hidden layers.
 
 <<ex:neuralnet, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 library(dplyr)
@@ -1682,7 +1718,7 @@ myNN1 <- neuralnet(formula = mpg ~ disp + hp + drat + wt + qsec,
 plot(myNN1)
 @
 
-Example \ref{ex:neuralnet2} shows that you can load the package \verb|NeuralNetTools| to create better topology plot. In addition, you can plot the observed data against network predictions to visualise the error. For a regression problem, mean squared error (MSE) defined as \( \frac{1}{N} \sum_{n=1}^{N} (\hat{y}_n-y_n)^2 \) is usually used as the error measurement.
+Example \ref{ex:neuralnet2} shows that you can load the package \verb|NeuralNetTools| to create a better topology plot. In addition, you can plot the observed data against network predictions to visualise the error. For a regression problem, the mean squared error (MSE) defined as \( \frac{1}{N} \sum_{n=1}^{N} (\hat{y}_n-y_n)^2 \) is usually used as the error measurement.
 
 <<ex:neuralnet2, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Use a helper package for prettier graphics (optional)
@@ -1711,7 +1747,7 @@ plot(myNN1, rep="best")
 \caption{MLP model with two hidden layers}
 \end{figure}
 
-Sigmoid function is traditionally used in shallow networks. It can suffer from weak gradient when stacked in deep networks. You can use the code in example \ref{ex:neuralnetactivation} to customise the activation function.
+The sigmoid function is traditionally used in shallow networks. It can suffer from a weak gradient when stacked in deep networks. You can use the code in example \ref{ex:neuralnetactivation} to customise the activation function.
 
 <<ex:neuralnetactivation, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Build the second model
@@ -1732,7 +1768,7 @@ myNNPred2 <- myNNResult2$net.result[,1] *
 myNNError2 <- mean((myNNPred2 - mtcars$mpg)^2)
 @
 
-Neural networks can also deal with categorical inputs. They are usually converted into one-hot encoding to feed into the model\footnote{For a categorical variable with \(K\) unique values, one-hot encoding would produce \(K\) new variables. Each new variables would have value \(\{1,0\}\). Please note that this is different from dummy encoding in statistical modelling.}. Code in example \ref{ex:neuralnetencode} converts all categorical variables in the \verb|mtcars| dataset into one-hot encoding. The encoded values afre then binded to the numeric values and jointly used for training.
+Neural networks can also deal with categorical inputs. They are usually converted into one-hot encoding to feed into the model\footnote{For a categorical variable with \(K\) unique values, one-hot encoding would produce \(K\) new variables. Each new variable will have value \(\{1,0\}\). Please note that this is different from dummy encoding in statistical modelling.}. The code in example \ref{ex:neuralnetencode} converts all categorical variables in the \verb|mtcars| dataset into one-hot encoding. The encoded values are then bound to numeric values and jointly used for training.
 
 <<ex:neuralnetencode, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Loads the purrr package to access the imap function
@@ -1794,26 +1830,26 @@ plot(myNN3, rep="best")
 
 \chapter{Time Series Analysis}
 
-Many datasets have temporal dimension. Time series refers to a chronologically-ordered sequence of observations. There are two main types of time series data: 
+Many datasets have a temporal dimension. Time series refers to a chronologically-ordered sequence of observations. There are two main types of time series data: 
 \begin{inparaenum}[1)]
 \item regularly-sampled\footnote{Regularly sampled time series has observations taken at fixed interval. This includes examples like heart rate, network traffic, daily weather... etc.}, and
-\item irregularly-sampled\footnote{Refers to when observations are not recorded at fixed interval, such as incidents of earthquakes.}
+\item irregularly-sampled\footnote{Refers to observations that are not recorded at fixed interval, such as incidents of earthquakes.}
 \end{inparaenum}
 In this chapter, we would focus on time series data sampled at regularly-spaced intervals.
 
-Temporal properties are often the point-of-interest in time series analysis. This include trend, seasonality, or temporal dependency between different variables. Studying these properties can gain useful insights. For example, extrapolating trend can create forecast for the future. Alternatively, analysing seasonality can help users understand the nature of recurring patterns.
+Temporal properties are often the point-of-interest in time series analysis. These include trend, seasonality, or temporal dependency between different variables. Studying these properties can offer useful insights. For example, extrapolating the trend can create forecasts for future scenarios. Alternatively, analysing the seasonality can help users understand the nature of recurring patterns.
 
 \section{Auto-Correlation Function}
 
-Auto-correlation function (ACF) measures the correlation of a single variable along the temporal dimension between \(x_t\) and \(x_{t+h}\). In other words, it shows the correlation of the variable over different lag periods. 
+The auto-correlation function (ACF) measures the correlation of a single variable along the temporal dimension between \(x_t\) and \(x_{t+h}\). In other words, it shows the correlation of the variable over different lag periods. 
 
-In the R language, you may use the \verb|Acf(x)| function within the package \verb|forecast| to plot the ACF correlogram. For most time series variables, correlation is usually strong at lag \(h=1\) and it gradually diminishes as lag period increases. Cyclic pattern in the correlogram suggests possible seasonality which you can analyse further.
+In the R language, you may use the \verb|Acf(x)| function within the package \verb|forecast| to plot the ACF correlogram. For most time series variables, correlation is usually strong at lag \(h=1\) and it gradually diminishes as the lag period increases. A cyclic pattern in the correlogram suggests possible seasonality which you can analyse further.
 
-On the other hand, the partial auto-correlation function (PACF) is similar to the ACF in the sense that it also measures the correlation between different lag periods. The difference is that it controls the correlation across the temporal dimsnion so that only the contribution of an individual lag is reflected.
+On the other hand, the partial auto-correlation function (PACF) is similar to the ACF in the sense that it also measures the correlation between different lag periods. The difference is that it controls the correlation across the temporal dimension so that only the contribution of an individual lag is reflected.
 
 \begin{Exercise}[title={Loading Datasets}]
 
-In this exercise, we would use an external dataset. This dataset contains daily electricity generation and demand data published by a German transmission network called Amprion\footnote{Amprion - Demand in Conrrol Area \url{https://www.amprion.net/Grid-Data/Demand-in-Control-Area/}}. The first column is a date time variable and the rest are demand and generation data, each sampled at \(15\) minutes granularity. Code in example \ref{ex:loadamprion} show how to load the dataset from CSV file.
+In this exercise, we will use an external dataset. This dataset contains daily electricity generation and demand data published by a German transmission network called Amprion\footnote{Amprion - Demand in Conrrol Area \url{https://www.amprion.net/Grid-Data/Demand-in-Control-Area/}}. The first column is a date-time variable and the rest are demand and generation data, each sampled at \(15\) minutes granularity. The code in example \ref{ex:loadamprion} shows how to load the dataset from the CSV file.
 
 \begin {table}[H]
 \caption {Description of the Amprion dataset}
@@ -1843,7 +1879,7 @@ amprion <- read.csv("amprion.csv",
 amprion
 @
 
-One of the main drivers of power demand and generation is weather. The weather dataset is published by the Deutscher Wetterdienst\footnote{DWD Climate Data Center \url{https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html}}. Weather observations are recorded every hour at the Bremen weather station. You can follow the code in example \ref{ex:loadbremen} to load the dataset.
+One of the main drivers of power demand and generation is the weather. The weather dataset is published by the Deutscher Wetterdienst\footnote{DWD Climate Data Center \url{https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html}}. Weather observations are recorded every hour at the Bremen weather station. You can follow the code in example \ref{ex:loadbremen} to load the dataset.
 
 \begin {table}[H]
 \caption {Description of the Bremen weather dataset}
@@ -1882,7 +1918,7 @@ bremen <- read.csv("bremen.csv",
 bremen
 @
 
-Before moving on to further analysis, we need to aggregate the two datasets into the same granularity first. Once this is done, we can then join the two datasets together to form one table containing all variables. Example \ref{ex:joinamprionbremen} shows how to use SQL-like pipeline in \verb|dplyr| to aggregate and join the two datasets.
+Before moving on to further analyses, we need to aggregate the two datasets into the same granularity. Once this is done, we can join the two datasets together to form one table containing all variables. Example \ref{ex:joinamprionbremen} shows how to use an SQL-like pipeline in \verb|dplyr| to aggregate and join the two datasets.
 
 <<ex:joinamprionbremen, fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Load the lubridate package to access more datetime functions
@@ -1930,7 +1966,7 @@ myTable %>%
 
 \begin{Exercise}[title={Analysing Temporal Correlation}]
 
-You can use the code in example \ref{ex:acf} to create the ACF and PACF correlograms. In addition, you can use the \verb|Ccf()| or \verb|ggCcf()| function to create a cross correlation function (CCF) correlogram. It analyses the temporal correlation between two variables.
+You can use the code in example \ref{ex:acf} to create the ACF and PACF correlograms. In addition, you can use the \verb|Ccf()| or \verb|ggCcf()| function to create a cross-correlation function (CCF) correlogram. It analyses the temporal correlation between two variables.
 
 <<ex:acf, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Load the forecast package
@@ -1975,19 +2011,19 @@ tsdisplay(myTable$total_demand,
 library(forecast)
 lag.plot(myTable$total_demand,lags = 28, layout = c(4,7))
 @
-\caption{Lag plot showing the correlation of various lag periods}
+\caption{Lag plots showing the correlation of various lag periods}
 \end{figure}
 
 \end{Exercise}
 
 \section{Decomposition}
-Time series can be either additive or multiplicative. Additive time series can be generally described as \(X_t=S_t+T_t+\epsilon_t\) where \(S_t\) refers to the seasonality at time \(t\) while \(T_t\) refers to the trend component. The observed data \(X_t\) is simply the sum total of trend, seasonal and error components. Alternative, a multiplicative time series is defined as \(X_t = S_t \times T_t \times \epsilon_t\). These components can be easily decomposed from the observed values.
+Time series can be either additive or multiplicative. Additive time series can be generally described as \(X_t=S_t+T_t+\epsilon_t\) where \(S_t\) refers to the seasonality at time \(t\) while \(T_t\) refers to the trend component at time \(t\). The observed data \(X_t\) is simply the sum total of the trend, seasonal and error components. Alternatively, a multiplicative time series is defined as \(X_t = S_t \times T_t \times \epsilon_t\). These components can be easily decomposed from the observed values.
 
-\begin{Exercise}[title={Identifying Trend and Seasonal Components}]
+\begin{Exercise}[title={Identifying the Trend and Seasonal Components}]
 
-To analyse the seasonality of a time series, you need to find out the ideal frequency of the seasonal component. Example \ref{ex:frequency} uses the function \verb|findfrequency()| to identify the frequency for a given time series. It uses spectal analysis to identify the frequency with strongest spectral density. Once the frequency is calculated, we can build a \verb|ts| object using the calculated frequency value. The function \verb|decompose()| converts the observed time series into trend component \(T_t \in [1,T]\), seasonal component \(S_t \in [1,T]\) and random residuals \(\epsilon_t \in [1,T]\). 
+To analyse the seasonality of a time series, you need to find out the ideal frequency of the seasonal component. Example \ref{ex:frequency} uses the function \verb|findfrequency()| to identify the frequency for a given time series. It uses spectral analysis to identify the frequency with the strongest spectral density. Once the frequency is calculated, we can build a \verb|ts| object using the calculated frequency value. The function \verb|decompose()| converts the observed time series into a trend component \(T_t \in [1,T]\), a seasonal component \(S_t \in [1,T]\) and random residuals \(\epsilon_t \in [1,T]\). 
 
-The code also divides the dataset into training and testing set. The training set is used to run analysis and train models. Once models are trained, they are applied to the testing set to assess model performance.
+The code also divides the dataset into a training and a testing set. The training set is used to run analyses and train models. Once the models are trained, they are applied to the testing set to assess model performance.
 
 <<ex:frequency, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Divide the dataset into training and testing set
@@ -2022,7 +2058,7 @@ plot(myDecomp)
 
 \begin{Exercise}[title={Linear Time Series Forecast}]
 
-In this exercise, we will build a simple forecasting model using the trend and seasonal components as independent variables. The mathematical formula of a linear model with \(M\) predictor variables can be expressed as \eqref{tslm}. Code in example \ref{ex:tslm} shows how to build a time series linear regression model with several covariate variables as predictors. It also visualises the forecast output as a chart. The coloured area surrounding the line represents the confidence interval of your prediction.
+In this exercise, we will build a simple forecasting model using the trend and seasonal components as independent variables. The mathematical formula of a linear model with \(M\) predictor variables can be expressed as \eqref{tslm}. The code in example \ref{ex:tslm} shows how to build a time series linear regression model with several covariate variables as predictors. It also visualises the forecast output as a chart. The coloured area surrounding the line represents the confidence interval of your prediction.
 
 \begin{equation}
 \label{tslm}
@@ -2100,7 +2136,7 @@ ggplot() +
 
 ARIMA is the acronym for Auto-Regressive Integrative Moving Average model. It is a statistical technique which incorporates lag within the model. It can be described as the combination of three separate parts: autoregression, integration and moving average. ARIMA has three corresponding parameters \(p\),\(d\),and \(q\) which is normally expressed as \(ARIMA(p,d,q)\) or as separate terms \(AR(p)\), \(I(d)\) and \(MA(q)\).
 
-The \(AR(p)\) part suggests that observation \(X_t\) is dependent on the linear combination of lagged terms up to \(p\) lag periods. A pure \(AR(p)\) model is expressed as \(X_t=\sum_{i=i}^{p}(\phi_i X_{t-i})\). The moving average part \(MA(q)\) indicates the residual is inherited from up to \(q\) lag periods. A pure \(MA(q)\) model can be expressed as as \(X_t=\sum_{i=1}^{q}(\theta_i \epsilon_{t-i}) + \epsilon_t \). As a result, a simple \(ARMA(p,q)\) model can be expressed as the following where \(\phi_i\) and \(\theta_i\) are model coefficients, while \(X_{t-i}\) represent observed data at \(i^{th}\) lag step and \(\epsilon_{t-i}\) refers to the random error at the \(i^{th}\) lag step \eqref{arma}.
+The \(AR(p)\) part suggests that observation \(X_t\) is dependent on the linear combination of lagged terms up to \(p\) lag periods. A pure \(AR(p)\) model is expressed as \(X_t=\sum_{i=i}^{p}(\phi_i X_{t-i})\). The moving average part \(MA(q)\) indicates the residual is inherited from up to \(q\) lag periods. A pure \(MA(q)\) model can be expressed as as \(X_t=\sum_{i=1}^{q}(\theta_i \epsilon_{t-i}) + \epsilon_t \). As a result, a simple \(ARMA(p,q)\) model can be expressed as the following where \(\phi_i\) and \(\theta_i\) are model coefficients, while \(X_{t-i}\) represents observed data at \(i^{th}\) lag step and \(\epsilon_{t-i}\) refers to the random error at the \(i^{th}\) lag step \eqref{arma}.
 
 \begin{equation}
 \label{arma}
@@ -2111,7 +2147,7 @@ The \(AR(p)\) part suggests that observation \(X_t\) is dependent on the linear 
 \underbrace{\epsilon_t}_\text{residual}
 \end{equation}
 
-ARIMA model assumes the time series conforms stationarity\footnote{A stationary time series has consistent statistical properties across all time, such as equal mean and variance.}. The integrative component \(I(d)\) ensures stationarity by taking \(d\) number of integrative steps over time. A first order integrative model \(I(1)\) is simply the difference between current step and the immediate previous lag step. It is expressed as \( X_t^{'}=X_t - X_{t-1} \). Similarly, a second order integrative model \(I(2)\) is expressed as \( X_t^{''} = X_t^{'} - X_{t-1}^{'} = X_t - 2X_{t-1}+X_{t-2} \).
+The ARIMA model assumes that the time series conforms to stationarity\footnote{A stationary time series has consistent statistical properties across all time, such as equal mean and variance.}. The integrative component \(I(d)\) ensures stationarity by taking \(d\) number of integrative steps over time. A first order integrative model \(I(1)\) is simply the difference between the current step and the immediate previous lag step. It is expressed as \( X_t^{'}=X_t - X_{t-1} \). Similarly, a second order integrative model \(I(2)\) is expressed as \( X_t^{''} = X_t^{'} - X_{t-1}^{'} = X_t - 2X_{t-1}+X_{t-2} \).
 
 Time series data with seasonality can be expressed as \(ARIMA(p,d,q)(P,D,Q)_m\) where the uppercase parameters represent the seasonal component of the model. The \(m\) value is a positive non-zero integer indicating the frequency of the seasonality. The estimates \(AR(P)\), \(I(D)\) and \(MA(Q)\) are linearly combined together with the non-seasonal part to create the seasonal ARIMA (SARIMA) model.
 
@@ -2119,7 +2155,7 @@ Time series data with seasonality can be expressed as \(ARIMA(p,d,q)(P,D,Q)_m\) 
 
 The standard ARIMA implementation accepts six parameters \(p\), \(d\), \(q\), \(P\), \(D\) and \(Q\) which produces a seasonal time series model. In many cases, these values are usually not known to the user and all possible values are examined case-by-case to get the best fit.
 
-In the \verb|forecast| package\footnote{The package author has published a detailed book: \url{https://www.otexts.org/fpp/}}, you may use the function \verb|Arima()| to experiment parameters manually. Alternatively, it is quite common to use automated method to search for good parameters. The method \verb|auto.arima()| tries all parameter values within the given constraints. It can also fit linear regression using predictor variables if the \verb|xreg| attribute is supplied to the function. This is considerably slower than the \verb|Arima()| function due to overhead for parameter search. Example \ref{ex:autoarima} demonstrates parameter searching using automated ARIMA.
+In the \verb|forecast| package\footnote{The package author has published a detailed book: \url{https://www.otexts.org/fpp/}}, you may use the function \verb|Arima()| to experiment parameters manually. Alternatively, it is quite common to use an automated method to search for good parameters. The method \verb|auto.arima()| tries all parameter values within the given constraints. It can also fit linear regression using predictor variables if the \verb|xreg| attribute is supplied to the function. This is considerably slower than the \verb|Arima()| function due to overhead for parameter search. Example \ref{ex:autoarima} demonstrates parameter searching using automated ARIMA.
 
 <<ex:autoarima, fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 library(forecast)
@@ -2162,7 +2198,7 @@ myTestError3 <- mean((myTsForecast3$mean - myTestingSet$total_demand)^2)
 
 \begin{Exercise}[title={Custom ARIMA}]
 
-After running the automated ARIMA forecast, you might realise the forecast tends to flat out when forecast horizon increases. This is because the \verb|auto.arima()| function selects the best parameters based on an indicated called AIC. It maximises the log-likelihood of the training data and gives preference to simpler models. We can manually tweak the ARIMA model with custom parameters using the \verb|Arima()| function instead. This is demonstrated in example \ref{ex:customarima}.
+After running the automated ARIMA model, you might realise that the forecast tends to flat out when the forecast horizon increases. This is because the \verb|auto.arima()| function selects the best parameters based on an indicator called AIC. It maximises the log-likelihood of the training data and gives preference to simpler models. We can manually tweak the ARIMA model with custom parameters using the \verb|Arima()| function instead. This is demonstrated in example \ref{ex:customarima}.
 
 <<ex:customarima, fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE, rexample=TRUE>>=
 # Use custom parameters for the ARIMA model
@@ -2288,11 +2324,11 @@ myTestError5
 
 \chapter{Survival Analysis}
 
-Events occuring at irregular time interval can be studied through survival analysis. It is commonly used to analyse time-to-event in many research areas, such as medicine, economics, engineering and biology. For example, survival analysis is traditionally used in clinical research to analyse the effects of different drugs on sustaining patient's life. In this case, the time to death is used an indicator for drug performance. We will go through several techniques in this chapter.
+Events occuring at irregular time intervals can be studied through survival analysis. It is commonly used to analyse time-to-event in many research areas, such as medicine, economics, engineering and biology. For example, survival analysis is traditionally used in clinical research to analyse the effects of different drugs on sustaining patient's life. In this case, the time to death is used an indicator for drug performance. We will go through several techniques in this chapter.
 
 \section{Kaplan-Meier Estimator}
 
-Kaplan-Meier estimator is used to measure how many subjects survives in a clinical trial since treatment began. At time \(t \leqslant	T\), the estimator is given by equation \eqref{kmestimator} where \(d_{t^{'}}\) represents the number of events and \(n_{t^{'}}\) represents the number of subjects at risk.
+The Kaplan-Meier estimator is used to measure how many subjects have survived in a clinical trial since treatment began. At time \(t \leqslant	T\), the estimator is given by equation \eqref{kmestimator} where \(d_{t^{'}}\) represents the number of events and \(n_{t^{'}}\) represents the number of subjects at risk.
 
 \begin{equation}
 \label{kmestimator}
@@ -2304,7 +2340,7 @@ Kaplan-Meier estimator is used to measure how many subjects survives in a clinic
 
 There are many implementations for survival analysis in the R language. The most commonly used one is the \verb|survival| package. You can use the \verb|survfit()| function to fit a Kaplan-Meier curve with categorical predictors.
 
-In this exercise, we use the \verb|lung| dataset within the \verb|survival| package which contains lung cancer patients survival time. You can use the command \verb|?lung| to read the detailed dataset description. To fit a Kaplan-Meier Curve, we need to define the target event (i.e. death, in this example) and the time-to-event. Code in example \ref{ex:surv} shows how to define the \verb|Surv| object using the \verb|Surv(time, event)| function. The \verb|survfit| function fits a Kaplan-Meier curve against the target event using the supplied variables.
+In this exercise, we use the \verb|lung| dataset within the \verb|survival| package which contains lung cancer patients' survival time. You can use the command \verb|?lung| to read the detailed dataset description. To fit a Kaplan-Meier curve, we need to define the target event (i.e. death, in this example) and the time-to-event. The code in example \ref{ex:surv} shows how to define the \verb|Surv| object using the \verb|Surv(time, event)| function. The \verb|survfit| function fits a Kaplan-Meier curve against the target event using the supplied variables.
 
 <<ex:surv, fig.show='hide', eval=FALSE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE, rexample=TRUE>>=
 # Load the survival package for curve fitting
@@ -2355,18 +2391,18 @@ ggsurvplot(mySurvFit2,
 \end{Exercise}
 
 
-\section{Cox Proportional Harzard Model}
+\section{Cox Proportional Hazards Model}
 
-To investigate the statistical effects of multiple predictor variables on survival probability, a technique named Cox regression can be used. Cox regression can take into account categorical, ordinal as well as numerical range variables. It analyses the effects of multiple variables on survivial and assumes that the effects of these covariates are time-independent.
+To investigate the statistical effects of multiple predictor variables on survival probability, a technique named Cox regression can be used. Cox regression can take into account categorical, ordinal as well as numerical range variables. It analyses the effects of multiple variables on survival and assumes that the effects of these covariates are time-independent.
 
-The harzard function \(h_t\) is give by equation \eqref{coxph}. The term \(h_{0,t}\) in the equation represents the baseline harzard when all covariates are zero. The linear terms \(x_1, x_2, x_3,..., x_M \) are the predictor variables, while \(\beta_1, \beta_2, \beta_3,..., \beta_M \) are their corresponding coefficients. For each coefficient \(\beta_m\), the exponential term \(e^{\beta_m}\) represents the harzard ratio of the covariate variable \(x_m\). If \(e^{\beta_m} > 1\), the corresponding covariate is positively correlated with increase in hazard. On the other hand, \(x_m\) is negatively correlated with harzard if \(e^{\beta_m} < 1\). In the case where \(e^{\beta_m} = 1\), the variable \(x_m\) has no effects on harzard.
+The Hazard function \(h_t\) is given by equation \eqref{coxph}. The term \(h_{0,t}\) in the equation represents the baseline Hazard when all covariates are zero. The linear terms \(x_1, x_2, x_3,..., x_M \) are the predictor variables, while \(\beta_1, \beta_2, \beta_3,..., \beta_M \) are their corresponding coefficients. For each coefficient \(\beta_m\), the exponential term \(e^{\beta_m}\) represents the Hazard ratio of the covariate variable \(x_m\). If \(e^{\beta_m} > 1\), the corresponding covariate is positively correlated with an increase in hazard. On the other hand, \(x_m\) is negatively correlated with Hazard if \(e^{\beta_m} < 1\). In the case where \(e^{\beta_m} = 1\), the variable \(x_m\) has no effects on Hazard.
 
 \begin{equation}
 \label{coxph}
 h_t = h_{0,t} \times e^{\beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 +...+\beta_M x_M}
 \end{equation}
 
-Cox model assumes variable effects are time-independent. To test whether the assumptions hold, we can analyse the Schoenfeld residuals for each covariate variable. Equation \eqref{schoenfeld} defines the Schoenfeld residual \(s_{i,k}\) of covariate \(k\) of observation \(i\). It is the difference between covariate \(x_{i,k}\) and the sum of weighted likelihood of failure of all subjects at risks at time \(t\). If there are observable temporal patterns in the residual plot, it suggests the proportional harzard assumptions may have been violated. In this case, you can consider adding interaction effects with time to mitigate the problem.
+The Cox model assumes that variable effects are time-independent. To test whether the assumptions holds, we can analyse the Schoenfeld residuals for each covariate variable. Equation \eqref{schoenfeld} defines the Schoenfeld residual \(s_{i,k}\) of covariate \(k\) of observation \(i\). It is the difference between covariate \(x_{i,k}\) and the sum of weighted likelihood of failure of all subjects at risk at time \(t\). If there are observable temporal patterns in the residual plot, it suggests that the proportional Hazard assumption may have been violated. In this case, you can consider adding interaction effects with time to mitigate the problem.
 
 \begin{equation}
 \label{schoenfeld}
@@ -2387,18 +2423,18 @@ myCoxModel1 <- coxph(Surv(time, status==2) ~ factor(sex) + age +
 summary(myCoxModel1)
 @
 
-The model output above shows the statistical effects of different covariates. For instance, \verb|sex|\footnote{It is encoded as male=\(1\) and female=\(2\).} is a statistically significant variable for predicting time-to-death of lung cancer patients. This variable has coefficient \(\beta_{sex=2} = \Sexpr{round(myCoxModel1$coefficients['factor(sex)2'],3)} \), which means that having \verb|sex=2| would change the patient's hazard by \(e^{\Sexpr{round(myCoxModel1$coefficients['factor(sex)2'],3)}} - 1=\Sexpr{round((exp(myCoxModel1$coefficients['factor(sex)2']) - 1)*100,1)}\% \). In other words, \verb|sex=2| is benefitial to the patient's wellbeing.
+The model output above shows the statistical effects of different covariates. For instance, \verb|sex|\footnote{It is encoded as male=\(1\) and female=\(2\).} is a statistically significant variable for predicting time-to-death of lung cancer patients. This variable has coefficient \(\beta_{sex=2} = \Sexpr{round(myCoxModel1$coefficients['factor(sex)2'],3)} \), which means that having \verb|sex=2| would change the patient's hazard by \(e^{\Sexpr{round(myCoxModel1$coefficients['factor(sex)2'],3)}} - 1=\Sexpr{round((exp(myCoxModel1$coefficients['factor(sex)2']) - 1)*100,1)}\% \). In other words, \verb|sex=2| is beneficial to the patient's wellbeing.
 
-Likewise, \verb|ph.ecog| is also a significant variable. Each unit increase in \verb|ph.ecog| would change the patient's harzard by \( e^{\Sexpr{round(myCoxModel1$coefficients['ph.ecog'],3)}}-1=\Sexpr{round((exp(myCoxModel1$coefficients['ph.ecog']) - 1)*100,1)}\% \). This implies higher \verb|ph.ecog| score significantly increases patient's risk of death.
+Likewise, \verb|ph.ecog| is also a significant variable. Each unit increase in \verb|ph.ecog| would change the patient's Hazard by \( e^{\Sexpr{round(myCoxModel1$coefficients['ph.ecog'],3)}}-1=\Sexpr{round((exp(myCoxModel1$coefficients['ph.ecog']) - 1)*100,1)}\% \). This implies that a higher \verb|ph.ecog| score significantly increases a patient's risk of death.
 
 \end{Exercise}
 
 \begin{Exercise}[title={Cox Regression Diagnostics}]
 
-Example \ref{ex:zph} tests the Cox proportional hazard assumption by calculating the Schoenfeld residuals. If there are observable patterns along the temporal dimension, the model assumptions may have been violated.
+Example \ref{ex:zph} tests the Cox proportional hazards assumption by calculating the Schoenfeld residuals. If there are observable patterns along the temporal dimension, the models' assumption may have been violated.
 
 <<ex:zph, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, cache=TRUE, rexample=TRUE>>=
-# Test the proportional harzard assumption of a Cox regression
+# Test the proportional Hazard assumption of a Cox regression
 myCoxZph1 <- cox.zph(myCoxModel1)
 # Print the results of the test 
 myCoxZph1
@@ -2422,7 +2458,7 @@ ggcoxzph(myCoxZph1,var = c("age","ph.ecog","ph.karno"))
 
 Unsupervised learning identifies the underlying structure of an unlabelled dataset. Clustering is one of the most common applications of unsupervised learning, which aims at allocating similar objects into common groups.
 
-In a given set of unlabelled objects, there can be different ways to produce clusters. Figure \ref{fig:clusters} below shows the effects of choosing differennt number of clusters.
+In a given set of unlabelled objects, there can be different ways to produce clusters. Figure \ref{fig:clusters} below shows the effects of choosing different number of clusters.
 
 \begin{figure}[H]
 \centering
@@ -2525,7 +2561,7 @@ multiplot(clust1, clust2, clust3, clust4,cols = 2)
 
 \section{\(K\)-means Clustering}
 
-\(K\)-means clustering a very common clustering algorithm due to its intrinsic simplicity. It produces clusters by minimising the Euclidean distance between objects and the centroid of their own cluster. The Euclidean distance between two \(P\)-dimensional vectors \(\vec{x_j}\) and \(\vec{x_k}\) is defined as equation \eqref{euclidean}.
+\(K\)-means clustering is a very common clustering algorithm due to its intrinsic simplicity. It produces clusters by minimising the Euclidean distance between objects and the centroid of their own cluster. The Euclidean distance between two \(P\)-dimensional vectors \(\vec{x_j}\) and \(\vec{x_k}\) is defined as in equation \eqref{euclidean}.
 
 \begin{equation}
 \label{euclidean}
@@ -2564,15 +2600,15 @@ d(\vec{x_j}, \vec{x_k}) = \sqrt{ \sum_{p=1}^{P} (x_{j,p} - x_{k,p} )^2 }
 
 The algorithm starts with a randomly select subset of \(K\) objects as initial cluster centroids such as \( \{ \vec{\mu}_1, \vec{\mu}_2, \vec{\mu}_3, ..., \vec{\mu}_K  \} \). The Euclidean distance between initial centroids and each object in the unlabelled set is calculated. The cluster assignment of an object belongs to the centroid with shortest distance. Once cluster assignment is completed for all objects, the centroid is recomputed as the mean of the cluster. This process iterates until the new cluster assignment is identical to the one at the previous iteration.
 
-Since the dataset is unlabelled, the true number of cluster is unknown. The \(K\) value which represents the number of clusters is usually experimented one-by-one and the best value is determined from the output. 
+Since the dataset is unlabelled, the true number of clusters is unknown. The \(K\) value which represents the number of clusters is usually experimented one-by-one and the best value is determined from the output. 
 
 In the R language, the \(K\)-means clustering algorithm is implemented very efficiently. You can use the \verb|kmeans()| function in the \verb|stats| package to perform \(K\)-means clustering.
 
 \begin{Exercise}[title={Dimensionality Reduction}]
 
-In example \ref{ex:pca}, we will use the \verb|mtcars| dataset. This dataset contains six numeric variables. In other words, car can be represented as \(P=6\) dimensional objects. In practical applications of \(K\)-means algorithm, it is very common to normalise the numeric variables using \(z\)-scores if they are recorded in different units. Normalisation would ensure that all variables are fairly represented.
+In example \ref{ex:pca}, we will use the \verb|mtcars| dataset. This dataset contains six numeric variables. In other words, car can be represented as \(P=6\) dimensional objects. In practical applications of the \(K\)-means algorithm, it is very common to normalise the numeric variables using \(z\)-scores if they are recorded in different units. Normalisation ensures that all variables are fairly represented.
 
-You can use dimensionality reduction techniques such as principal component analysis (PCA) to visualise the data. PCA converts input variables into principal components (PCs) in the order of maximum variance. The following code would execute PCA and visualise the top two PCs on a scatterplot. 
+You can use dimensionality reduction techniques such as principal component analysis (PCA) to visualise the data. PCA converts input variables into principal components (PCs) in the order of maximum variance. The following code will execute PCA and visualise the top two PCs on a scatterplot. 
 
 <<ex:pca, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Select the numeric variables from the mtcars dataset
@@ -2605,7 +2641,7 @@ autoplot(myPca, loadings.label = TRUE) +
 
 \begin{Exercise}[title={\(K\)-means Clustering}]
 
-With a \(P=6\) dimensional dataset, we can apply \(K\)-means algorithm on it to compute the clusters. Since the number of cluster \(K\) is unknown, we can experiement different values in this example \ref{ex:kmeans}. The clustering results can be visualised in a low-dimensional space with two principal components.
+  With a \(P=6\) dimensional dataset, we can apply the \(K\)-means algorithm on it to compute the clusters. Since the number of clusters \(K\) is unknown, we experiement with different values in example \ref{ex:kmeans}. The clustering results can be visualised in a low-dimensional space with two principal components.
 
 <<ex:kmeans, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # We know there are three types of of flowers, so let's start with K=3
@@ -2671,17 +2707,16 @@ multiplot(myClustPlot1,myClustPlot2,myClustPlot3,cols = 3)
 
 \section{Hierarchical Clustering}
 
-In a given unlabelled dataset containing objects \(\vec{x}_i, i=\{1,2,3,...,N\} \), the maximum number of cluster is \(N\) where each cluster contains only \(1\) member object. In this case, the cluster centroids denoted as \( \vec{\mu}_i \) contain rich information which perfectly describes their member objects as \( \vec{\mu}_i = \vec{x}_i \). However, such information would be practically useless. To improve this, we can start with \(N\) clusters and merge the closest two clusters into one. This would have obtained \(N-1\) clusters by adding the least amount of error into the system. This merging process can be iteratively repeated until there are no more clusters left to merge. This is how agglomerative hierarchical clustering algorithm works. 
+In a given unlabelled dataset containing objects \(\vec{x}_i, i=\{1,2,3,...,N\} \), the maximum number of cluster is \(N\), where each cluster contains only \(1\) member object. In this case, the cluster centroids denoted as \( \vec{\mu}_i \) contain rich information which perfectly describes their member objects as \( \vec{\mu}_i = \vec{x}_i \). However, such information would be practically useless. To improve this, we can start with \(N\) clusters and merge the closest two clusters into one. This would have obtained \(N-1\) clusters by adding the least amount of error into the system. This merging process can be iteratively repeated until there are no more clusters left to merge. This is how the agglomerative hierarchical clustering algorithm works. 
 
-In hierarchical clustering, the closeness metric between two clusters \( \omega_i \) and \( \omega_j \) is denoted as function \( D(\omega_i,\omega_j) \). There are several common choices of including 
+In hierarchical clustering, the closeness metric between two clusters \( \omega_i \) and \( \omega_j \) is denoted as a function \( D(\omega_i,\omega_j) \). There are several common choices including 
 \begin{inparaenum}[1)]
 \item single linkage, 
 \item complete linkage, 
 \item average linkage,
 \item centroid and
 \item Ward's method
-\end{inparaenum}
-. For single linkage, the distance between two clusters is defined as the closest distance between their member objects \eqref{singlelinkage}. In many cases, this tends to produce long chains with similar objects merging sequentially into the same cluster. On the other hand, complete linkage uses the distance between farthest objects between two clusters as the cluster closeness metric \eqref{completelinkage}. This tends to produce clusters with consistent size. The two aforementioned measurements are prone to outlier influence. To mitigate such problem, average linkage can be used. It uses the arithmetic average of all pairwise distance as the cluster closeness measurement \eqref{averagelinkage}. Similarly, we can make use of cluster centroid to measure closeness \eqref{centroid}. The centroid method is also resilient to outlier influence. Nonetheless, Ward's method compares the change in sum of squares between cluster members and their centroid when they are merged \eqref{ward}.
+\end{inparaenum}. For single linkage, the distance between two clusters is defined as the closest distance between their member objects \eqref{singlelinkage}. In many cases, this tends to produce long chains with similar objects merging sequentially into the same cluster. On the other hand, complete linkage uses the distance between farthest objects between two clusters as the cluster closeness metric \eqref{completelinkage}. This tends to produce clusters with consistent size. The two aforementioned measurements are prone to outlier influence. To mitigate this problem, average linkage can be used. It uses the arithmetic average of all pairwise distances as the cluster closeness measurement \eqref{averagelinkage}. Similarly, we can make use of the cluster centroid to measure closeness \eqref{centroid}. The centroid method is also resilient to outlier influence. Ward's method compares the change in the sum of squares between cluster members and their centroid when they are merged \eqref{ward}.
 
 \begin{subequations}
 	Single linkage
@@ -2743,7 +2778,7 @@ In hierarchical clustering, the closeness metric between two clusters \( \omega_
 	}
 \end{algorithm}
 
-The result of hierarchical clustering can be visualised using a tree-like structure called dendrogram. The merging sequence of clusters as well as object closeness can be easily read from the dendrogram. The height of the node at the dendrogram indicates the closeness metric of the two clusters when they are merged. After analysing the dendrogram, users can decide how many clusters to retain. This is usually an objective decision. Once decided, the dendrogram can be cut to obtain the desired number of clusters. Alternatively, we can cut the dendrogram at a certain fixed height to discard trivial clusters at the bottom.
+The result of hierarchical clustering can be visualised using a tree-like structure called dendrogram. The merging sequence of clusters as well as object closeness can be easily read from the dendrogram. The height of the node at the dendrogram indicates the closeness metric of the two clusters when they are merged. After analysing the dendrogram, users can decide how many clusters to retain. This is usually an subjective decision. Once decided, the dendrogram can be cut to obtain the desired number of clusters. Alternatively, we can cut the dendrogram at a certain fixed height to discard trivial clusters at the bottom.
 
 \begin{figure}[H]
 \centering
@@ -2816,7 +2851,7 @@ ggdendrogram(myHClust)
 
 \begin{Exercise}[title={Cutting a Dendrogram}]
 
-Dendrogram can be cut to remove smaller clusters at lower height. This can be achieved using the \verb|cutree()| function in R. You can either specify the number of clusters to retain using parameter \verb|k|, this would retain the top \verb|k| clusters of the dendrogram. Alternatively, you can use the \verb|h| parameter to specify at which height the dendrogram should be cut. Example \ref{ex:cutdendro} shows how to cut a dendrogram. It also demonstrates various ways to visualise a dendrogram.
+The dendrogram can be cut to remove smaller clusters at lower heights. This can be achieved using the \verb|cutree()| function in R. You can either specify the number of clusters to retain using the parameter \verb|k|, this will retain the top \verb|k| clusters of the dendrogram. Alternatively, you can use the \verb|h| parameter to specify at which height the dendrogram should be cut. Example \ref{ex:cutdendro} shows how to cut a dendrogram. It also demonstrates various ways to visualise a dendrogram.
 
 <<ex:cutdendro, fig.show='hide', eval=TRUE, results='hide',warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=7, fig.height=5, rexample=TRUE>>=
 # Cut the dendrogram by specifying how many clusters to retain
@@ -2867,8 +2902,631 @@ plot(myPhylo,
 
 \end{Exercise}
 
+\chapter{Extending R}
+
+There are many ways to extend \verb|R| functionalities. We will introduce some of them in this chapter.
+
+\section{R Markdown}
+
+\verb|R| Markdown is a way to produce documents dynamically. It supports various output formats such as HTML, PDF, LaTeX and Beamer. The document is self-contained and fully reproducible which makes it easy to share. 
+
+RStudio is integrated with \verb|R| Markdown so that users can manipulate the documents very easily. Users can launch a \verb|R| Markdown template by navigating to \textbf{File > New File > R Markdown}. This creates a \verb|.Rmd| template. It contains three types of content:
+
+\begin{description}
+  \item[YAML header] Surrounded by \verb|---| at the top of the document. Users can specify key parameters here, such as output format.
+  \item[Text] Standard Markdown format.
+  \item[Code chunk] Surrounded by \verb|```|, optional arguments can be provided in the trailing curly bracket \verb|{}|.
+\end{description}
+
+A standard YAML header can render basic properties such as document title and author names in the HTML output file. Additional properties can be supplied to modify style and enable advanced features.
+
+The text body is written in standard markdown format. Markdown is a lightweight markup language with plain text formatting syntax. Small pieces of inline \verb|R| code is surrounded by the \verb|`r| mark. This will print the \verb|R| output in the compiled output.
+
+A large chunk of multi-line \verb|R| code is embraced by the \verb|```{r}| symbol. Additional arguments can be passed to each code chunk. For example, \verb|message=FALSE| would supress package loading message. On the other hand, \verb|echo=FALSE| would hide the \verb|R| code while still executing the chunk.
+
+\begin{Exercise}[title={Dynamically Generating a Report}]
+
+This example shows how to dynamically generate an HTML document using \verb|R| Markdown. In RStudio, user can compile a \verb|.Rmd| file by clicking the \textbf{Knit} button or pressing \verb|Ctrl + Shift + K|. This will send the document to the \verb|knitr| engine for compilation. The compiled output is shown in Figure \ref{fig:rmarkdown}.
+
+\begin{verbatim}
+---
+title: "Car Assessment Report"
+author: "James Bond"
+output: html_document
+---
+Vehicle Analysis
+=======
+
+I have analysed `r nrow(mtcars)` cars systematically. The 
+following vehicles have the largest `horsepower`:
+
+```{r, message=FALSE}
+library(dplyr)
+mtcars %>%
+  mutate(name = rownames(.)) %>%
+  arrange(desc(hp)) %>%
+  select(name, hp) %>%
+  head(2)
+```
+
+The following graph shows that these cars have impressive
+**horsepower** and **1/4 mile time**.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Create a ggplot
+library(ggplot2)
+myPlot <- mtcars %>%
+  mutate(car_name = rownames(.),
+         hp_rank = dense_rank(desc(hp)),
+         top2 = hp_rank <= 2) %>%
+  ggplot(aes(x=qsec, y=hp, name=car_name)) +
+  stat_smooth(method = "lm") +
+  geom_point(aes(colour=top2)) +
+  labs(x="1/4 Mile Time (Seconds)",
+       y="Horsepower",
+       colour="Top 2 Horsepower")
+# Convert ggplot to plotly
+library(plotly)
+myPlot %>% ggplotly(tooltip = "name")
+```
+
+## Selection Criteria
+
+Essential gadgets are required for Health and Safety reasons:
+
+* Rocket launchers (_front_ and _back_)
+* Ejectable seats
+* Bulletproof screen
+\end{verbatim}
+
+\begin{figure}[H]
+\label{fig:rmarkdown}
+\centering
+\includegraphics[width=\textwidth]{img/rmarkdown.PNG}
+\caption{Compiled R Markdown output in HTML format}
+\end{figure}
+
+\end{Exercise}
+
+\subsection{R Notebook}
+
+\verb|R| Notebook is a special type of an \verb|R| Markdown document with chunks that can be executed independently and interactively, with output visible immediately beneath the input. 
+
+Users can launch an \verb|R| Notebook template by navigating to \textbf{File > New File > R Notebook}. It has the same \verb|.Rmd| file extension and the Notebook is configured by the \verb|output: html_notebook| parameter in the YAML header.
+
+The \textbf{Preview} button shows the rendered copy of the Notebook. Unlike \textbf{Knit} for standard \verb|R| Markdown documents, \textbf{Preview} does not run any \verb|R| code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+\section{Shiny Web Application}
+
+\verb|shiny| is a package for creating interactive web applications. Users can use it to integrate statistical models in \verb|R| with dashboard elements such as chart, drop down menu, checkbox, etc. It is a commonly used to disseminate analytical output to non-technical users.
+
+In a \verb|shiny| application, the web page layout is coded in \verb|R| and automatically rendered. There is no need to write any HTML, CSS or JavaScript anymore. This enables users to focus more on analytical elements and develop dashboards rapidly.
+
+User can launch a template for a \verb|shiny| web application in RStudio by navigating to \textbf{File > New Project > Shiny Web App}. This creates a new project containing an \verb|app.R| file\footnote{Do not change the file name, otherwise the system would not recognise it as a shiny web application.}\footnote{Users can also create two files ui.R and server.R seperately. This is suitable for more complex application with longer code.}. There are two main components inside the file:
+
+\begin{description}
+  \item [ui] This defines the user interface (UI) for the \verb|shiny| application, e.g. the page layout, location of control widgets, page title, etc.
+  \item [server] The server-side application which contains the logic. The analytical code is located in this part.
+\end{description}
+
+The \verb|ui| of the default \verb|shiny| template is shown in example \ref{ex:shinyui}. The page layout is defined by the \verb|fluidPage()| function. In this example, the \verb|titlePanel()| function defines the page title which is located at the top. The \verb|sidebarLayout()| function divides the screen layout into two unequal parts. The smaller part is defined by \verb|sidebarPanel()| which contains input controls. On the other hand, the larger part is defined by \verb|mainPanel()| which contains the output. 
+
+Many types of control widgets are supported in \verb|shiny|. They are shown in figure \ref{fig:shinyinput}. A detailed description can be found at \url{https://shiny.rstudio.com/tutorial/written-tutorial/lesson3/}.
+
+<<ex:shinyui, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Define UI for application that draws a histogram
+ui <- fluidPage(
+   # Application title
+   titlePanel("Old Faithful Geyser Data"),
+   # Sidebar with a slider input for number of bins 
+   sidebarLayout(
+      sidebarPanel(
+         sliderInput("bins",
+                     "Number of bins:",
+                     min = 1,
+                     max = 50,
+                     value = 30)),
+      # Show a plot of the generated distribution
+      mainPanel(
+         plotOutput("distPlot")
+      )
+   )
+)
+@
+
+\begin{figure}[H]
+\label{fig:shinyinput}
+\centering
+\includegraphics[width=\textwidth]{img/shiny-inputs.PNG}
+\caption{Control widgets in shiny}
+\end{figure}
+
+Example \ref{ex:shinyserver} shows the \verb|server| component in the default \verb|shiny| template. It is defined as a simple function which accepts two arguments \verb|input| and \verb|output|. In the function, named elements can be added to the \verb|output| and visualised through the \verb|ui|. In this case, the function retrieves variable \verb|input$bins| and renders a histogram, which is eventually returned as a graph as the \verb|output$distPlot| element.
+
+<<ex:shinyserver, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Define server logic required to draw a histogram
+server <- function(input, output) {
+   output$distPlot <- renderPlot({
+      # generate bins based on input$bins from ui.R
+      x    <- faithful[, 2] 
+      bins <- seq(min(x), max(x), length.out = input$bins + 1)
+      # draw the histogram with the specified number of bins
+      hist(x, breaks = bins, col = 'darkgray', border = 'white')
+   })
+}
+@
+
+To run a \verb|shiny| application, users can click on the \textbf{Run App} button in RStudio. This will render the application. Figure \ref{fig:shiny} shows the \verb|shiny| application rendered from the default template.
+
+\begin{figure}[H]
+\label{fig:shiny}
+\centering
+\includegraphics[width=\textwidth]{img/shiny.PNG}
+\caption{Default shiny template}
+\end{figure}
+
+\begin{Exercise}[title={Design an Analytics Dashboard}]
+
+In this exercise, the objective is to design a simple analytics dashboard which displays predicted flight departure delay. Users can use shiny to make predictions in real-time. The app includes serveral basic widgets such as date picker, drop-down menu and radio button. A sample screenshot is displayed in figure \ref{fig:shiny-flight}
+
+\begin{figure}[H]
+\label{fig:shiny-flight}
+\centering
+\includegraphics[width=\textwidth]{img/shiny-flights.PNG}
+\caption{Interactive application displaying predicted flight departure delay.}
+\end{figure}
+
+Please load the package \verb|nycflights13| and use the \verb|flights| dataset. Steps are indicated in example \ref{ex:shinyloaddata}.
+
+<<ex:shinyloaddata, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+# Load the package
+library(nycflights13)
+# Browse the flights dataset
+# Aii flights departing from New York airports in 2013.
+flights
+# Browse the airlines dataset 
+# This is a small reference table containing full names of airlines
+airlines
+@
+
+To begin with, users can launch the default \verb|shiny| template and start editing. The code chunk in example \ref{ex:shinyplotexample} shows how the underlying model works. This is the main logic of the application and therefore should be placed in the \verb|server| component of the application.
+
+<<ex:shinyplotexample, fig.show='asis', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+# Build a simple model to predict flight departure delay
+myFlightModel <- rpart(dep_delay ~
+                         months(date) + weekdays(date) + 
+                         hour + origin + dest + carrier,
+                       data = flights %>% mutate(date = make_date(year, month, day)),
+                       na.action = na.omit,
+                       control = rpart.control(cp = 0.0005))
+# Predict the departure delay of a new flight
+# Use shiny control widgets to capture user input
+myNewFlight <- tibble(date = make_date(2019,5,10),
+                      hour= 0:23,
+                      origin="JFK",
+                      dest = "SFO", 
+                      carrier="AA")
+# Run the prediction
+myNewFlightDelay <- predict(myFlightModel, myNewFlight)
+# Visualise the prediction
+tibble(hour=0:23, dep_delay = myNewFlightDelay) %>%
+  ggplot(aes(x=hour, y=dep_delay)) +
+  geom_col() +
+  labs(x="Hours", y="Departure Delay (Minutes)")
+@
+
+\end{Exercise}
+
+\section{Writing Packages}
+
+In \verb|R|, functions are wrapped in packages so that they can be re-used and transported. All functions are documented in a standard way and usually include working examples.
+
+\begin{Exercise}[title={Create a Package}]
+
+The objective of this exercise is to create a simple R package. To launch a package template, navigate to \textbf{File > New Project > New Directory > R Package}. Enter a package name such as \verb|mypackage| then click \textbf{Create Project} as shown in figure \ref{fig:package-create}. This should launch a package template.
+
+\begin{figure}[H]
+\label{fig:package-create}
+\centering
+\includegraphics[width=\textwidth]{img/package-create.png}
+\caption{Launching an empty package template.}
+\end{figure}
+
+All functions in a package should be documented in a standard way. This can be done through the \verb|roxygen2| package. To make sure \verb|roxygen2| is enabled, navigate to \textbf{Build > Configure Build Tools} and check the box \textbf{Generate documentation with Roxygen}. Afterwards, click on \textbf{Configure} and check all boxes, this will ensure documentation is generated at all places. This is illustrated in figure \ref{fig:roxygen}.
+
+\begin{figure}[H]
+\label{fig:roxygen}
+\centering
+\includegraphics[width=\textwidth]{img/package-roxygen.png}
+\caption{Enabling roxygen2 to generate documentation}
+\end{figure}
+
+Functions are located in the \verb|R| directory. We will create a simple function called \verb|is_even()| to check whether a given integer is even or not. Users can begin by nagivating to this directory and create a new file named \verb|is_even.R| and enter the code chunk in example \ref{ex:createfunction}.
+
+<<ex:createfunction, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+#' Checks even number
+#'
+#' \code{is_even()} returns \code{TRUE} if the input is an even number.
+#'
+#' @author James Bond \email{jbond@@universialexports.com}
+#'
+#' @param x Input integer vector.
+#' @return Logical vector
+#'
+#' @examples
+#' myNumbers <- 1:20
+#' is_even(myNumbers)
+#'
+#' @export
+is_even <- function(x) {
+  if(!is.integer(x)){
+    stop("Input is not integer")
+  }
+  return (x %% 2) == 0
+}
+@
+
+The \verb|roxygen2| package picks up tags such as \verb|@param| and turns them into standard R documentation. It is particularly important to include \verb|@export| at the end, as this will ensure the function is exported so that users can access it.
+
+Before moving on, users can open up the \verb|DESCRIPTION| file and modify the package details. It is crucial that the details are up-to-date after every code change, especially the version number.
+
+\begin{verbatim}
+Package: mypackage
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+\end{verbatim}
+
+Once the user has finished editing everything, the source code is ready to be wrapped as a package. To do this, the user can navigate to \textbf{Build > Check Package}. This will check the source code and ensure the code is ready for build. Afterwards, the user can click on \textbf{Build > Build Source Package}, which will wrap all the code into a \verb|.tar.gz| package file. The resulting file is a standard R package which can be transported to any user on any platform.
+
+Another way to wrap the package is to click on \textbf{Build > Install and Restart}. This builds the package and installs it directly into the user's library. In this case, the user can simply call the library and start using the custom functions rigth away.
+
+<<ex:buildpackage, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(mypackage)
+# This will return a logical vector
+is_even(1:20)
+# This will error
+is_even(3.141)
+# Lookup the documentation
+?is_even
+@
+
+\end{Exercise}
+
+\section{Reproducibility}
+
+The principle of reproducibility suggests that a process should always produce same results if the input remains identical. Reproducible results are crucially important for business analytics for various kind of reasons, such as compliance, quality assurance, KPI measurement... etc. The open source nature of \verb|R| and many of its packages means they get very frequent updates. There can be substantial differences between versions of the same package. 
+
+A dependency management system called \verb|packrat| can be used to ensure reproducibility. It creates a private library for the project and searches for packages only in this location. Shared libraries would not be used in a \verb|packrat|-enabled project. This means the project is totally isolated and updating packages in a shared library would not break the project.
+
+Users can enable \verb|packrat| by navigating to \textbf{Tools > Project Options > Packages} and enable the option \textbf{Use packrat with this project}. The system will then scan for packages and put them in a private library.
+
+\begin{figure}[H]
+\label{fig:packrat}
+\centering
+\includegraphics[width=\textwidth]{img/packrat.png}
+\caption{Enabling packrat dependency management system}
+\end{figure}
+
+\chapter{Efficient Programming}
+
+Computational power is a scarce resource, especially when most base \verb|R| functions run in memory. This chapter dives deeper into memory and CPU management. 
+
+\section{Memory Usage}
+
+All integer and numeric values in \verb|R| are stored as double-precision values. This means each number consumes \(64\) bits of system memory. Users should notice that significant figures have no effect on the object size. In other words, the values \(3.14\) and \(3.14159265359\) have identical object size. 
+
+The package \verb|pryr| can be used to track memory usage, as shown in example \ref{ex:pryrobjectsize}.
+
+<<ex:pryrobjectsize, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(pryr)
+# Displays the size of an integer value 
+# Note the trailing 'L' character, this forces the number to become an integer
+object_size(3L)
+# Significant figure of a numeric valule has no effect on object size
+# Therefore these two values have the same object size
+object_size(3.14)
+object_size(3.14159265359)
+# Creates an integer vector
+# This contains 1 million integers
+# Consumes 4 MB memory
+myBigVec1 <- 1:1e6
+object_size(myBigVec1)
+@
+
+In general, object size grows proportionally with the length of the object. However, memory is allocated to \verb|R| objects in large blocks in exchange for faster processing. Example \ref{ex:pryrcharactersize} shows two character objects with different length having the same object size.
+
+<<ex:pryrcharactersize, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Both character objects have identical object size.
+# Each consume 120 bytes.
+object_size("My name is Bond.")
+object_size("My name is Bond, James Bond.")
+@
+
+It is important to use data type correctly in order to conserve memory. Example \ref{ex:pryrlogicalsize} compares the object size of a character vector versus a logical vector.
+
+<<ex:pryrlogicalsize, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Object size of logical value is much smaller than character value
+# In this case, the character vector is three time larger
+object_size(c("Yes", "No", "No", "Yes"))
+object_size(c(TRUE, FALSE, FALSE, TRUE))
+@
+
+The \verb|mem_used()| function in the \verb|pryr| package identifies the total memory used by all objects. This does not include memory used by the \verb|R| interpreter itself, the \verb|bash| shell wrapping R, nor memory used by RStudio IDE. Example \ref{ex:pryrmemused} shows how the function is used.
+
+<<ex:pryrmemused, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Returns the total memory used by all R objects
+mem_used()
+@
+
+Useful function such as \verb|mem_change()| can be used to measure how much memory was changed from an operation. This is shown in example \ref{ex:pryrmemchange}.
+
+<<ex:pryrmemchange, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Assign a large vector
+# This will consume memory (+4 MB)
+mem_change({ myBigVec2 <- 1:1e6 })
+# Remove a large vector
+# This releases memory (-4 MB)
+mem_change({ rm(myBigVec2) })
+@
+
+\section{Profiling}
+
+\verb|R| code can be profiled to identify the memory and execution time bottleneck. The package \verb|profvis| works with RStudio IDE to offer an interactive interface for visualising profile data. 
+
+The \verb|profvis()| function wraps an \verb|R| operation inside a set of curly brackets \verb|{}|, as shown in example \ref{ex:profvis}. This example generates some random numbers, runs a simple linear regression model and views the model summary.
+
+<<ex:profvis, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(profvis)
+profvis({
+  # Generate some random numbers from normal distribution
+  myDataX <- rnorm(1e6)
+  myDataY <- rnorm(1e6)
+  # Run a linear model
+  myModel <- lm(myDataY ~ myDataX)
+  # View the model summary
+  summary(myModel)
+})
+@
+
+This produces an interactive output with two parts, as shown in figure \ref{ex:profvis}. The top part is the code with the profiled memory and time. It shows how much memory was allocated (positive) and deallocated (negative) by the function call. The bottom part is a flame graph which shows the call stack. The time spent in each call stack is indicated by the width of the block. 
+
+\begin{figure}[H]
+\label{fig:profvis}
+\centering
+\includegraphics[width=\textwidth]{img/profvis.png}
+\caption{Flame graph of profiling output}
+\end{figure}
+
+\section{Multithreaded Processing}
+
+Base \verb|R|\footnote{GNU-R} was historically designed to run in a single thread. Today, many computers have multiple cores or even multiple sockets. To make use of the computational power, many functions in \verb|R| can be parallelised on a multi-core system for faster processing. 
+
+Microsoft R Open (MRO)\footnote{\url{https://mran.microsoft.com/open}} is a popular distribution of \verb|R| which offers multithreaded processing. It uses Intel Math Kernel Library (MKL) which provides BLAS and LAPACK subroutines. This allows key mathematical operations to be performed on all threads.
+
+Example \ref{ex:mklthreads} shows how to detect and change MKL threads in MRO. There is no need to modify the MKL thread number under normal circumstances.
+
+<<ex:mklthreads, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Detects how many threads are in use
+getMKLthreads()
+# Change to 4 threads
+setMKLthreads(4)
+# Reset to system default value
+setMKLthreads()
+@
+
+Multithreading can also be used to optimise \verb|apply()| family functions and \verb|for| loops. Examples \ref{ex:parallel1} and \ref{ex:parallel2} show how a simple \verb|sapply()| function can be executed using the \verb|parSapply()| function in the \verb|parallel| package. It sets up a cluster of workers which run simultaneously, where code is executed in parallel. The cluster is stopped to release resources once the work has finished.
+
+<<ex:parallel1, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+system.time({
+  sapply(1:10, function(x) {Sys.sleep(0.25)})
+})
+@
+
+
+<<ex:parallel2, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(parallel)
+system.time({
+  # Detect how many cores are available on the system
+  myCores <- detectCores()
+  # Create a parallel cluster
+  # Use 25% of system cores
+  myCluster <- makeCluster(floor(myCores * 1/4))
+  # Run the same process on multicore
+  parSapply(myCluster, 1:10, function(x) {Sys.sleep(0.25)})
+  # Stop the cluster
+  stopCluster(myCluster)
+})
+@
+
+Multithreading does not always guarentee top speed. This is because it has very significant overhead due to starting and closing the threads. In addition, multithreaded processes may cause serious issues on multi-user systems, as users may compete for computational resources at the same time. Besides, using many threads simultaneously may block other users' processes. This should always be used with great care.
+
+
+\chapter{Distributed Computing}
+
+Very large datasets which cannot fit in memory need to be processed differently. There are several big data tools which support large-scale processing. The simplest way is to carve up the large dataset into smaller chunks and process them seperately. Once completed, the overall results can be reconstructed. 
+
+A slightly more advanced way is to process it natively in a Hadoop cluster which hosts the large dataset. There are plenty of algorithms which can be executed on Hadoop, these are mainly provided by Microsoft Machine Learning Server and Apache Spark MLlib.
+
+\section{Apache Spark}
+
+Apache Spark can be accessed in \verb|R| via the \verb|sparklyr| package, which supports the full \verb|dplyr| pipeline. It features low-latency computation by caching the working dataset in memory and performing computations at memory speed. Ideally, Spark can run on a YARN cluster to maximise the benefits of distributed computing. It also supports local mode which runs on a single host. Spark can run on several modes:
+
+\begin{description}
+
+  \item [Standalone] This is also known as local mode. The driver and executors run on the client machine. Although there is no distribution of computing process, prototyping and debugging in the local mode is more convenient. Example \ref{ex:launchsparklocal} shows how to launch Spark locally.
+  
+  <<ex:launchsparklocal, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+  library(sparklyr)
+  library(dplyr)
+  # Opens the Spark connection through sparklyr
+  # Using standalone mode (local master)
+  mySparkConn <- spark_connect(master = "local")
+  # Checks whether the connection is opened
+  mySparkConn %>% connection_is_open()
+  # Checks Spark version
+  mySparkConn %>% spark_version()
+  @
+
+  \item [YARN Client]
+  Spark driver is launched in the same process as the client that submits the application. Resource allocation is done by YARN Resource Manager (RM) based on data locality. Driver program on client machine controls the executors on the YARN cluster.
+  
+  \item [YARN Cluster] The Spark client submits an application to the YARN cluster. Both the driver and executors run on the YARN cluster.
+  
+\end{description}
+
+In Spark, source data can accessed through different ways. Files in CSV format can be accessed directly in the local file system. Alternatively, CSV files can be uploaded to HDFS and read from there. Spark also supports other formats, such as \verb|data.frame|, \verb|tibble| objects and even Hive tables in Hadoop, as data sources.
+
+\begin{Exercise}[title={Train a Linear Regression Model}]
+
+In this exercise, we will upload a dataset to Spark for modelling. To begin with, we will use a local \verb|tibble| as data source. 
+
+<<ex:sparkdplyr, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(sparklyr)
+library(dplyr)
+library(nycflights13)
+mySparkConn <- spark_connect(master = "local")
+# Converts an R object into Spark DataFrame
+flights_tbl <- mySparkConn %>% copy_to(flights)
+# Runs dplyr pipeline on Spark
+# It returns a Spark DataFrame
+myFlightsSummary <- flights_tbl %>%
+  group_by(year, month) %>%
+  summarise(avg_dep_delay = mean(dep_delay, na.rm = TRUE)) %>%
+  arrange(year, month)
+  # Print it out on the console
+myFlightsSummary
+@
+
+The \verb|sparklyr| package supports Spark MLlib, which is a library for scalable machine learning algorithms. We can run a linear regression model using this package. Example \ref{ex:sparkregression} shows how to run a linear regression model on Spark.
+
+<<ex:sparkregression, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Remove NA data and divide the dataset into two halves
+flights_tbl %>%
+  na.omit() %>%
+  sdf_partition(training = 0.5,
+                testing = 0.5) %>%
+  sdf_register(c("flights_training", "flights_testing"))
+# Get a pointer object for the training and testing datasets
+flights_training <- mySparkConn %>% tbl("flights_training")
+flights_testing <- mySparkConn %>% tbl("flights_testing")
+# Run a random forest model
+# This can take some time
+myFlightsModel <- flights_training  %>%
+  ml_random_forest(dep_delay ~ month + hour + origin + dest + carrier)
+# Run the model prediction on both training and testing set
+myFlightsPredictionTraining <- myFlightsModel %>% ml_predict(flights_training)
+myFlightsPredictionTesting <- myFlightsModel %>% ml_predict(flights_testing)
+# Calculate the training and testing error (Mean-squared error)
+# Collect the result back to local memory at the end
+myTrainingMse <- myFlightsPredictionTraining %>%
+  mutate(error = prediction - dep_delay) %>%
+  summarise(mse = mean(error^2, na.rm = TRUE)) %>%
+  collect()
+myTestingMse <- myFlightsPredictionTesting %>%
+  mutate(error = prediction - dep_delay) %>%
+  summarise(mse = mean(error^2, na.rm = TRUE)) %>%
+  collect()
+# Print the MSE
+myTrainingMse
+myTestingMse
+@
+
+\end{Exercise}
+
+\section{Microsoft Machine Learning Server}
+
+Microsoft Machine Learning Server (MLS) supports distributed large scale processing on various platforms. Large datasets are stored on local file system or HDFS in \verb|XDF| file format. Data is compressed and processed as smaller chunks. 
+
+One of the important features of MLS is that the compute context can be switched without changing the code base. Users can use the function \verb|rxSetComputeContext()| to configure where to perform the computational task. Popular choices include: \verb|RxLocalSeq()|, \verb|RxLocalParallel()| and \verb|RxSpark()|.
+
+\begin{Exercise}[title={Train a Neural Network}]
+
+In this exercise, users will train a single-layer neural network using the \verb|flights| dataset. Example \ref{ex:mlshistogram} shows how to import data into XDF format and draw a simple histogram.
+
+<<ex:mlshistogram, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(nycflights13)
+# Configure the compute context
+# It works parallel
+rxOptions(numCoresToUse = 4)
+rxSetComputeContext(RxLocalParallel())
+# Creates a pointer to a local XDF file
+myFlightsClean <- RxXdfData("flight_clean.xdf")
+# Clean the dataset by removing NA values
+# Also chop it into smaller chunks
+rxDataStep(inData = flights,
+           outFile = myFlightsClean,
+           overwrite = TRUE,
+           rowsPerRead = 50000,
+           removeMissings = TRUE)
+# Run a simple histogram
+rxHistogram(~ dep_delay_log | origin,
+            myFlightsClean,
+            transforms = list(dep_delay_log = log(dep_delay),
+                              origin = factor(origin)))
+@
+
+In example \ref{ex:mlsneuralnet}, the dataset is split into training and testing sets randomly. It then fits a neural network model using the training set. Afterwards, the model is applied to the training and testing sets to calculate the mean-squared error (MSE) values.
+
+<<ex:mlsneuralnet, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Split the dataset randomly into training / testing set
+mySplit <-  rxSplit(
+  inData = myFlightsClean,
+  outFilesBase = "mySplit",
+  outFileSuffixes = c("training", "testing"),
+  splitByFactor = "splitVar",
+  overwrite = TRUE,
+  transforms = list(
+    splitVar = factor(sample(c("Train", "Test"),
+                             size = .rxNumRows,
+                             replace = TRUE,
+                             prob = c(0.5, 0.5)),
+                      levels = c("Train", "Test"))))
+# Train a neural network model
+myFlightsNeuralNetModel <- rxNeuralNet(
+  formula = dep_delay ~ month + hour + origin + dest + carrier, 
+  data = mySplit[[1]], 
+  type = "regression",
+  transforms = list(origin = factor(origin),
+                    dest = factor(dest),
+                    carrier = factor(carrier)))
+# Create pointers for the training/testing prediction results
+myFlighNeuralPredictionTraining <- RxXdfData("prediction_training.xdf")
+myFlighNeuralPredictionTesting <- RxXdfData("prediction_testing.xdf")
+# Run the model prediction
+rxPredict(modelObject = myFlightsNeuralNetModel, 
+          data = mySplit[[1]],
+          outData = myFlighNeuralPredictionTraining,
+          extraVarsToWrite = "dep_delay",
+          overwrite = TRUE)
+rxPredict(modelObject = myFlightsNeuralNetModel, 
+          data = mySplit[[2]],
+          outData = myFlighNeuralPredictionTesting,
+          extraVarsToWrite = "dep_delay",
+          overwrite = TRUE)
+# Calculate the training and testing MSE
+rxSummary(formula = ~ sq_error, 
+          data = myFlighNeuralPredictionTraining,
+          transforms = list(sq_error=(Score - dep_delay)^2))
+rxSummary(formula = ~ sq_error, 
+          data = myFlighNeuralPredictionTesting,
+          transforms = list(sq_error=(Score - dep_delay)^2))
+@
+
+\end{Exercise}
+
 \bibliography{book}{}
 \bibliographystyle{plain}
-
 
 \end{document}
