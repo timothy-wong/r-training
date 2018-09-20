@@ -308,10 +308,11 @@ Categorical data can be represented in \verb|R| using \verb|factor|. This is an 
 Factors can either be ordered or unordered. Ordered factors can be compared using logical operators.
 
 <<ex:factor, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
-# Create an ordered  factor variable
-myFactor <- factor(c(1, 3, 3, 2, 2, 1, 2, 3),
-                   levels = c(1, 2, 3),
-                   labels = c("Low", "Medium", "High"),
+# Create an ordered factor variable
+myValues <- c("Low", "High", "High", "Medium", "Medium")
+myOrder <- c("Low", "Medium", "High")
+myFactor <- factor(myValues, 
+                   levels = myOrder, 
                    ordered = TRUE)
 # Print the factor
 myFactor
@@ -322,6 +323,7 @@ levels(myFactor)
 # Compare the levels of individual observations
 myFactor[1] > myFactor[2]
 myFactor[2] > myFactor[1]
+myFactor[2] == myFactor[3]
 @
 
 \section{Logical Operator}

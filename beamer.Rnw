@@ -18,6 +18,7 @@
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
 \usepackage{pstricks}
+\usepackage{multicol}
 \usepackage{tikz}
 \usetikzlibrary{positioning, shapes, shapes.geometric, arrows}
 
@@ -62,7 +63,16 @@ checkpoint(snapshotDate = '2018-08-01',
 \end{beamercolorbox}
 }
 
-\AtBeginSection[]{\frame{\sectionpage}}
+\AtBeginSection[]{
+  \begin{frame}
+    \sectionpage
+  \end{frame}
+  \begin{frame}[shrink]{Outline}
+    \begin{multicols}{2}
+      \tableofcontents[currentsection,hideothersubsections]
+    \end{multicols}
+  \end{frame}
+}
 
 \begin{document}
 
@@ -71,8 +81,12 @@ checkpoint(snapshotDate = '2018-08-01',
 \end{frame}
 
 \begin{frame}[shrink]{Outline}
-    \tableofcontents
+  \begin{multicols}{2}
+  \tableofcontents[hideallsubsections]
+  \end{multicols}
 \end{frame}
+
+\section{Introduction}
 
 \section{R Ecosystem}
 
@@ -95,6 +109,7 @@ checkpoint(snapshotDate = '2018-08-01',
   \end{itemize}
 \end{frame}
 
+\subsection{IDE}
 
 \begin{frame}[fragile]{RStudio Server Pro}
   \begin{itemize}
@@ -103,6 +118,7 @@ checkpoint(snapshotDate = '2018-08-01',
   \includegraphics[width=\textwidth]{img/rstudio.PNG}
 \end{frame}
 
+\subsection{Packages}
 
 \begin{frame}[fragile, shrink]{Packages}
 \begin{itemize}
@@ -130,6 +146,7 @@ library("ggplot2")
 \end{itemize}
 \end{frame}
 
+\subsection{Creating Variables}
 
 \begin{frame}[fragile, shrink]{Variable Assignment}
 \begin{itemize}
@@ -261,7 +278,35 @@ weekdays(myVec7)
 \end{frame}
 
 
+\begin{frame}[fragile, shrink]{Factor}
 
+\begin{itemize}
+  \item Represents categorical data
+  \item Can be ordered or unordered
+  \item Ordered factors can be compared
+\end{itemize}
+
+<<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+# Create an ordered factor variable
+myValues <- c("Low", "High", "High", "Medium", "Medium")
+myOrder <- c("Low", "Medium", "High")
+myFactor <- factor(myValues, 
+                   levels = myOrder, 
+                   ordered = TRUE)
+# Print the factor
+myFactor
+# Check the number of levels in the factor variable
+nlevels(myFactor)
+# Print the labels of the factors
+levels(myFactor)
+# Compare the levels of individual observations
+myFactor[1] > myFactor[2]
+myFactor[2] > myFactor[1]
+myFactor[2] == myFactor[3]
+@
+\end{frame}
+
+\subsection{Comparison}
 
 \begin{frame}[fragile, shrink]{Logical Operators}
 \begin{itemize}
@@ -299,8 +344,7 @@ c(5, 10, 15, NA, 25, 30, NaN, 35, 40, Inf, 50, -Inf, 60) / 5
 @
 \end{frame}
 
-
-
+\subsection{List and Data Frames}
 
 \begin{frame}[fragile, shrink]{List}
 \begin{itemize}
@@ -427,6 +471,8 @@ myFavMovies2[4:7, c("title","year")]
 @
 \end{frame}
 
+\subsection{Custom Functions}
+
 \begin{frame}[fragile, shrink]{Functions}
 \begin{itemize}
   \item Functions are vectorised.
@@ -452,7 +498,7 @@ is.even(1:10)
 @
 \end{frame}
 
-
+\subsection{Flow Control}
 
 \begin{frame}[fragile, shrink]{If-Else}
 <<fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
@@ -615,6 +661,7 @@ system.time({
 @
 \end{frame}
 
+\subsection{User Communities}
 
 \begin{frame} [fragile, shrink] {UK User Communities}
 \begin{itemize}
@@ -656,12 +703,10 @@ system.time({
     \item R/Medicine - \includegraphics[width=0.2\textwidth]{img/rmedicine.PNG}
     \item NHS-R - \includegraphics[width=0.2\textwidth]{img/nhsr.PNG}
     \item R-ladies - \includegraphics[width=0.1\textwidth]{img/rladies.PNG}
-    
   \end{itemize}
 \end{frame}
 
 \section{Data Transformation}
-
 
 \begin{frame}{Tidyverse}
 \begin{itemize}
@@ -765,6 +810,8 @@ flights
 \end{frame}
 
 
+\subsection{dplyr pipline}
+
 \begin{frame}[fragile,shrink]{dplyr Query}
 \begin{itemize}
   \item Finding average arrival delay time for each route and sort it.
@@ -780,6 +827,8 @@ flights %>%
   filter(n > 100)
 @
 \end{frame}
+
+\subsection{Filtering}
 
 \begin{frame}[fragile]{Filtering Observations}
 \begin{itemize}
@@ -809,6 +858,7 @@ filter(flights, arr_delay <= 120, dep_delay <= 120)
 @
 \end{frame}
 
+\subsection{Ordering}
 
 \begin{frame}[fragile]{Arranging Observations}
 \begin{itemize}
@@ -836,6 +886,7 @@ arrange(df,desc(x))
 @
 \end{frame}
 
+\subsection{Selecting}
 
 \begin{frame}[fragile]{Selecting Variables}
 \begin{itemize}
@@ -868,6 +919,7 @@ select(flights, time_hour, air_time, everything())
 @
 \end{frame}
 
+\subsection{Compute New Variables}
 
 \begin{frame}[fragile]{Compute New Variables}
 \begin{itemize}
@@ -899,7 +951,7 @@ mySummary
 @
 \end{frame}
 
-
+\subsection{Grouped Summaries}
 
 \begin{frame}[fragile]{Grouped Summaries}
 \begin{itemize}
@@ -934,6 +986,7 @@ mutate(flights_sml,
 
 
 \section{Regression Models}
+
 \subsection{Linear Regression}
 
 \begin{frame}{Simple Regression}
@@ -1754,6 +1807,8 @@ multiplot(plotlist = plt, cols = 8)
 
 \section{Extending R}
 
+\subsection{R Markdown}
+
 \begin{frame}[fragile]{R Markdown}
   \begin{itemize}
     \item Generate documents and reports easily
@@ -1769,6 +1824,8 @@ multiplot(plotlist = plt, cols = 8)
   \end{itemize}
 \end{frame}
 
+\subsection{R Notebook}
+
 \begin{frame}[fragile]{R Notebook}
   \begin{itemize}
     \item Similar to R Markdown.
@@ -1778,6 +1835,8 @@ multiplot(plotlist = plt, cols = 8)
     \item Good way to document workflow.
   \end{itemize}
 \end{frame}
+
+\subsection{Shiny Web Application}
 
 \begin{frame}[fragile]{Shiny Web Application}
   \begin{itemize}
@@ -1807,7 +1866,9 @@ multiplot(plotlist = plt, cols = 8)
   \end{figure}
 \end{frame}
 
-\begin{frame}[fragile]{Writing Package}
+\subsection{Writing Packages}
+
+\begin{frame}[fragile]{Writing Packages}
   \begin{itemize}
     \item Functions are wrapped in packages.
     \item Can be reused and transported.
@@ -1848,6 +1909,8 @@ return (x %% 2) == 0
 \end{frame}
 
 \section{Efficient Programming}
+
+\subsection{Memory Usage}
 
 \begin{frame}[fragile]{Memory Usage}
   \begin{itemize}
@@ -1914,6 +1977,8 @@ mem_change({ rm(myBigVec2) })
 @
 \end{frame}
 
+\subsection{Memory Profiling}
+
 \begin{frame}[fragile, shrink]{Memory Profiling}
   \begin{itemize}
     \item Memory profile can be used to identify process bottleneck.
@@ -1939,6 +2004,8 @@ summary(myModel)
   \includegraphics[width=\textwidth]{img/profvis.png}
   \end{figure}
 \end{frame}
+
+\subsection{Multithreaded Processing}
 
 \begin{frame}[fragile]{Multithreaded Processing}
   \begin{itemize}
@@ -1996,6 +2063,8 @@ system.time({
   \end{itemize}
 \end{frame}
 
+\subsection{Spark MLlib (SparklyR)}
+
 \begin{frame}[fragile, shrink]{Apache Spark}
 \begin{description}
 
@@ -2039,6 +2108,8 @@ myFlightsSummary <- flights_tbl %>%
 myFlightsSummary
 @
 \end{frame}
+
+\subsection{Microsoft MLS}
 
 \begin{frame}[fragile]{Microsoft Machine Learning Server (MLS)}
   \begin{itemize}
