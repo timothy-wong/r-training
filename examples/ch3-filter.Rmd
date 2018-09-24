@@ -1,0 +1,111 @@
+---
+title: "Ch3 - Data Transformation - Filter()"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## FILTER()
+
+### Examples
+
+
+```{r}
+# load the required packages
+library(dplyr)
+library(nycflights13)
+# Inspect the data, noting the type of each variable
+flights
+# View the flights dataset interactively
+View(flights)
+
+# Select all flights on January 1st
+# Assigning them to a new variable jan1
+jan1 <- filter(flights, month == 1, day == 1)
+jan1
+
+# Select all flights from November or December
+filter(flights, month == 11 | month == 12)
+
+# A useful shorthand for this problem is x %in% y
+# It selects every row where x is one of the values in y
+filter(flights, month %in% c(11, 12))
+
+# Let’s select only the flights that weren’t delayed
+# (on arrival or departure) by more than two hours:
+filter(flights, arr_delay <= 120, dep_delay <= 120)
+```
+
+### Exercises
+
+
+Find all flights in the flights dataset that:
+
+1) Had an arrival delay of two or more hours
+
+```{r}
+filter(flights, arr_delay >= 120)
+```
+
+###########################################################################################
+###########################################################################################
+2) Flew to Houston (IAH or HOU)
+
+```{r}
+filter(flights, dest == "IAH" | dest == "HOU")
+
+```
+ 
+
+Alternative solution:
+
+```{r}
+filter(flights, dest %in% c("IAH", "HOU"))
+```
+
+###########################################################################################
+###########################################################################################
+3) Were operated by United (UA), American (AA) or Delta (DL).
+
+```{r}
+filter(flights, carrier %in% c("AA", "DL", "UA"))
+```
+
+###########################################################################################
+###########################################################################################
+4) Departed in summer (July, August and September)
+
+```{r}
+filter(flights, month %in%  c(7, 8, 9))
+```
+
+###########################################################################################
+###########################################################################################
+5) Arrived more than two hours late, but did not leave late.
+
+```{r}
+filter(flights, dep_delay <= 0, arr_delay > 120)
+
+##
+```
+
+###########################################################################################
+###########################################################################################
+6) Had a departure delay of at least 1 hour, but made up over 30 minutes in flight.
+
+```{r}
+filter(flights, dep_delay >= 60, dep_delay - arr_delay > 30)
+```
+
+###########################################################################################
+###########################################################################################
+7) How many flights have a missing dep_time? What other variables are missing?
+
+```{r}
+filter(flights, is.na(dep_time))
+```
+
+Notably, the arrival time (arr_time) is also missing for these rows. These seem to be cancelled flights.
+

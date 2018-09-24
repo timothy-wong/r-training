@@ -1,0 +1,81 @@
+---
+title: "Ch3 - Data Transformation - Arrange()"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ARRANGE()
+
+### Examples
+
+
+```{r}
+# load the required packages
+library(dplyr)
+library(nycflights13)
+
+# Arrange flights by year, then month, then day
+arrange(flights, year, month, day)
+
+# Use desc() to reorder by a column in descending order
+arrange(flights, desc(arr_delay))
+
+# Missing values are always sorted at the end:
+df <- tibble(x = c(5, 2, NA))
+arrange(df, x)
+arrange(df,desc(x))
+```
+
+### Exercises
+
+Sort the flights dataset to find:
+
+1) The fastest (in terms of flight time) flights.
+
+
+
+```{r}
+arrange(flights, air_time)
+```
+
+
+###########################################################################################
+###########################################################################################
+2) The fastest (in terms of average speed in mph) flights
+
+
+We can find these flights by sorting by the result of distance / air_time / 60, where the 60 is to convert the expression to miles per hour since air_time is in minutes.
+
+```{r}
+arrange(flights, distance / air_time / 60)
+```
+
+###########################################################################################
+###########################################################################################
+
+3) The flights that departed the most ahead of time.
+
+```{r}
+arrange(flights, dep_delay)
+```
+
+###########################################################################################
+###########################################################################################
+4) The flights that were most delayed on departure.
+
+```{r}
+arrange(flights, desc(dep_delay))
+```
+
+
+###########################################################################################
+###########################################################################################
+5) Which flights travelled the furthest?
+
+```{r}
+arrange(flights, desc(distance))
+```
+

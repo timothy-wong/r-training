@@ -828,10 +828,11 @@ arrange(df,desc(x))
 \begin{Exercise}[title={Arranging Observations}]
 Sort the \verb|flights| dataset to find:
 \begin{enumerate}
-  \item The fastest flights.
-  \item The most delayed flights.
-  \item The flights that left earliest.
-  \item Which flights travelled the longest?
+  \item The fastest (in terms of flight time) flights.
+  \item The fastest (in terms of average speed in mph).
+  \item The flights that departed the most ahead of time.
+  \item The flights that were most delayed on departure.
+  \item Which flights travelled the furthest?
 \end{enumerate}
 
 \end{Exercise}
@@ -862,7 +863,9 @@ select(flights, year:day)
 # Select all columns except those from year to day (inclusive)
 select(flights, -(year:day))
 # Rename a variable using rename()
-rename(flights, tail_num = talinum)
+rename(flights, tail_num = tailnum)
+# Select all columns starting with "sched"
+select(flights, starts_with("sched"))
 # Reorder columns using the everything() helper
 select(flights, time_hour, air_time, everything())
 @
@@ -872,6 +875,7 @@ select(flights, time_hour, air_time, everything())
 \begin{enumerate}
   \item Can you find two ways to select \verb|dep_time|, \verb|dep_delay|, \verb|arr_time| and \verb|arr_delay| from the \verb|flights| dataset in one line of code?
   \item What happens if you include the name of a variable multiple times in a \verb|select()| call?
+  \item 3) Run the following code: \verb|select(flights, contains("TIME"))|. Note the result. What happens when you add the argument \verb|ignore.case = TRUE| in the \verb|contains()| function? What does this tell you about this helper function?
 \end{enumerate}
 
 \end{Exercise}
@@ -902,7 +906,7 @@ flights_sml <- select(flights,
                       ends_with("delay"),
                       distance,
                       air_time)
-# Use these the smaller data frame derive new columns
+# Use this smaller data frame to derive new columns
 mutate(flights_sml,
   	gain = arr_delay - dep_delay,
   	speed = distance / air_time * 60)
@@ -928,14 +932,13 @@ transmute(flights,
 # Example of ranking
 y <- c(1, 2, 2, NA, 3, 4)
 min_rank(y)
-min_rank(desc(y))
 @
 
 \begin{Exercise}[title={Computing New Variables}]
 
 \begin{enumerate}
   \item Currently \verb|dep_time| and \verb|sched_dep_time| are convenient to look at but hard to compute with because they’re not really continuous numbers. Convert them to a more convenient representation of number of minutes since midnight.
-  \item Compare a new variable \verb|air_time| as \verb|arr_time - dep_time|. What do you expect to see? What problem do you see? What do you need to do to fix it?
+  \item Compare \verb|air_time| with \verb|arr_time - dep_time| (you will need to convert these to units of minutes after midnight - see Q1). What do you expect to see? What problem do you see? Why might this be?
   \item What does \verb|1:3 + 1:10| return and why? How about \verb|1:3 + 1:9|?
 \end{enumerate}
 
@@ -959,8 +962,7 @@ When combining several operations, it is usually better to join them together us
 
 <<ex:tidysummarise, fig.show='hide', results='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize',rexample=TRUE>>=
 # Example of summarise() function alone
-# You can also use summarize()
-# These two are equivalent
+# You can also use summarize() - they are equivalent
 summarise(flights, delay = mean(dep_delay, na.rm = TRUE))
 # Combining summarise() with group_by() and a dplyr verb
 by_day <- group_by(flights, year, month, day)
@@ -1116,7 +1118,7 @@ Residuals	          & This is the unexplained bit of the model, defined as obser
 Estimate            & Coefficient of the corresponding independent variable (i.e.  the \(\beta_m\) values).\\
 Standard error      & Standard deviation of the estimate.\\
 \(t\)-value         & The number of standard deviations away from zero (i.e. the null hypothesis).\\
-\(P(>|t|)\)        & \(p\)-value of the model estimate. In general, variables with \(p\)-value above \(0.05\) are considered statistical significant.\\
+\(P(>|t|)\)        & \(p\)-value of the model estimate. In general, variables with \(p\)-value below \(0.05\) are considered statistically significant.\\
 Multiple \(R^2\)    & Pearson's correlation squared which indicates strength of relationship between the observed and fitted values.\\
 Adjusted \(R^2\)    & Adjusted version of \(R^2\).\\
 \(F\)-statistic     & Global hypothesis for the model as a whole.\\
