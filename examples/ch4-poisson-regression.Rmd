@@ -1,0 +1,73 @@
+---
+title: "ch.4 - poisson regression"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exercise 9 - Testing for Poisson distribution
+
+## Examples 4.2.1
+
+```{r}
+# Draw a simple histogram.
+hist(mtcars$carb)
+# Note that the variable never goes below 0 and has a long but thin tail towards the positive side
+
+# Compute the mean and variance.
+mean(mtcars$carb)
+var(mtcars$carb)
+```
+
+To robustly check whether a variable is truly drawn from a Poisson distribution, you can perform a Chi-squared goodness-of-fit test. It fits the input data against a theoretical Poisson distribution.
+
+```{r}
+# Performs the Chi-squared goodness-of-fit test.
+# It checks whether the variable is drawn from a Poisson distribution.
+library(vcd)
+gf <- goodfit(mtcars$carb, type= "poisson", method= "ML")
+
+# EXPLANATION: Chi-Square goodness of fit test is a non-parametric test that is used to find out how the observed value of a given phenomena is significantly different from the expected value. In Chi-Square goodness of fit test, the term goodness of fit is used to compare the observed sample distribution with the expected probability distribution. Chi-Square goodness of fit test determines how well a theoretical distribution (such as normal, binomial, or Poisson) fits the empirical distribution. In Chi-Square goodness of fit test, sample data is divided into intervals. Then the numbers of points that fall into the interval are compared with the expected numbers of points in each interval
+
+# Plots the observed frequency vs theoretical Poisson distribution.
+# The hanging bars should fill the space if it is perfectly Poisson.
+plot(gf)
+
+# Checks the statistical p-value of the goodness-of-fit test.
+# If p<=0.05 then it is safe to say that the variable is Poisson.
+summary(gf)
+```
+
+
+# Exercise 10 - Building a Poisson model
+
+Here we train a Poisson regression model using the mtcars dataset.
+The variable *carb* is used as dependent variable while *hp*, *wt* and *am* are used as independent predictor variables.
+
+
+```{r}
+# Build a Poisson model to predict the number of carburetors in a car.
+myPoissonModel <- glm(carb ~ hp + wt + factor(am),
+                  family="poisson",
+                  data=mtcars)
+
+# Read the model summary
+summary(myPoissonModel)
+
+# Read the model diagnostic
+plot(myPoissonModel)
+
+
+# Visualise the observed / fitted values as a table
+library(dplyr)
+tibble(observed = mtcars$carb, fitted = myPoissonModel$fitted.values) %>% 
+       View()
+
+```
+
+```{r}
+
+```
+

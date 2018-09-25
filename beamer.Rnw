@@ -913,7 +913,7 @@ select(flights, year:day)
 # Select all columns except those from year to day (inclusive)
 select(flights, -(year:day))
 # Rename a variable using rename()
-rename(flights, tail_num = talinum)
+rename(flights, tail_num = tailnum)
 # Reorder columns using the everything() helper
 select(flights, time_hour, air_time, everything())
 @
@@ -938,18 +938,23 @@ select(flights, time_hour, air_time, everything())
 \end{frame}
 
 
-\begin{frame}[fragile,shrink]{Examples - summarise()}
+
+\begin{frame}[fragile,shrink]{Examples - mutate()}
 <<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-mySummary <- flights %>%
-  group_by(dest) %>%
-  summarise(
-    count = n(),
-    dist = mean(distance, na.rm = TRUE),
-    delay = mean(arr_delay, na.rm = TRUE)) %>%
-  filter(count > 20)
-mySummary
+# Select several columns only
+flights_sml <- select(flights,
+                      year:day,
+                      ends_with("delay"),
+                      distance,
+                      air_time)
+# Use these the smaller data frame derive new columns
+mutate(flights_sml,
+  	gain = arr_delay - dep_delay,
+  	speed = distance / air_time * 60)
 @
 \end{frame}
+
+
 
 \subsection{Grouped Summaries}
 
@@ -969,21 +974,18 @@ mySummary
 \end{frame}
 
 
-\begin{frame}[fragile,shrink]{Examples - mutate()}
+\begin{frame}[fragile,shrink]{Examples - summarise()}
 <<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# Select several columns only
-flights_sml <- select(flights,
-                      year:day,
-                      ends_with("delay"),
-                      distance,
-                      air_time)
-# Use these the smaller data frame derive new columns
-mutate(flights_sml,
-  	gain = arr_delay - dep_delay,
-  	speed = distance / air_time * 60)
+mySummary <- flights %>%
+  group_by(dest) %>%
+  summarise(
+    count = n(),
+    dist = mean(distance, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE)) %>%
+  filter(count > 20)
+mySummary
 @
 \end{frame}
-
 
 \section{Regression Models}
 
@@ -994,7 +996,7 @@ Univariate linear regression model
 \[ \hat{y}_i=\beta_0+\beta_1 x_i \]
 \begin{itemize}
   \item Analogous to a straight line \( y=mx+c\)
-  \item Can be chained with \(M\) dependent variables (Multivariate)
+  \item Can be chained with \(M\) independent variables (Multivariate)
     \[ \hat{y}_i=\beta_0 + \sum_{m=1}^{M}\beta_m x_{m,i} \]
   \item Residual term \( \epsilon_i = y_i - \hat{y}_i \) assumed to be Gaussian 
     \[\epsilon_i\sim\mathcal{N}(0,\sigma^2) \]
@@ -1039,19 +1041,33 @@ myModel4 <- lm(mpg ~ wt * hp + qsec + factor(am), mtcars)
 \end{description}
 \end{frame}
 
+\begin{frame}{Regression Assumptions}
+\begin{description}
+  \item [Linearity]
+  There should be a linear relationship between the dependent  variable and independent variable(s). A linear relationship suggests that a change in Y due to one unit change in X is constant, regardless of the value of X. 
+  
+  \item [Distribution of error terms]
+  The error terms should be normally distributed.
+
+  \item [Variance of error terms]
+  The error terms should have constant variance - `homoscedasticity'
+\end{description}
+\end{frame}
+
+
 \begin{frame}{Regression Diagnostics}
 \begin{description}
   \item [Residuals vs Fitted]
-  Checks for non-linear relationship. Look for a near horizontal line.
+  Assesses the linearity of the relationship relationship. Look for a near horizontal line.
 
   \item [Normal Quantile-Quantile]
-  It aligns model residuals against a theoretical normal distribution. If the residuals spread along a straight diagonal line on the Q-Q plot, it suggests that the residuals are normally distributed.
+  Plots the model's residuals against a theoretical normal distribution. If the residuals lie along an approximately straight diagonal line on the   Q-Q plot, this suggests that the residuals are normally distributed.
 		
   \item [Scale-Location]
-  Checks for homoscedasticity and heteroscedasticity. It is homoscedastic if observations scatter without any observable pattern.
+  Checks for homoscedasticity - there should be no discernible pattern in the plot. Heteroscedasticity is often visible as a funnel shape and is usually caused by outliers.
   
   \item [Residual vs Leverage (Cook's Distance)]
-  Identifies observations having strong influence to the model.
+  Identifies observations having strong influence on the model.
 \end{description}
 \end{frame}
 
@@ -1193,36 +1209,21 @@ summary(myPoissonModel)
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Logistic Regression}
+\begin{frame}[fragile]{Logistic Regression}
 \begin{itemize}
   \item Equation for logistic regression
     \[P(Y)=\frac{1}{1+e^{-(\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M)}}\]
-  \item Coefficients \( \beta_1, \beta_2, \beta_3, ..., \beta_M  \) can be converted into odds ratios \(OR(x_1), OR(x_2), OR(x_3),...,OR(x_M)\).
-    \[{OR}(x_1) = \frac{odds(x_1+1)}{odds(x_1)} = \frac{e^{\beta_0+\beta_1 (x_1+1)+\beta_2 x_2+...+\beta_M x_M}}{e^{\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M}} = e^{\beta_1}\]
-    \item \(OR(x_1)\) Represents the change in probability when \(x_1\) increases by \(1\) unit.
+
+  \item Build a logistic regression model to predict the dependent variable \verb|am|. (\verb|1|=manual; \verb|0|=auto)
+    <<fig.show='hide',eval=TRUE,results=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
+  myLogisticModel <- glm(am ~ mpg + hp + disp,
+                         family="binomial",
+                         data=mtcars)
+  summary(myLogisticModel)
+  @
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile, shrink]{Training a Logistic Regression Model}
-
-\begin{itemize}
-\item Build a logistic regression model to predict the dependent variable \verb|am|. (\verb|1|=manual; \verb|0|=auto)
-\end{itemize}
-  <<fig.show='hide',eval=TRUE,results=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-myLogisticModel <- glm(am ~ mpg + hp + disp,
-                       family="binomial",
-                       data=mtcars)
-summary(myLogisticModel)
-@
-
-Calculate the odds ratios for this model.
-<<fig.show='hide',results=TRUE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
-# Calculate the odds-ratios by taking the exponential of the coefficients
-# You may also calculate the 95% confidence interval of the odds-ratio
-exp(cbind(oddsratio = myLogisticModel$coefficients,
-          confint(myLogisticModel)))
-@
-\end{frame}
 
 \section{Tree-based Methods}
 

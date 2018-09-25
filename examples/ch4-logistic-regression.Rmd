@@ -1,0 +1,23 @@
+---
+title: "ch.4 - logistic regression"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+# Load the package
+library(nycflights13)
+# Browse the flights dataset
+# Aii flights departing from New York airports in 2013.
+flights
+# Browse the airlines dataset
+# This is a small reference table containing full names of airlines
+airlines
+
+```
+
+
