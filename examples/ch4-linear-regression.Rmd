@@ -1,0 +1,205 @@
+---
+title: "ch.4 - linear regression"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Ex.6 - Simple Linear Regression
+
+## Example 4.1.1
+
+```{r}
+#Load the dataset into your local environment.
+data(mtcars)
+
+# Browse the top few rows
+head(mtcars)
+
+# Browse the last few rows
+tail(mtcars)
+```
+
+## Example 4.1.2
+
+```{r}
+# Create a simple histogram using base R plot
+hist(mtcars$mpg)
+
+# Using dplyr pipeline style code (equivalent output)
+library(dplyr)
+mtcars$mpg %>% hist()
+```
+
+
+```{r}
+# Plot histogram using ggplot2 package
+library(ggplot2)
+
+mtcars %>%
+      ggplot(aes(x=mpg)) +
+      geom_histogram() +
+      labs(x="Miles-per-gallon", y="Count",
+      title="Histogram showing the distribution of car performance")
+```
+
+```{r}
+# Create a boxplot showing mpg distribution of different gear types
+mtcars %>%
+    ggplot(aes(x = factor(am, levels = c(0,1), labels = c("Automatic", "Manual")), 
+               y = mpg)) +
+           geom_boxplot() +
+           labs(x="Gear type", y="Miles-per-gallon")
+
+```
+
+```{r}
+# Draw a scatterplot with facets to visualise multiple variables: five of them!
+# V. useful - we see that as horsepower increases, mpg decreases (y-axis aesthetic), displacement increases (size of bubbles) and we see more 3-gear cars replacing 4-gear cars.
+
+mtcars %>%
+    ggplot(aes(x=hp, 
+               y=mpg, colour=factor(gear), size=disp)) +
+          geom_point() +
+          facet_grid(. ~ cyl) +
+          labs(x="Horsepower", y="Miles-per-gallon",
+               colour="Number of gears", size="Displacement")
+```
+
+```{r}
+# Draw a matrix scatterplot
+pairs(mtcars)
+```
+
+```{r}
+# Load the package GGally
+# It is an extension of the ggplot2 package
+# Use ggpairs to draws a prettier matrix scatterplot
+library(GGally)
+ggpairs(mtcars)
+```
+
+
+
+Now let us try to analyse car efficiency using the mpg column as dependent variable. 
+
+The hypothesis is that heavier cars have lower miles-per-gallon. Let's plot this as a scattergraph with a line of best fit:
+
+```{r}
+mtcars %>%
+    ggplot(aes(x=wt, 
+               y=mpg)) +
+          geom_point() + geom_smooth(method = 'lm', se= F)
+```
+We can investigate this by building a univariate linear model using the lm() function and analyse the results. The following code fits an univariate regression model.
+
+```{r}
+# Build a univariate linear model
+myModel1 <- lm(mpg ~ wt, mtcars)
+
+# Read the model summary
+summary(myModel1)
+```
+
+
+## Example 4.1.4
+
+You can also build more complex multivariate models using the same lm() function Example 4.1.4 shows how the function deals with nominal and ordinal variables.
+
+```{r}
+# Dummy variables are automatically created on-the-fly.
+# The variable am has two categories
+myModel2 <- lm(mpg ~ wt + hp + qsec + factor(am), mtcars)
+summary(myModel2)
+
+```
+
+```{r}
+# Build a multivariate linear model with polynomial terms.
+# Interaction effect can be added as well
+
+myModel3 <- lm(mpg ~ wt + qsec + factor(am) + factor(cyl) * disp + poly(hp, 3) + factor(gear), mtcars)
+summary(myModel3)
+```
+
+To further analyse the effects of individual variables, wou can load the *car* package and use the function avPlots() to view the partial regression plot3. 
+This graphically displays the effect of individual variables while keeping others in control.
+
+```{r}
+# library(car)
+# avPlots(myModel2)
+```
+
+
+As the input predictor variables usually have different scale, the model coefficient are not directly comparable. To fairly compare the effect magnitude of the
+predictor variables, they need to be standardised first. The QuantPsyc package has a function lm.beta() which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influnce of each predictor variable:
+
+## Example 4.1.6
+
+```{r}
+library(QuantPsyc)
+lm.beta(myModel1)
+lm.beta(myModel2)
+lm.beta(myModel3)
+```
+
+```{r}
+# Compare linear regression models using Chi-square test
+# Testing whether myModel2 and myModel3 are different from myModel1
+anova(myModel1, myModel2, myModel3, test="Chisq")
+```
+
+# Exercise 7
+
+```{r}
+plot(myModel3)
+```
+
+
+# Exercise 8 - Model overfitting
+
+
+Run the next two chunks to reproduce Fig 4.3.
+Change the values of J and K to being 8 and 5 respectively to get the plot Fig 4.4 - this gives a more flexible model which is at the risk of overfitting.
+
+```{r}
+# Bivariate linear model with polynomial terms
+# You can change the values here.
+J <- 3
+K <- 2
+myModel4 <- lm(mpg ~ poly(wt,J) + poly(hp,K), mtcars)
+summary(myModel4)
+```
+
+
+
+```{r}
+# Create the base axes as continuous values
+wt_along <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 50)
+hp_along <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 50)
+
+# Use the outer product of wt and hp to run predictions for every point on the plane
+f <- function(k1, k2, model){ 
+  z <- predict(model, data.frame(wt=k1, hp=k2 )) 
+  }
+
+myPrediction <- outer(wt_along, hp_along, f, model = myModel4)
+
+# Draw the 3D plane
+myPlane <- persp(x = wt_along, xlab = "Weight",
+                y = hp_along, ylab = "Horsepower",
+                z = myPrediction, zlab = "Miles-per-Gallon",
+                main = "Fitted vs observed values in 3D space",
+                theta = 30, phi = 30, expand = 0.5, col = "lightblue")
+
+# Add original data as red dots on the plane
+myPoints <- trans3d(x = mtcars$wt,
+                    y = mtcars$hp,
+                    z = mtcars$mpg,
+                    pmat=myPlane)
+                    points(myPoints, col="red")
+
+```
+
