@@ -1118,7 +1118,7 @@ Residuals	          & This is the unexplained bit of the model, defined as obser
 Estimate            & Coefficient of the corresponding independent variable (i.e.  the \(\beta_m\) values).\\
 Standard error      & Standard deviation of the estimate.\\
 \(t\)-value         & The number of standard deviations away from zero (i.e. the null hypothesis).\\
-\(P(>|t|)\)        & \(p\)-value of the model estimate. In general, variables with \(p\)-value above \(0.05\) are considered statistical significant.\\
+\(P(>|t|)\)        & \(p\)-value of the model estimate. In general, variables with \(p\)-value below \(0.05\) are considered statistically significant.\\
 Multiple \(R^2\)    & Pearson's correlation squared which indicates strength of relationship between the observed and fitted values.\\
 Adjusted \(R^2\)    & Adjusted version of \(R^2\).\\
 \(F\)-statistic     & Global hypothesis for the model as a whole.\\

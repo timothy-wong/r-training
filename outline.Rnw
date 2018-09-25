@@ -51,7 +51,7 @@ Training materials including the book, slides and datasets are open-sourced. The
 \section{Syllabus}
 
 \begin{description}
-
+  
 \item[R Ecosystem] (1 hour)
   \begin{itemize}
     \item Open Source R
@@ -81,8 +81,6 @@ Training materials including the book, slides and datasets are open-sourced. The
       \item Table joining
     \end{itemize}
     
-
-
 \item[Regression Methods] (2 hours)
   \begin{itemize}
       \item Linear regression
@@ -104,9 +102,6 @@ Training materials including the book, slides and datasets are open-sourced. The
           \item Odds-ratio
         \end{itemize}
     \end{itemize}
-    
-    
-
 
 \item[Tree-based Methods] (1.5 hours)
   \begin{itemize}
@@ -127,7 +122,6 @@ Training materials including the book, slides and datasets are open-sourced. The
     \item Topologies
     \item Multi-layer perceptron (MLP)
   \end{itemize}
-  
 
 \item[Time Series Analysis] (3 hours)
   \begin{itemize}
@@ -166,6 +160,29 @@ Training materials including the book, slides and datasets are open-sourced. The
   \begin{itemize}
     \item K-means Clustering
     \item Agglomerative hierarchical clustering
+  \end{itemize}
+
+\item[Extending R] (2 hours)
+  \begin{itemize}
+    \item R Markdown
+    \item R Notebook
+    \item Shiny Web Application
+    \item Writing Packages
+    \item Reproducibility
+  \end{itemize}
+
+\item[Efficient Programming] (1 hour)
+  \begin{itemize}
+    \item Memory Usage
+    \item Profiling
+    \item Multithreaded Processing
+  \end{itemize}
+
+
+\item[Distributed Computing] (2 hour)
+  \begin{itemize}
+    \item Apache Spark
+    \item Microsoft Machine Learning Server
   \end{itemize}
 \end{description}
 
