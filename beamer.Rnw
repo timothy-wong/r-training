@@ -1209,7 +1209,7 @@ summary(myPoissonModel)
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Logistic Regression}
+\begin{frame}[fragile]{Logistic Regression}
 \begin{itemize}
   \item Equation for logistic regression
     \[P(Y)=\frac{1}{1+e^{-(\beta_0+\beta_1 x_1+\beta_2 x_2+...+\beta_M x_M)}}\]
