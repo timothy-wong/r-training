@@ -9,7 +9,7 @@ Vehicle Analysis
 I have analysed `r nrow(mtcars)` cars systematically. The 
 following vehicles have the largest `horsepower`:
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 mtcars %>%
   mutate(name = rownames(.)) %>%
@@ -28,7 +28,7 @@ myPlot <- mtcars %>%
   mutate(car_name = rownames(.),
          hp_rank = dense_rank(desc(hp)),
          top2 = hp_rank <= 2) %>%
-  ggplot(aes(x=qsec, y=hp, name=car_name)) +
+  ggplot(aes(x=qsec, y=hp), name=car_name) +
   stat_smooth(method = "lm") +
   geom_point(aes(colour=top2)) +
   labs(x="1/4 Mile Time (Seconds)",
