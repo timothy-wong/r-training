@@ -24,3 +24,4 @@ figure
 logs
 *.xdf
 datasets.zip
+packrat/lib*/
