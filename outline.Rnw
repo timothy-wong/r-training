@@ -182,7 +182,6 @@ Training materials including the book, slides and datasets are open-sourced. The
 \item[Distributed Computing] (2 hour)
   \begin{itemize}
     \item Apache Spark
-    \item Microsoft Machine Learning Server
   \end{itemize}
 \end{description}
 
