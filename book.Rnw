@@ -55,15 +55,14 @@
 \setlength{\parskip}{1em}
  
 <<setup, include=FALSE>>=
-library(checkpoint)
-checkpoint(snapshotDate = "2018-08-01", 
-           auto.install.knitr = TRUE, 
-           scan.rnw.with.knitr = TRUE, 
-           verbose = TRUE,
-           use.knitr = TRUE,
-           scanForPackages = TRUE,
-           checkpointLocation=getwd())
-
+# library(checkpoint)
+# checkpoint(snapshotDate = "2018-08-01", 
+#            auto.install.knitr = TRUE, 
+#            scan.rnw.with.knitr = TRUE, 
+#            verbose = TRUE,
+#            use.knitr = TRUE,
+#            scanForPackages = TRUE,
+#            checkpointLocation=getwd())
 library(knitr)
 knit_hooks$set(rexample = function(before, options, envir) {
   if (before) sprintf("\\begin{rexample}\\label{%s}\\hfill{}", options$label) else "\\end{rexample}"
@@ -1788,8 +1787,6 @@ mtcars_encoded <- mtcars %>% select(cyl,vs,am,gear,carb) %>%
   }) %>% bind_cols()
 # Combines all numeric and categorical variables
 mtcars_all <- bind_cols(mtcars_numeric_normalised, mtcars_encoded)
-# View the dataset
-View(mtcars_all)
 # Train the third model by including encoded categorical variables
 myNN3 <- neuralnet(formula = mpg ~ 
                      disp + hp + drat + wt + qsec +
@@ -1954,8 +1951,6 @@ bremen_daily <- bremen %>%
 # Join the two daily datasets together into a common table
 myTable <- amprion_daily %>%
   left_join(bremen_daily, by = "date")
-# View the aggregated datasets
-View(myTable)
 # Plots the daily total demand
 myTable %>%
   ggplot(aes(x=date, y=total_demand)) + 
@@ -2240,25 +2235,25 @@ myTestError4 <- mean((myTsForecast4$mean - myTestingSet$total_demand)^2)
 \centering
 <<fig.show='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, fig.width=7, fig.height=3>>=
 myTsModel4 <- Arima(y = myTs, 
-                    xreg = myTrainingSet %>% 
-                            dplyr::select(mean_airtemp,
+                    xreg = dplyr::select(myTrainingSet,
+                                          mean_airtemp,
                                           mean_windspd,
                                           max_sun,
                                           mean_soil10,
                                           mean_soil20,
                                           mean_soil50,
-                                          mean_soil100),
+                                          mean_soil100) %>% as.matrix(),
                     order = c(2,0,0), 
                     seasonal = c(1,1,1)) 
 myTsForecast4 <- forecast(myTsModel4, 
-                          xreg = myTestingSet %>% 
-                            dplyr::select(mean_airtemp,
+                          xreg =  dplyr::select(myTestingSet,
+                                         mean_airtemp,
                                          mean_windspd,
                                          max_sun,
                                          mean_soil10,
                                          mean_soil20,
                                          mean_soil50,
-                                         mean_soil100))
+                                         mean_soil100) %>% as.matrix())
 plot(myTsForecast4)
 @
 \caption{Forecast generated from a seasonal ARIMA model.}
