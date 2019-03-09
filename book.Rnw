@@ -3354,7 +3354,7 @@ Multithreading does not always guarentee top speed. This is because it has very 
 
 Very large datasets which cannot fit in memory need to be processed differently. There are several big data tools which support large-scale processing. The simplest way is to carve up the large dataset into smaller chunks and process them seperately. Once completed, the overall results can be reconstructed. 
 
-A slightly more advanced way is to process it natively in a Hadoop cluster which hosts the large dataset. There are plenty of algorithms which can be executed on Hadoop, these are mainly provided by Microsoft Machine Learning Server and Apache Spark MLlib.
+A slightly more advanced way is to process it natively in a Hadoop cluster which hosts the large dataset. There are plenty of algorithms which can be executed on Hadoop, these are mainly provided by Apache Spark MLlib.
 
 \section{Apache Spark}
 
@@ -3438,87 +3438,6 @@ myTestingMse <- myFlightsPredictionTesting %>%
 # Print the MSE
 myTrainingMse
 myTestingMse
-@
-
-\end{Exercise}
-
-\section{Microsoft Machine Learning Server}
-
-Microsoft Machine Learning Server (MLS) supports distributed large scale processing on various platforms. Large datasets are stored on local file system or HDFS in \verb|XDF| file format. Data is compressed and processed as smaller chunks. 
-
-One of the important features of MLS is that the compute context can be switched without changing the code base. Users can use the function \verb|rxSetComputeContext()| to configure where to perform the computational task. Popular choices include: \verb|RxLocalSeq()|, \verb|RxLocalParallel()| and \verb|RxSpark()|.
-
-\begin{Exercise}[title={Train a Neural Network}]
-
-In this exercise, users will train a single-layer neural network using the \verb|flights| dataset. Example \ref{ex:mlshistogram} shows how to import data into XDF format and draw a simple histogram.
-
-<<ex:mlshistogram, eval=FALSE, size='scriptsize',rexample=TRUE>>=
-library(nycflights13)
-# Configure the compute context
-# It works parallel
-rxOptions(numCoresToUse = 4)
-rxSetComputeContext(RxLocalParallel())
-# Creates a pointer to a local XDF file
-myFlightsClean <- RxXdfData("flight_clean.xdf")
-# Clean the dataset by removing NA values
-# Also chop it into smaller chunks
-rxDataStep(inData = flights,
-           outFile = myFlightsClean,
-           overwrite = TRUE,
-           rowsPerRead = 50000,
-           removeMissings = TRUE)
-# Run a simple histogram
-rxHistogram(~ dep_delay_log | origin,
-            myFlightsClean,
-            transforms = list(dep_delay_log = log(dep_delay),
-                              origin = factor(origin)))
-@
-
-In example \ref{ex:mlsneuralnet}, the dataset is split into training and testing sets randomly. It then fits a neural network model using the training set. Afterwards, the model is applied to the training and testing sets to calculate the mean-squared error (MSE) values.
-
-<<ex:mlsneuralnet, eval=FALSE, size='scriptsize',rexample=TRUE>>=
-# Split the dataset randomly into training / testing set
-mySplit <-  rxSplit(
-  inData = myFlightsClean,
-  outFilesBase = "mySplit",
-  outFileSuffixes = c("training", "testing"),
-  splitByFactor = "splitVar",
-  overwrite = TRUE,
-  transforms = list(
-    splitVar = factor(sample(c("Train", "Test"),
-                             size = .rxNumRows,
-                             replace = TRUE,
-                             prob = c(0.5, 0.5)),
-                      levels = c("Train", "Test"))))
-# Train a neural network model
-myFlightsNeuralNetModel <- rxNeuralNet(
-  formula = dep_delay ~ month + hour + origin + dest + carrier, 
-  data = mySplit[[1]], 
-  type = "regression",
-  transforms = list(origin = factor(origin),
-                    dest = factor(dest),
-                    carrier = factor(carrier)))
-# Create pointers for the training/testing prediction results
-myFlighNeuralPredictionTraining <- RxXdfData("prediction_training.xdf")
-myFlighNeuralPredictionTesting <- RxXdfData("prediction_testing.xdf")
-# Run the model prediction
-rxPredict(modelObject = myFlightsNeuralNetModel, 
-          data = mySplit[[1]],
-          outData = myFlighNeuralPredictionTraining,
-          extraVarsToWrite = "dep_delay",
-          overwrite = TRUE)
-rxPredict(modelObject = myFlightsNeuralNetModel, 
-          data = mySplit[[2]],
-          outData = myFlighNeuralPredictionTesting,
-          extraVarsToWrite = "dep_delay",
-          overwrite = TRUE)
-# Calculate the training and testing MSE
-rxSummary(formula = ~ sq_error, 
-          data = myFlighNeuralPredictionTraining,
-          transforms = list(sq_error=(Score - dep_delay)^2))
-rxSummary(formula = ~ sq_error, 
-          data = myFlighNeuralPredictionTesting,
-          transforms = list(sq_error=(Score - dep_delay)^2))
 @
 
 \end{Exercise}
