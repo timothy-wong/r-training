@@ -672,7 +672,12 @@ system.time({
   }
 })
 @
+\begin{Exercise}[title={Working with the apply family}]
 
+\item Write the for loop from the previous task, (runs through a list of numbers 1:20 and prints only the even numbers) as an apply function. 
+\item (Advanced) Use the \verb|sys.time| function to find out if apply is faster than for.
+
+\end{Exercise}
 
 \chapter{Data Transformation}
 \label{ch:datatransformation}
