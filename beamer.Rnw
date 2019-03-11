@@ -42,14 +42,14 @@
 % }
 
 <<setup, include=FALSE>>=
-library(checkpoint)
-checkpoint(snapshotDate = '2018-08-01', 
-           auto.install.knitr = TRUE, 
-           scan.rnw.with.knitr = TRUE, 
-           verbose = TRUE,
-           use.knitr = TRUE,
-           scanForPackages = TRUE,
-           checkpointLocation=getwd())
+# library(checkpoint)
+# checkpoint(snapshotDate = '2018-08-01', 
+#            auto.install.knitr = TRUE, 
+#            scan.rnw.with.knitr = TRUE, 
+#            verbose = TRUE,
+#            use.knitr = TRUE,
+#            scanForPackages = TRUE,
+#            checkpointLocation=getwd())
 @
 
 \defbeamertemplate*{section page}{ifttheme}%[1][]
@@ -1582,7 +1582,7 @@ myTsModel4 <- Arima(y = myTs,
                                    mean_soil10,
                                    mean_soil20,
                                    mean_soil50,
-                                   mean_soil100),
+                                   mean_soil100) %>% as.matrix(),
                     order = c(2,0,0),
                     seasonal = c(1,1,1))
 myTsForecast4 <- forecast(myTsModel4, 
@@ -1593,7 +1593,7 @@ myTsForecast4 <- forecast(myTsModel4,
                                    mean_soil10,
                                    mean_soil20,
                                    mean_soil50,
-                                   mean_soil100))
+                                   mean_soil100) %>% as.matrix())
 plot(myTsForecast4)
 @
 \end{frame}
@@ -2107,40 +2107,6 @@ myFlightsSummary <- flights_tbl %>%
   arrange(year, month)
   # Print it out on the console
 myFlightsSummary
-@
-\end{frame}
-
-\subsection{Microsoft MLS}
-
-\begin{frame}[fragile]{Microsoft Machine Learning Server (MLS)}
-  \begin{itemize}
-    \item Data is stored on file system
-    \item Runs on multiple compute context
-    \item Uses \verb|XDF| file format: compressed small chunks
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile, shrink]{Loading Data into MLS}
-<<eval=FALSE, size='scriptsize',rexample=TRUE>>=
-library(nycflights13)
-# Configure the compute context
-# It works parallel
-rxOptions(numCoresToUse = 4)
-rxSetComputeContext(RxLocalParallel())
-# Creates a pointer to a local XDF file
-myFlightsClean <- RxXdfData("flight_clean.xdf")
-# Clean the dataset by removing NA values
-# Also chop it into smaller chunks
-rxDataStep(inData = flights,
-           outFile = myFlightsClean,
-           overwrite = TRUE,
-           rowsPerRead = 50000,
-           removeMissings = TRUE)
-# Run a simple histogram
-rxHistogram(~ dep_delay_log | origin,
-            myFlightsClean,
-            transforms = list(dep_delay_log = log(dep_delay),
-                              origin = factor(origin)))
 @
 \end{frame}
 
