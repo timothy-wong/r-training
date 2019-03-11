@@ -82,6 +82,7 @@ knit_hooks$set(rexample = function(before, options, envir) {
 }
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 % \SweaveOpts{concordance=TRUE}
 \frontmatter
 \maketitle
