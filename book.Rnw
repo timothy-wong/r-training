@@ -178,7 +178,7 @@ Inside RStudio, the display is divided into different tabs which users can custo
 
 \begin{Exercise}[title={Using RStudio IDE}]
 
-\item Use your interactive console to print your name using : \verb print(“hello <my name>”)
+\item Use your interactive console to print your name using : \verb |print(“hello <my name>”)|
 \item Write the source code to print your name and run it. 
 
 \end{Exercise}
@@ -464,6 +464,14 @@ myFavMovies2[1:3, "year"]
 # Get the "title" and "year" variables of row 4-7 
 myFavMovies2[4:7, c("title","year")]
 @
+\begin{Exercise}[title={Working with Data Frames }]
+
+\item Create your own favourite movies data frame (Your data frame must contain more than one type.)
+\item Return a variable (column) of your data frame.
+\item Can you add another variable (column) to your data frame?
+\item Can you return an observation (row)?
+
+\end{Exercise}
 
 \section{Function}
 
