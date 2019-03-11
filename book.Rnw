@@ -175,6 +175,15 @@ Inside RStudio, the display is divided into different tabs which users can custo
 \caption{RStudio Server Pro (RSP)}
 \end{figure}
 
+
+\begin{Exercise}[title={Using RStudio IDE}]
+
+\item Use your interactive console to print your name using : \verb print(“hello <my name>”)
+\item Write the source code to print your name and run it. 
+
+\end{Exercise}
+
+
 \section{Packages}
 
 Functionality in \verb|R| can be extended through packages. Most packages are open-sourced with a few exceptions. They are published on community-maintained repositories such as CRAN and Bioconductor.

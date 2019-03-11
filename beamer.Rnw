@@ -118,6 +118,16 @@
   \includegraphics[width=\textwidth]{img/rstudio.PNG}
 \end{frame}
 
+\begin{frame}[fragile]{RStudio Server Pro}
+  \begin{itemize}
+    \item RStudio has three parts: source code, interactive console and object explorer.
+    \item Source code panel: edit the source code 
+    \item interactive console: execute R code snippets
+    \item object explorer: observe what objects are in memory.
+  \end{itemize}
+  \includegraphics[width=\textwidth]{img/rstudio_labelled.PNG}
+\end{frame}
+
 \subsection{Packages}
 
 \begin{frame}[fragile, shrink]{Packages}
