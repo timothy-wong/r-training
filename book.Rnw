@@ -497,6 +497,12 @@ is.even <- function(x) {
 # Return true for even numbers
 is.even(1:10)
 @
+\begin{Exercise}[title={Working with Functions}]
+
+\item Write a new function called “square.it” that returns the square of a number.
+\item Can you apply this to a numerical column in your dataframe?
+
+\end{Exercise}
 
 \section{Flow Control}
 
@@ -579,6 +585,12 @@ for (i in 1:100) {
 myResult
 @
 
+\begin{Exercise}[title={Operational and Conditional Statements}]
+
+\item Write a for loop that runs through a list of numbers 1:20 and prints only the even numbers. 
+\item Can you change this loop so it prints just the odd numbers?
+
+\end{Exercise}
 \section{Apply}
 
 Functions in the apply family can be used to run operations over multiple values. In example \ref{ex:apply}, the \verb|apply()| function receives a \verb|tibble| object and iterates over each row. Variables of each row are merged in a character message and returned. 
