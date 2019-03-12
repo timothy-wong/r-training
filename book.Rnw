@@ -81,7 +81,6 @@ knit_hooks$set(rexample = function(before, options, envir) {
 }
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 % \SweaveOpts{concordance=TRUE}
 \frontmatter
 \maketitle
@@ -177,10 +176,10 @@ Inside RStudio, the display is divided into different tabs which users can custo
 
 
 \begin{Exercise}[title={Using RStudio IDE}]
-
-\item Use your interactive console to print your name using : \verb |print(“hello <my name>”)|
-\item Write the source code to print your name and run it. 
-
+  \begin{itemize}
+    \item Use your interactive console to print your name using : \verb|print("hello <my name>")|
+    \item Write the source code to print your name and run it. 
+  \end{itemize}
 \end{Exercise}
 
 
@@ -465,12 +464,12 @@ myFavMovies2[1:3, "year"]
 myFavMovies2[4:7, c("title","year")]
 @
 \begin{Exercise}[title={Working with Data Frames }]
-
-\item Create your own favourite movies data frame (Your data frame must contain more than one type.)
-\item Return a variable (column) of your data frame.
-\item Can you add another variable (column) to your data frame?
-\item Can you return an observation (row)?
-
+  \begin{itemize}
+    \item Create your own favourite movies data frame (Your data frame must contain more than one type.)
+    \item Return a variable (column) of your data frame.
+    \item Can you add another variable (column) to your data frame?
+    \item Can you return an observation (row)?
+  \end{itemize}
 \end{Exercise}
 
 \section{Function}
@@ -498,10 +497,10 @@ is.even <- function(x) {
 is.even(1:10)
 @
 \begin{Exercise}[title={Working with Functions}]
-
-\item Write a new function called “square.it” that returns the square of a number.
-\item Can you apply this to a numerical column in your dataframe?
-
+  \begin{itemize}
+    \item Write a new function called \verb|square.it()| that returns the square of a number.
+    \item Can you apply this to a numerical column in your dataframe?
+  \end{itemize}
 \end{Exercise}
 
 \section{Flow Control}
@@ -586,10 +585,10 @@ myResult
 @
 
 \begin{Exercise}[title={Operational and Conditional Statements}]
-
-\item Write a for loop that runs through a list of numbers 1:20 and prints only the even numbers. 
-\item Can you change this loop so it prints just the odd numbers?
-
+  \begin{itemize}
+    \item Write a for loop that runs through a list of numbers \verb|1:20| and prints only the even numbers. 
+    \item Can you change this loop so it prints just the odd numbers?
+  \end{itemize}
 \end{Exercise}
 \section{Apply}
 
@@ -673,10 +672,10 @@ system.time({
 })
 @
 \begin{Exercise}[title={Working with the apply family}]
-
-\item Write the for loop from the previous task, (runs through a list of numbers 1:20 and prints only the even numbers) as an apply function. 
-\item (Advanced) Use the \verb|sys.time| function to find out if apply is faster than for.
-
+  \begin{itemize}
+    \item Write the for loop from the previous task, (runs through a list of numbers \verb|1:20| and prints only the even numbers) as an apply function. 
+    \item (Advanced) Use the \verb|sys.time()| function to find out if \verb|apply| is faster than \verb|for|.
+  \end{itemize}
 \end{Exercise}
 
 \chapter{Data Transformation}
