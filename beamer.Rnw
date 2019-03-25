@@ -115,7 +115,7 @@
   \begin{itemize}
     \item RStudio is your integrated development environment (IDE)
   \end{itemize}
-  \includegraphics[width=\textwidth]{img/rstudio.PNG}
+  \includegraphics[width=\textwidth]{img/rstudio.png}
 \end{frame}
 
 \begin{frame}[fragile]{RStudio Server Pro}
@@ -125,7 +125,7 @@
     \item interactive console: execute R code snippets
     \item object explorer: observe what objects are in memory.
   \end{itemize}
-  \includegraphics[width=\textwidth]{img/rstudio_labelled.PNG}
+  \includegraphics[width=\textwidth]{img/rstudio_labelled.png}
 \end{frame}
 
 \subsection{Packages}
@@ -675,16 +675,16 @@ system.time({
 
 \begin{frame} [fragile, shrink] {UK User Communities}
 \begin{itemize}
-  \item LondonR - \includegraphics[width=0.2\textwidth]{img/londonr.PNG}
+  \item LondonR - \includegraphics[width=0.2\textwidth]{img/londonr.png}
   \item ManchesterR - \includegraphics[width=0.2\textwidth]{img/manchesterr.png}
-  \item CaRdiff - \includegraphics[width=0.2\textwidth]{img/cardiff.JPG}
+  \item CaRdiff - \includegraphics[width=0.2\textwidth]{img/cardiff.jpg}
   \item SheffieldR
-  \item EdinbR - \includegraphics[width=0.2\textwidth]{img/edinbr.PNG}
-  \item CambR - \includegraphics[width=0.1\textwidth]{img/cambr.JPG}
+  \item EdinbR - \includegraphics[width=0.2\textwidth]{img/edinbr.png}
+  \item CambR - \includegraphics[width=0.1\textwidth]{img/cambr.jpg}
   \item NottinghamR
-  \item BirminghamR - \includegraphics[width=0.1\textwidth]{img/birminghamr.JPG}
-  \item Oxford RUG - \includegraphics[width=0.1\textwidth]{img/oxfordrug.PNG}
-  \item Bristol Data Scientists - \includegraphics[width=0.2\textwidth]{img/bristolds.JPG}
+  \item BirminghamR - \includegraphics[width=0.1\textwidth]{img/birminghamr.jpg}
+  \item Oxford RUG - \includegraphics[width=0.1\textwidth]{img/oxfordrug.png}
+  \item Bristol Data Scientists - \includegraphics[width=0.2\textwidth]{img/bristolds.jpg}
 \end{itemize}
 \end{frame}
 
@@ -692,13 +692,13 @@ system.time({
   \begin{itemize}
 
     \item International R User Conference (useR!) \\
-    \includegraphics[width=0.2\textwidth]{img/userconf.PNG}
+    \includegraphics[width=0.2\textwidth]{img/userconf.png}
 
     \item Enterprise Application of the R Language (EARL) \\
-    \includegraphics[width=0.2\textwidth]{img/earlconf.PNG}
+    \includegraphics[width=0.2\textwidth]{img/earlconf.png}
 
     \item European R User Meeting (ERUM) \\
-    \includegraphics[width=0.2\textwidth]{img/erumconf.JPG}
+    \includegraphics[width=0.2\textwidth]{img/erumconf.jpg}
 
   \end{itemize}
 \end{frame}
@@ -707,12 +707,12 @@ system.time({
 
 \begin{frame}[shrink]{Domain-specific Communities}
   \begin{itemize}
-    \item R in Insurance - \includegraphics[width=0.2\textwidth]{img/rinsurance.PNG}
-    \item Applied Finance with R - \includegraphics[width=0.2\textwidth]{img/rfinance.PNG}
-    \item R/Pharma - \includegraphics[width=0.2\textwidth]{img/rpharma.PNG}
-    \item R/Medicine - \includegraphics[width=0.2\textwidth]{img/rmedicine.PNG}
-    \item NHS-R - \includegraphics[width=0.2\textwidth]{img/nhsr.PNG}
-    \item R-ladies - \includegraphics[width=0.1\textwidth]{img/rladies.PNG}
+    \item R in Insurance - \includegraphics[width=0.2\textwidth]{img/rinsurance.png}
+    \item Applied Finance with R - \includegraphics[width=0.2\textwidth]{img/rfinance.png}
+    \item R/Pharma - \includegraphics[width=0.2\textwidth]{img/rpharma.png}
+    \item R/Medicine - \includegraphics[width=0.2\textwidth]{img/rmedicine.png}
+    \item NHS-R - \includegraphics[width=0.2\textwidth]{img/nhsr.png}
+    \item R-ladies - \includegraphics[width=0.1\textwidth]{img/rladies.png}
   \end{itemize}
 \end{frame}
 
@@ -812,8 +812,6 @@ system.time({
 <<fig.show='hide', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize'>>=
 # Load the package
 library(nycflights13)
-# View the flights dataset interactively
-View(flights)
 # Print out the dataset on the console
 flights
 @
@@ -845,7 +843,7 @@ flights %>%
   \item Pick a subset of observations based on their values
   \item Use logical operators: \verb|>|, \verb|>=|, \verb|<|, \verb|<=|, \verb|!=|, \verb|==|
   \item More complex combinations of logical operators:
-    \includegraphics[width=0.7\textwidth]{img/venn.PNG}
+    \includegraphics[width=0.7\textwidth]{img/venn.png}
   \item Only returns observations where the condition is \verb|TRUE|. All \verb|FALSE| and \verb|NA| values are excluded.
   \item Use the function \verb|is.na()| to check if the value is missing.
 \end{itemize}
@@ -1248,7 +1246,7 @@ summary(myPoissonModel)
       \item Regularisation.
     \end{itemize}
   \end{itemize}
-  \includegraphics[width=\textwidth]{img/rpart.PNG}
+  \includegraphics[width=\textwidth]{img/rpart.png}
 \end{frame}
 
 \subsection{Decision Tree}
@@ -1866,14 +1864,14 @@ multiplot(plotlist = plt, cols = 8)
 \begin{frame}{Shiny App Example}
   \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{img/shiny.PNG}
+  \includegraphics[width=\textwidth]{img/shiny.png}
   \end{figure}
 \end{frame}
 
 \begin{frame}{Control Widgets}
   \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{img/shiny-inputs.PNG}
+  \includegraphics[width=\textwidth]{img/shiny-inputs.png}
   \end{figure}
 \end{frame}
 

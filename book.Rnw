@@ -170,7 +170,7 @@ Inside RStudio, the display is divided into different tabs which users can custo
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{img/rstudio.PNG}
+\includegraphics[width=\textwidth]{img/rstudio.png}
 \caption{RStudio Server Pro (RSP)}
 \end{figure}
 
@@ -791,7 +791,7 @@ For filtering you can use the standard comparison operators (\verb|>|, \verb|>=|
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{img/venn.PNG}
+\includegraphics[width=\textwidth]{img/venn.png}
 \caption{Logical operators in R}
 \end{figure}
 
@@ -1521,7 +1521,7 @@ At the heart of tree-based method is a concept called binary recursive partition
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{img/rpart.PNG}
+\includegraphics[width=\textwidth]{img/rpart.png}
 \caption{Recursive partitioning}
 \end{figure}
 			
@@ -3013,7 +3013,7 @@ Essential gadgets are required for Health and Safety reasons:
 \begin{figure}[H]
 \label{fig:rmarkdown}
 \centering
-\includegraphics[width=\textwidth]{img/rmarkdown.PNG}
+\includegraphics[width=\textwidth]{img/rmarkdown.png}
 \caption{Compiled R Markdown output in HTML format}
 \end{figure}
 
@@ -3068,7 +3068,7 @@ ui <- fluidPage(
 \begin{figure}[H]
 \label{fig:shinyinput}
 \centering
-\includegraphics[width=\textwidth]{img/shiny-inputs.PNG}
+\includegraphics[width=\textwidth]{img/shiny-inputs.png}
 \caption{Control widgets in shiny}
 \end{figure}
 
@@ -3092,7 +3092,7 @@ To run a \verb|shiny| application, users can click on the \textbf{Run App} butto
 \begin{figure}[H]
 \label{fig:shiny}
 \centering
-\includegraphics[width=\textwidth]{img/shiny.PNG}
+\includegraphics[width=\textwidth]{img/shiny.png}
 \caption{Default shiny template}
 \end{figure}
 
@@ -3103,7 +3103,7 @@ In this exercise, the objective is to design a simple analytics dashboard which 
 \begin{figure}[H]
 \label{fig:shiny-flight}
 \centering
-\includegraphics[width=\textwidth]{img/shiny-flights.PNG}
+\includegraphics[width=\textwidth]{img/shiny-flights.png}
 \caption{Interactive application displaying predicted flight departure delay.}
 \end{figure}
 
