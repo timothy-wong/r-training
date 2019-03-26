@@ -1,0 +1,88 @@
+\documentclass{beamer}
+%
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  %\usetheme{Ilmenau}
+  \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{pstricks}
+\usepackage{multicol}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes, shapes.geometric, arrows}
+
+% These two lines are required to fix font issue.
+% Track here: https://tex.stackexchange.com/questions/133781/font-display-error-in-windows
+\usepackage{sansmathaccent}
+\pdfmapfile{+sansmathaccent.map}
+
+\tikzstyle{block1} = [rectangle, draw, fill=blue!20, text centered, rounded corners]
+\tikzstyle{block2} = [rectangle, draw, fill=red!20, text centered, rounded corners]
+\tikzstyle{block3} = [rectangle, draw, text centered]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\title{
+  \textbf{Business Analytics in R -} \\
+  Introduction to Statistical Programming - Extra Material 
+}
+
+\defbeamertemplate*{section page}{ifttheme}%[1][]
+{\vbox{}\vskip-3.2cm%
+\begin{beamercolorbox}[sep=0.3cm,ht=0.5\paperheight,wd=\paperwidth]{red}
+    \begin{center}
+        \begin{minipage}[c]{0.55\paperwidth}
+        \centering \Huge \insertsection%\par
+        \end{minipage}
+    \end{center}
+\end{beamercolorbox}
+}
+
+\AtBeginSection[]{
+  \begin{frame}
+    \sectionpage
+  \end{frame}
+  \begin{frame}[shrink]{Outline}
+    \begin{multicols}{2}
+      \tableofcontents[currentsection,hideothersubsections]
+    \end{multicols}
+  \end{frame}
+}
+
+
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{Continuing R Development}
+
+\begin{frame}{Troubleshooting}
+  \begin{itemize}
+    \item When developing code we often get lots of errors and hit blockers. The R community is large and help is at hand.
+    \item Use a search engine to search for your traceback error. Often people have had the same error and there are webpages dedicated to helping users. 
+    \item Attend open meetings on R or ask your R-using colleagues.
+    \item Read documentation on functions. In the interactive console in RStudio type \verb|?function.name| and documentation will appear in \\
+          the Help Panel or RStudio IDE. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Discovering new packages }
+  \begin{itemize}
+    \item When you find a new package to work with install it and test on examples before moving to your own data. 
+    \item Most packages have vignette documents which show how functions in the package can be used together to perform analysis. 
+    \item R has a \verb|datasets| package that includes many open source datasets that can be used to test and train models. 
+  \end{itemize}
+\end{frame}
+
+\end{document}

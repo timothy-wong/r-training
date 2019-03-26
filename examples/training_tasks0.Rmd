@@ -1,0 +1,111 @@
+---
+title: "training_examples"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 0 
+Use your interactive console to print your name using : print(“hello <my name>”)
+
+```{r}
+print("Hello Everyone!")
+```
+
+# Task 1
+Create your own custom vector of any data type.
+```{r }
+v      <- c(2,3,4,5,1,5,3,8,1)
+len    <- length(v)
+middle <- v[ceiling(len/2):ceiling(len/2)+1]
+1:3 + 1:10
+1:3 + 1:9
+```
+
+# Task 2
+Create your own favourite movies data frame (Your data frame must contain more than one type.)
+
+```{r}
+df <- data.frame("number"     = c(1,2,3,4),
+                 "alpha"      = c("a","b","c","d"),
+                 "phys_constants"= c(2.998e08, 6.02e23, 8.85e-12,5.01e-11 )
+)
+```
+Return a variable (column) of your data frame.
+
+```{r}
+print(df$number)
+print(df[,1])
+```
+Can you add another variable (column) to your data frame?
+```{r}
+df$animals <- c("monkey","giraffe", "elephant", "hippotamus")
+print(head(df))
+```
+Can you return an observation (row)?
+
+```{r}
+print(df[1,])
+```
+
+#Task 3
+Write a new function called “square.it” that returns the square of a number.
+
+
+```{r}
+square.it <- function(x){
+  return(x*x)
+}
+```
+Can you apply this to a numerical column in your dataframe?
+```{r}
+square.it(df$number)
+
+```
+
+#Task 4
+Write a for loop that runs through a list of numbers 1:20 and prints only the even numbers. 
+```{r}
+is.odd <- function(x){
+  remainder <- x%%2
+  equalOne  <- remainder == 1
+  return(equalOne)
+}
+```
+Can you change this loop so it prints just the odd numbers?
+```{r}
+for(i in 1:20){
+  if(is.odd(i)){
+    print(i)
+  }
+}
+```
+# Task 5
+Write apply function for your Task 4 For loop.
+```{r}
+vec <- 1:20
+sapply(vec, function(x){ if(is.odd(x)){print(x)}})
+```
+
+(Advanced) Use system.time to find out if apply is faster than for.
+
+```{r}
+system.time(for(i in 1:20){
+  if(is.odd(i)){
+    print(i)
+  }
+})
+
+vec <- 1:20
+system.time(sapply(vec, function(x){ if(is.odd(x)){print(x)}}))
+```
+
+# Task 6
+library(dplyr)
+library(nycflights13)
+head(as.data.frame(flights))
+
+# Tidyverse examples
+flight_times <- mutate(flights, dep_time_minutes = ( dep_time %/% 100 * 60 +dep_time%%100)%%1440)
