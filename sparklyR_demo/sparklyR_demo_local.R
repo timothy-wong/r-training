@@ -112,6 +112,7 @@ myTestingMse
 # first, write the mtcars spark dataframe to csv
 spark_write_csv(myTbl, 'mtcars_local', mode = 'overwrite')
 
+# change user to your username/lanid
 myCsvLocal <- mySparkConn %>% 
   spark_read_csv(name = "mtcars_local",
                  path = "file:/home/user012/mtcars_local")
@@ -120,7 +121,8 @@ myCsvLocal
 # You can also write and read parquet files
 # write flights to parquet
 spark_write_parquet(flights_tbl, 'flights_local', mode = 'overwrite')
-# read it back in from parquet
+
+# read it back in from parquet - change user to your username/lanid
 myParquetLocal <- mySparkConn %>% 
   spark_read_parquet(name = "flightsnyc13",
                      path = "file:/home/user012/flights_local")
@@ -153,8 +155,8 @@ mtcarsTest <- mySparkConn %>% tbl("mtcars_testing")
 mlGbtReg <- ml_gradient_boosted_trees(mtcarsTrain, mpg ~ hp + wt + drat,
                                     type = "regression")
 # predictions for testing and training
-predtrainGbt <- ml_predict(ml_gbt, mtcarsTrain)
-predtestGbt <- ml_predict(ml_gbt, mtcarsTest)
+predtrainGbt <- ml_predict(mlGbtReg, mtcarsTrain)
+predtestGbt <- ml_predict(mlGbtReg, mtcarsTest)
 # Calculate the training and testing error (Mean-squared error)
 myTestingMseGbt <- predtestGbt %>%
   mutate(error = prediction - mpg) %>%
