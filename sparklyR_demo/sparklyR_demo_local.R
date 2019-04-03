@@ -15,22 +15,30 @@ spark_install(version = "2.4")
 # Opens the Spark connection through sparklyr
 # Using standalone mode (local master)
 mySparkConn <- spark_connect(master = "local")
+
 # Checks whether the connection is opened
 mySparkConn %>% connection_is_open()
+
 # Checks Spark version
 mySparkConn %>% spark_version()
+
 # Checks Spark version (another way -- without pipeline)
 spark_version(mySparkConn)
+
+
 
 
 # Loading data and aggregation pipeline -----------------------------------
 
 # Copy a local R data frame to Spark as SDF
 mySparkConn %>% sdf_copy_to(mtcars, overwrite = TRUE)
+
 # Sets up a connection to Spark table
 myTbl <- mySparkConn %>% tbl("mtcars")
+
 # Browse the top rows of the table
 head(myTbl)
+
 # Performs SQL-style aggregation using dplyr framework
 # It runs natively on Spark
 myTbl %>% 
@@ -42,10 +50,10 @@ myTbl %>%
 
 # Reading / Writing files -------------------------------------------------
 
-## Set up Spark Data Frame using CSV on local file system
+# Set up Spark Data Frame using CSV on local file system
 # Works in Spark local mode only
 
-# first, write the mtcars spark dataframe to csv
+# First, write the mtcars spark dataframe to csv
 spark_write_csv(myTbl, 'mtcars_local', mode = "overwrite")
 
 # change user to your username/lanid
@@ -77,9 +85,9 @@ library(nycflights13)
 library(ggplot2)
 library(dbplot)
 
-# data manipulation and visualisation with sparklyr
 # Converts an R object into Spark DataFrame
 flights_tbl <- mySparkConn %>% copy_to(flights)
+
 # Runs dplyr pipeline on Spark
 # It returns a Spark DataFrame
 myFlightsSummary <- flights_tbl %>%
@@ -114,7 +122,7 @@ myHistogram
 # Machine learning algorithms ---------------------------------------------
 
 # Remove NA data
-# Divide the dataset into two halves (training + testing)
+# Divide the dataset into two portions (training + testing)
 flights_tbl %>%
   na.omit() %>%
   sdf_partition(training = 0.8,
@@ -151,8 +159,10 @@ ml_regression_evaluator(myFlightsPredictionTesting,
 
 # Run linear regression locally in R
 myModelRLocal <- lm(mpg ~ hp + wt + drat, mtcars)
+
 # Run Spark MLlib models
 myModelSparkLocal <- myCsvLocal %>% ml_linear_regression(mpg ~ hp + wt + drat)
+
 # Compare the different linear models
 # They should be identical
 all.equal(myModelRLocal %>% coefficients(), 
