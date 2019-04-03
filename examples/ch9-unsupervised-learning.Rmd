@@ -1,0 +1,89 @@
+---
+title: "ch9_unsupervised"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## K-means Clustering
+
+We will use the mtcars dataset and the kmeans function for this data. Load the stats package using:
+
+```{r }
+library(dplyr)
+library(stats)
+```
+
+Kmeans works using the Euclidean distance between points, therfore it will work on numerical variables only. We can select the numerical columns from our dataset:
+
+```{r}
+
+mtcars_numeric <- mtcars %>% select(mpg, disp, hp, drat, wt,qsec)
+
+```
+
+It is important to normalise our data as these measurements are often recorded in different units. We do this using z-score.
+
+```{r}
+
+mtcars_mean <- mtcars_numeric %>% lapply(mean)
+mtcars_sd   <- mtcars_numeric %>% lapply(sd)
+
+mtcars_norm <- (mtcars_numeric - mtcars_mean)/mtcars_sd
+
+```
+
+## Dimensionality Reduction
+
+Each data variable can be thought of a dimension fo the data set. We have 6 variables therefore we can consider the dataset as having 6 components. We wish to reduce the dimensions of the data on to prricipal components in order of maximum variance.  
+```{r pressure, echo=FALSE}
+
+myPca <- prcomp(mtcars_norm)
+
+library(ggfortify)
+autoplot(myPca, loadings.label = TRUE)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Now we would like to do Kmeans on the 6 dimensional data. We need to give the number of clusters that we would like to have. We will start by looking at two clusters. We cannot visualise these clusters in 6 dimensions so we would like to use the PCA analysis to visualise the data on the principal components. 
+
+```{r}
+
+
+myKClust <- kmeans(mtcars_norm, centers = 2)
+
+# visualising on the clusters
+
+ggplot(myPca$x, aes(x = PC1,
+                    y = PC2,
+                    colour = factor(myKClust$cluster))) +
+                    geom_point() +
+                    geom_label(aes(label=mtcars %>% rownames())) +
+                    stat_ellipse()+
+                    labs(colour = "Cluster")
+        
+```
+So how do we know how many clusters to use? An elbow plot can help us find out
+
+```{r}
+
+
+sse <- vector('numeric')
+num_cluster <- 2:6
+j <-1
+for(i in num_cluster){
+
+  sse[j] <- sum(kmeans(mtcars_norm,centers=i)$withinss)
+  j<- j+1
+}
+#Converting the sse to a data frame and storing corresponding value of k
+sse <- as.data.frame(sse)
+sse$num_clusters <- num_cluster
+
+#Making the plot. This plot is also known as screeplot
+ggplot(sse, aes( x=num_clusters, y =sse)) +geom_line()+geom_point()
+
+```
