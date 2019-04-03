@@ -210,7 +210,7 @@ mlLogReg <- ml_logistic_regression(mtcarsTrain, mlFormula)
 predTestClass <- ml_predict(mlGbtClass, mtcarsTest)
 predTestLog <- ml_predict(mlLogReg, mtcarsTest)
 
-# Create a function to calculate the accuracy of each model
+# Let's create a function to calculate the accuracy of each model
 calc_accuracy <- function(data, cutpoint = 0.5){
   data %>% 
     mutate(prediction = if_else(prediction > cutpoint, 1.0, 0.0)) %>%
