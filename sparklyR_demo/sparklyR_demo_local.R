@@ -62,6 +62,9 @@ myCsvLocal <- mySparkConn %>%
                  path = "file:/home/user007/mtcars_local")
 myCsvLocal
 
+# Upload the flights dataset to Spark
+flights_tbl <- mySparkConn %>% sdf_copy_to(flights, overwrite = TRUE)
+
 # You can also write and read parquet files
 # write flights to parquet
 spark_write_parquet(flights_tbl, 
@@ -107,7 +110,8 @@ myLineplot <- myFlightsSummary %>%
 myLineplot
 
 # Compute the histogram of a variable
-myHistogram <- flights %>% filter(!is.na(air_time)) %>% 
+myHistogram <- flights_tbl %>%
+  filter(!is.na(air_time)) %>% 
   dbplot_histogram(air_time, binwidth = 50) +
   labs(title = "Flights - air time") +
   theme_light()
