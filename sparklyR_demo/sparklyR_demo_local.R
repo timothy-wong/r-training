@@ -136,7 +136,7 @@ flights_testing <- mySparkConn %>% tbl("flights_testing")
 # Run a random forest model
 # This can take some time
 myFlightsModel <- flights_training %>%
-  ml_decision_tree_regressor(dep_delay ~ month + hour + origin + dest + carrier)
+  ml_random_forest(dep_delay ~ month + hour + origin + dest + carrier)
 
 # Run the model prediction on both training and testing set
 myFlightsPredictionTraining <- myFlightsModel %>% ml_predict(flights_training)
