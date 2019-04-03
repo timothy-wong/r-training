@@ -2204,7 +2204,8 @@ myTsModel3 <- auto.arima(y = myTs,
                                         mean_soil10,
                                         mean_soil20,
                                         mean_soil50,
-                                        mean_soil100),
+                                        mean_soil100) %>%
+                           as.matrix(),
                          trace = TRUE)
 # View the ARIMA(p,d,q)(P,D,Q) estimates and their coefficients
 summary(myTsModel3)
@@ -2212,13 +2213,14 @@ summary(myTsModel3)
 # Apply the ARIMA model to testing set
 myTsForecast3 <- forecast(myTsModel3,
                           xreg = myTestingSet %>%
-                                   select(mean_airtemp, 
-                                          mean_windspd, 
-                                          max_sun,
-                                          mean_soil10,
-                                          mean_soil20,
-                                          mean_soil50,
-                                          mean_soil100))
+                            select(mean_airtemp, 
+                                   mean_windspd, 
+                                   max_sun,
+                                   mean_soil10,
+                                   mean_soil20,
+                                   mean_soil50,
+                                   mean_soil100) %>%
+                            as.matrix())
 # Visualise the forecast
 autoplot(myTsForecast3)
 plot(myTsForecast3)
@@ -2243,7 +2245,8 @@ myTsModel4 <- Arima(y = myTs,
                                    mean_soil10,
                                    mean_soil20,
                                    mean_soil50,
-                                   mean_soil100),
+                                   mean_soil100) %>%
+                            as.matrix(),
                     order = c(2,0,0), 
                     seasonal = c(1,1,1)) 
 # View the model summary
@@ -2257,7 +2260,8 @@ myTsForecast4 <- forecast(myTsModel4,
                                    mean_soil10,
                                    mean_soil20,
                                    mean_soil50,
-                                   mean_soil100))
+                                   mean_soil100) %>%
+                            as.matrix())
 # Visualise the forecast
 autoplot(myTsForecast4)
 plot(myTsForecast4)
@@ -2308,13 +2312,14 @@ mySimulation <- lapply(1:100, function(i){
          run = i,
          value = simulate(object = myTsModel4,
                           xreg = myTestingSet %>% 
-                                  select(mean_airtemp, 
-                                         mean_windspd, 
-                                         max_sun,
-                                         mean_soil10,
-                                         mean_soil20,
-                                         mean_soil50,
-                                         mean_soil100)) %>%
+                            select(mean_airtemp, 
+                                   mean_windspd, 
+                                   max_sun,
+                                   mean_soil10,
+                                   mean_soil20,
+                                   mean_soil50,
+                                   mean_soil100) %>%
+                            as.matrix()) %>%
                   as.numeric())})
 # Combines all tibbles together to form a large tibble
 mySimulationAll <- do.call(rbind, mySimulation)
