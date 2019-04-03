@@ -231,5 +231,22 @@ calc_accuracy <- function(data, cutpoint = 0.5){
 calc_accuracy(predTestClass)
 calc_accuracy(predTestLog)
 
+
+
+
+# Distributed R -----------------------------------------------------------
+
+# Create a SDF with 100 rows (with values from 1 to 100)
+myData <- mySparkConn %>% sdf_len(100)
+# Runs arbitrary R code on all Spark executors
+myData %>% spark_apply(function(df) { df * 10 })
+
+
+
+
+# Disconnect from Spark ---------------------------------------------------
+
+
+
 # Disconnect from Spark
 spark_disconnect(mySparkConn)
