@@ -2,8 +2,6 @@
 
 This is the R language training pack created by Timothy Wong and James Gammerman.
 
-## Book
-The main file is book.pdf
+## Download the book
 
-## Slides
-The main file is beamer.pdf
+Please go to [this page](https://github.com/timothywong731/r-training/releases) and select the latest version of the book.
