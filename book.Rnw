@@ -124,6 +124,7 @@ The \LaTeX\xspace source code and the compiled PDF version of this book can be d
     \item Artemis Maipa
     \item Phuong Pham
     \item Laura Shemilt
+    \item Nyala Noe
   \end{itemize}
 \end{itemize}
 % \mbox{}\\
@@ -1176,7 +1177,7 @@ myModel3 <- lm(mpg ~ wt + qsec + factor(am) +
 summary(myModel3)
 @
 
-To further analyse the effects of individual variables, wou can load the \verb|car| package and use the function \verb|avPlots()| to view the partial regression plots\footnote{It is also called the added-variable plot.}. This would graphically display the effect of individual variables while keeping others in control. This is shown in example \ref{ex:avplots}.
+To further analyse the effects of individual variables, we can load the \verb|car| package and use the function \verb|avPlots()| to view the partial regression plots\footnote{It is also called the added-variable plot.}. This would graphically display the effect of individual variables while keeping others in control. This is shown in example \ref{ex:avplots}.
 
 <<ex:avplots,fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
 library(car)
@@ -1903,11 +1904,8 @@ In this exercise, we will use an external dataset. This dataset contains daily e
 <<ex:loadamprion, fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Read the Amprion dataset from CSV file
 # You might have to modify the path to point to your file location
-amprion <- read.csv("amprion.csv",
-                    colClasses = c("character",
-                                   "numeric",
-                                   "numeric",
-                                   "numeric")) %>% as_tibble()
+library(readr)
+amprion <- read_csv("amprion.csv")
 # View the dataset
 amprion
 @
@@ -1937,16 +1935,7 @@ One of the main drivers of power demand and generation is the weather. The weath
 
 <<ex:loadbremen, fig.show='asis', eval=TRUE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
 # Load the Bremen weather dataset
-bremen <- read.csv("bremen.csv",
-                   colClasses = c("character",
-                                  "numeric",
-                                  "numeric",
-                                  "numeric",
-                                  "factor",
-                                  "numeric",
-                                  "numeric",
-                                  "numeric",
-                                  "numeric")) %>% as_tibble()
+bremen <- read_csv("bremen.csv")
 # View the dataset
 bremen
 @
@@ -3401,19 +3390,7 @@ Apache Spark can be accessed in \verb|R| via the \verb|sparklyr| package, which 
 
 \begin{description}
 
-  \item [Standalone] This is also known as local mode. The driver and executors run on the client machine. Although there is no distribution of computing process, prototyping and debugging in the local mode is more convenient. Example \ref{ex:launchsparklocal} shows how to launch Spark locally.
-  
-  <<ex:launchsparklocal, eval=FALSE, size='scriptsize',rexample=TRUE>>=
-  library(sparklyr)
-  library(dplyr)
-  # Opens the Spark connection through sparklyr
-  # Using standalone mode (local master)
-  mySparkConn <- spark_connect(master = "local")
-  # Checks whether the connection is opened
-  mySparkConn %>% connection_is_open()
-  # Checks Spark version
-  mySparkConn %>% spark_version()
-  @
+  \item [Standalone] This is also known as local mode. The driver and executors run on the client machine. Although there is no distribution of computing process, prototyping and debugging in the local mode is more convenient.
 
   \item [YARN Client]
   Spark driver is launched in the same process as the client that submits the application. Resource allocation is done by YARN Resource Manager (RM) based on data locality. Driver program on client machine controls the executors on the YARN cluster.
@@ -3422,30 +3399,100 @@ Apache Spark can be accessed in \verb|R| via the \verb|sparklyr| package, which 
   
 \end{description}
 
-In Spark, source data can accessed through different ways. Files in CSV format can be accessed directly in the local file system. Alternatively, CSV files can be uploaded to HDFS and read from there. Spark also supports other formats, such as \verb|data.frame|, \verb|tibble| objects and even Hive tables in Hadoop, as data sources.
+In Spark, source data can accessed through different ways. Files in CSV format can be accessed directly in the local file system. Alternatively, various file formats such as CSV, JSON and parquet can be uploaded to HDFS and read from there. Spark also supports other object types, such as \verb|data.frame|, \verb|tibble| objects and even Hive tables in Hadoop as data sources.
 
-\begin{Exercise}[title={Train a Linear Regression Model}]
+\begin{Exercise}[title={Read / Write in Spark}]
 
-In this exercise, we will upload a dataset to Spark for modelling. To begin with, we will use a local \verb|tibble| as data source. 
-
-<<ex:sparkdplyr, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+In this exercise, we will learn how to set up Spark and perform simple aggregation and read/write operations. To begin with, we will check whether Spark is installed or not. If not, we will invoke the installation command \verb|spark_install()|, as shown in example \ref{ex:installspark}.
+<<ex:installspark, eval=FALSE, size='scriptsize',rexample=TRUE>>=
 library(sparklyr)
 library(dplyr)
-library(nycflights13)
-mySparkConn <- spark_connect(master = "local")
-# Converts an R object into Spark DataFrame
-flights_tbl <- mySparkConn %>% copy_to(flights)
-# Runs dplyr pipeline on Spark
-# It returns a Spark DataFrame
-myFlightsSummary <- flights_tbl %>%
-  group_by(year, month) %>%
-  summarise(avg_dep_delay = mean(dep_delay, na.rm = TRUE)) %>%
-  arrange(year, month)
-  # Print it out on the console
-myFlightsSummary
+# Checks which spark versions are available
+spark_available_versions()
+# Checks which version is installed.
+spark_installed_versions()
+# Install spark
+# Only do this if Spark is not already installed
+spark_install()
 @
 
-The \verb|sparklyr| package supports Spark MLlib, which is a library for scalable machine learning algorithms. We can run a linear regression model using this package. Example \ref{ex:sparkregression} shows how to run a linear regression model on Spark.
+To open a Spark connection, follow the code in example \ref{ex:launchsparklocal}.
+<<ex:launchsparklocal, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Opens the Spark connection through sparklyr
+# Using standalone mode (local master)
+mySparkConn <- spark_connect(master = "local")
+# Checks whether the connection is opened
+mySparkConn %>% connection_is_open()
+# Checks Spark version
+mySparkConn %>% spark_version()
+@
+
+Once we have set up Spark connection, we can learn how to convert local data to Spark and perform aggregation pipeline in \verb|dplyr| style. This is shown in example \ref{ex:sparkdplyr}.
+
+<<ex:sparkdplyr, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Copy a local R data frame to Spark as SDF
+mySparkConn %>% sdf_copy_to(mtcars, overwrite = TRUE)
+# Sets up a connection to Spark data frame (SDF)
+myTbl <- mySparkConn %>% tbl("mtcars")
+# Browse the top rows of the SDF
+head(myTbl)
+# Performs SQL-style aggregation using dplyr framework
+# It runs natively on Spark
+myTbl %>% 
+  group_by(cyl) %>% 
+  summarise(avg_mpg = mean(mpg, na.rm=TRUE))
+@
+
+Spark standalone mode can read and write files in user's local file system. Example \ref{ex:sparkreadwrite} shows 
+
+<<ex:sparkreadwrite, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# First, write the mtcars SDF to CSV
+myTbl %>% spark_write_csv("file:/home/YOUR_USER_NAME/my_data/", mode = "overwrite")
+# Cchange user to your username/lanid
+myCsvLocal <- mySparkConn %>% 
+  spark_read_csv(name = "mtcars_local",
+                 path = "file:/home/YOUR_USER_NAME/my_dat/")
+myCsvLocal
+@
+
+\end{Exercise}
+
+\begin{Exercise}[title={Data Visualisation in Spark}]
+
+Large datasets are especially hard to visualise. In Spark, we can user the extension package \verb|dbplot| to visualise very large datasets. The summary statistics is computed in Spark, which means that the visulisation process is fully scalable. Follow the code in example \ref{ex:dbplot}.
+
+<<ex:dbplot, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+library(nycflights13)
+library(ggplot2)
+library(dbplot)
+# Upload the flights dataset to Spark
+flights_tbl <- mySparkConn %>% sdf_copy_to(flights, overwrite = TRUE)
+# Create a line plot showing the mean departure delay
+myChart <- flights_tbl %>%
+  dbplot_line(month, mean(dep_delay)) +
+  labs(title = "Flights - average departure delay per month",
+       ylab = "Average departure delay",
+       xlab = "Month") +
+  scale_x_continuous(breaks= seq(1,12,1))
+# Plot the graph
+myChart
+# Compute a histogram of the air_time variable
+myHistogram <- flights_tbl %>%
+  filter(!is.na(air_time)) %>% 
+  dbplot_histogram(air_time, binwidth = 50) +
+  labs(title = "Flights - air time") +
+  theme_light()
+# Plot the histogram
+myHistogram
+@
+
+\end{Exercise}
+
+
+
+\begin{Exercise}[title={Train a Random Forest Model}]
+
+The \verb|sparklyr| package supports Spark MLlib, which is a library for scalable machine learning algorithms. We can run a linear regression model using this package. Example \ref{ex:sparkregression} shows how to run a random forest model on Spark.
 
 <<ex:sparkregression, eval=FALSE, size='scriptsize',rexample=TRUE>>=
 # Remove NA data and divide the dataset into two halves
@@ -3464,22 +3511,31 @@ myFlightsModel <- flights_training  %>%
 # Run the model prediction on both training and testing set
 myFlightsPredictionTraining <- myFlightsModel %>% ml_predict(flights_training)
 myFlightsPredictionTesting <- myFlightsModel %>% ml_predict(flights_testing)
-# Calculate the training and testing error (Mean-squared error)
-# Collect the result back to local memory at the end
-myTrainingMse <- myFlightsPredictionTraining %>%
-  mutate(error = prediction - dep_delay) %>%
-  summarise(mse = mean(error^2, na.rm = TRUE)) %>%
-  collect()
-myTestingMse <- myFlightsPredictionTesting %>%
-  mutate(error = prediction - dep_delay) %>%
-  summarise(mse = mean(error^2, na.rm = TRUE)) %>%
-  collect()
-# Print the MSE
-myTrainingMse
-myTestingMse
+# Evaluate model performance using Mean-squared error (MSE)
+ml_regression_evaluator(myFlightsPredictionTraining, 
+                        label_col = "dep_delay",
+                        metric_name = "mse")
+ml_regression_evaluator(myFlightsPredictionTesting, 
+                        label_col = "dep_delay",
+                        metric_name = "mse")
 @
 
 \end{Exercise}
+
+
+\begin{Exercise}[title={Distributed R}]
+
+In some cases, users may want to implement custom logic on a large dataset. Spark allows user to run any custom R code. In example \ref{ex:sparkdistribute}, we create a sample dataset in Spark and use the function \verb|spark_apply()| to run an arbitrary R function on it. 
+
+<<ex:sparkdistribute, eval=FALSE, size='scriptsize',rexample=TRUE>>=
+# Create a SDF with 100 rows (with values from 1 to 100)
+myData <- mySparkConn %>% sdf_len(100)
+# Runs arbitrary R code on all Spark executors
+# This is a native R function
+myData %>% spark_apply(function(df) { df * 10 })
+@
+\end{Exercise}
+
 
 \bibliography{book}{}
 \bibliographystyle{plain}
