@@ -1195,15 +1195,6 @@ avPlots(myModel2)
 	\caption{Partial regression plots}
 \end{figure}
 
-As the input predictor variables usually have different scale, the model coefficients are not directly comparable. To fairly compare the effect magnitude of the predictor variables, they need to be standardised first. The \verb|QuantPsyc| package has a function \verb|lm.beta()| which performs coefficient standardisation. The magnitude of the standardised coefficient indicates the relative influence of each predictor variable. You can follow example \ref{ex:betanorm} for coefficient standardisation.
-
-<<ex:betanorm, fig.show='hide', eval=TRUE, results='hide', warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', rexample=TRUE>>=
-library(QuantPsyc)
-lm.beta(myModel1)
-lm.beta(myModel2)
-lm.beta(myModel3)
-@
-
 You can also compare nested models\footnote{Refers to models having additional predictor terms. For example, \(\hat{y}=x_1+x_2+x_3\) and \(\hat{y}=x_1+x_2+x_3+x_4\) are both nested models of \(\hat{y}=x_1+x_2\).} using ANOVA technique. Example \ref{ex:linearanova} compares three nested models by applying the Chi-square test on the model residuals to check for statistically significant differences. In most cases, the simplest model is prefereable if the candidate models are not significantly different.
 
 <<ex:linearanova, fig.show='hide', eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, size='scriptsize', fig.width=4, fig.height=3, rexample=TRUE>>=
